@@ -1,0 +1,55 @@
+﻿{
+  "$class": ["char-select-screen", "fade-in"],
+  "$childs": [
+    { "$class": "login-background" },
+    {
+      "$class": "char-select-box",
+      "$id": "char-select-container",
+      "$childs": [
+        { "$el": "h2", "$text": "{{char.title}}" },
+        { "$el": "p", "$id": "legacy-title", "$class": "legacy-title", "$text": "" },
+        { "$id": "char-list", "$class": "char-list-container" },
+        {
+          "$el": "button",
+          "$class": "login-button",
+          "$text": "{{char.btn_create}}",
+          "$action": "goToCreator"
+        },
+        {
+          "$el": "button",
+          "$id": "gm-btn",
+          "$class": ["login-button", "btn-dark", "hidden"],
+          "$text": "{{char.btn_gm}}",
+          "$action": "goToGMArea"
+        },
+        {
+          "$el": "a",
+          "$class": ["switch-link", "block-mt-15"],
+          "$text": "{{char.logout}}",
+          "$action": "logout"
+        }
+      ]
+    },
+    {
+      "$class": ["char-select-box", "hidden"],
+      "$id": "legacy-creation-container",
+      "$childs": [
+        { "$el": "h2", "$text": "{{char.legacy_title}}" },
+        { "$el": "p", "$text": "{{char.legacy_desc}}", "$class": "mb-20-muted" },
+        { "$el": "div", "$class": "login-input-group", "$childs": [
+            { "$el": "input", "$id": "legacy-name", "$att": { "type": "text", "placeholder": "{{char.legacy_placeholder}}" } }
+        ]},
+        { "$el": "div", "$class": "flex-gap-mb-20", "$childs": [
+            { "$el": "button", "$class": ["login-button", "btn-auto", "btn-dark"], "$text": "{{char.btn_gen_legacy}}", "$action": "generateLegacyName" },
+            { "$el": "button", "$class": ["login-button", "btn-auto"], "$text": "{{char.btn_save_legacy}}", "$action": "createLegacy" }
+        ]},
+        {
+          "$el": "a",
+          "$class": ["switch-link", "block-mt-15"],
+          "$text": "{{char.logout}}",
+          "$action": "logout"
+        }
+      ]
+    }
+  ]
+}

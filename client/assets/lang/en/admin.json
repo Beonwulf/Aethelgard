@@ -1,0 +1,18 @@
+{
+  "gm": {
+    "title": "Aethelgard Administration",
+    "tab_users": "Players",
+    "tab_guilds": "Guilds",
+    "header_users": "Player Management",
+    "header_guilds": "Guild Management",
+    "wip": "Guild management is still work in progress...",
+    "btn_back": "Back",
+    "loading": "Loading hero data...",
+    "access_denied": "Access denied or an error occurred.",
+    "network_error": "Network error while contacting the gods.",
+    "role_label": "Role: ",
+    "btn_make_gm": "Make GM",
+    "role_updated": "Role successfully updated.",
+    "role_update_error": "Error while changing the role."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "creator": {
+    "step_1": "1. Basis",
+    "step_2": "2. Attribute",
+    "step_3": "3. Talente",
+    "step_4": "4. Die Chronik",
+    "step_5": "5. Aussehen & Name",
+    "culture": "Die Kultur",
+    "profession": "Der Beruf",
+    "attr_desc": "Verteile deine Eigenschaften klug, denn sie formen das Fundament deines Helden.",
+    "chronicle_desc": "Jeder Held hat eine Vergangenheit. Lass die Schicksalsweber deine Geschichte niederschreiben...",
+    "btn_weave": "Schicksal offenbaren",
+    "btn_reweave": "Neu weben ({{rerolls}})",
+    "chronicle_empty": "Die Seiten deiner Chronik sind noch leer...",
+    "label_name": "Wie lautet der Vorname deines Helden?",
+    "placeholder_name": "Legenden werden mit Namen geboren...",
+    "btn_gen_name_title": "Zufälliger Name passend zur Kultur",
+    "manifestation": "Die Manifestation im Nexus folgt in Kürze...",
+    "gods_blessing": "Die Segnungen der Götter",
+    "titles": {
+      "1": "Die Herkunft",
+      "2": "Die Eigenschaften",
+      "3": "Die Talente",
+      "4": "Die Chronik",
+      "5": "Aussehen & Name"
+    }
+  }
+}

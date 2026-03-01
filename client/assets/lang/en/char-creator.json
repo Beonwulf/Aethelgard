@@ -1,0 +1,28 @@
+{
+  "creator": {
+    "step_1": "1. Basics",
+    "step_2": "2. Attributes",
+    "step_3": "3. Skills",
+    "step_4": "4. Chronicle",
+    "step_5": "5. Appearance & Name",
+    "culture": "Culture",
+    "profession": "Profession",
+    "attr_desc": "Distribute your attributes wisely, for they form the foundation of your hero.",
+    "chronicle_desc": "Every hero has a past. Let the fate weavers write down your story...",
+    "btn_weave": "Reveal Fate",
+    "btn_reweave": "Reweave ({{rerolls}})",
+    "chronicle_empty": "The pages of your chronicle are still empty...",
+    "label_name": "What is the first name of your hero?",
+    "placeholder_name": "Legends are born with names...",
+    "btn_gen_name_title": "Random name based on culture",
+    "manifestation": "Manifestation in the Nexus follows shortly...",
+    "gods_blessing": "Blessings of the Gods",
+    "titles": {
+      "1": "The Origin",
+      "2": "The Attributes",
+      "3": "The Skills",
+      "4": "The Chronicle",
+      "5": "Appearance & Name"
+    }
+  }
+}

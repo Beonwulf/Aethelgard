@@ -1,0 +1,178 @@
+{
+    "$class": "gm-dashboard",
+    "$childs": [
+      {
+        "$el": "aside",
+        "$class": "gm-sidebar",
+        "$childs": [
+          {
+            "$class": "gm-sidebar-header",
+            "$childs": [{ "$el": "h1", "$class": "gm-sidebar-title", "$text": "Aethelgard" }]
+          },
+          {
+            "$el": "ul",
+            "$class": "gm-sidebar-nav",
+            "$childs": [
+              { "$el": "li", "$childs": [{ "$el": "a", "$href": "#", "$text": "{{gm.nav_dashboard}}", "$dataSet": {"section": "dashboard"} }] },
+              { "$el": "li", "$childs": [{ "$el": "a", "$href": "#", "$text": "{{gm.nav_world}}", "$dataSet": {"section": "world"} }] },
+              { "$el": "li", "$childs": [{ "$el": "a", "$href": "#", "$text": "{{gm.nav_users}}", "$dataSet": {"section": "users"} }] },
+              { "$el": "li", "$childs": [{ "$el": "a", "$href": "#", "$text": "{{gm.nav_characters}}", "$dataSet": {"section": "characters"} }] },
+              { "$el": "li", "$childs": [{ "$el": "a", "$href": "#", "$text": "{{gm.nav_guilds}}", "$dataSet": {"section": "guilds"} }] },
+              { "$el": "li", "$childs": [{ "$el": "a", "$href": "#", "$text": "{{gm.nav_database}}", "$dataSet": {"section": "database"} }] }
+            ]
+          },
+          { "$el": "button", "$class": ["login-button", "btn-auto"], "$text": "{{gm.btn_back}}", "$action": "goBack" }
+        ]
+      },
+      {
+        "$el": "main",
+        "$class": "gm-main-content",
+        "$childs": [
+          {
+            "$id": "dashboard-section",
+            "$class": ["gm-content-section", "active"],
+            "$childs": [
+              { "$class": "gm-content-header", "$childs": [{ "$el": "h2", "$class": "gm-content-title", "$text": "{{gm.header_dashboard}}" }] },
+              {
+                "$class": "gm-stats-grid",
+                "$childs": [
+                  { "$class": "gm-stat-card", "$childs": [
+                      { "$el": "h3", "$class": "gm-stat-card-title", "$text": "{{gm.stat_users}}" },
+                      { "$el": "p", "$id": "stat-users", "$class": "gm-stat-card-value", "$text": "..." }
+                  ]},
+                  { "$class": "gm-stat-card", "$childs": [
+                    { "$el": "h3", "$class": "gm-stat-card-title", "$text": "{{gm.stat_characters}}" },
+                    { "$el": "p", "$id": "stat-characters", "$class": "gm-stat-card-value", "$text": "..." }
+                  ]},
+                  { "$class": "gm-stat-card", "$childs": [
+                    { "$el": "h3", "$class": "gm-stat-card-title", "$text": "{{gm.stat_guilds}}" },
+                    { "$el": "p", "$id": "stat-guilds", "$class": "gm-stat-card-value", "$text": "..." }
+                  ]},
+                  { "$class": "gm-stat-card", "$childs": [
+                    { "$el": "h3", "$class": "gm-stat-card-title", "$text": "{{gm.stat_quests}}" },
+                    { "$el": "p", "$id": "stat-quests", "$class": "gm-stat-card-value", "$text": "..." }
+                  ]},
+                  { "$class": "gm-stat-card", "$childs": [
+                    { "$el": "h3", "$class": "gm-stat-card-title", "$text": "{{gm.stat_items}}" },
+                    { "$el": "p", "$id": "stat-items", "$class": "gm-stat-card-value", "$text": "..." }
+                  ]},
+                  { "$class": "gm-stat-card", "$childs": [
+                    { "$el": "h3", "$class": "gm-stat-card-title", "$text": "{{gm.stat_npcs}}" },
+                    { "$el": "p", "$id": "stat-npcs", "$class": "gm-stat-card-value", "$text": "..." }
+                  ]}
+                ]
+              }
+            ]
+          },
+          {
+            "$id": "world-section",
+            "$class": "gm-content-section",
+            "$childs": [
+              { "$class": "gm-content-header", "$childs": [{ "$el": "h2", "$class": "gm-content-title", "$text": "{{gm.header_world}}" }] },
+              { "$class": "gm-stats-grid", "$childs": [
+                { "$class": "gm-stat-card", "$childs": [
+                  { "$el": "h3", "$class": "gm-stat-card-title", "$text": "{{gm.world_server_status}}" },
+                  { "$el": "p", "$class": "gm-stat-card-value", "$text": "Online" },
+                  { "$class": "flex-align-center-gap", "$childs": [
+                    { "$el": "button", "$class": "login-button btn-auto", "$text": "{{gm.world_restart}}"},
+                    { "$el": "button", "$class": "login-button btn-auto btn-danger", "$text": "{{gm.world_maintenance}}"}
+                  ]}
+                ]},
+                { "$class": "gm-stat-card", "$childs": [
+                  { "$el": "h3", "$class": "gm-stat-card-title", "$text": "{{gm.world_announcement}}" },
+                  { "$class": "gm-form-group", "$childs": [
+                    { "$el": "textarea", "$id": "announcement-text", "$placeholder": "{{gm.world_announcement_placeholder}}"}
+                  ]},
+                  { "$el": "button", "$class": "login-button btn-auto", "$text": "{{gm.world_send_announcement}}"}
+                ]}
+              ]}
+            ]
+          },
+          {
+            "$id": "users-section",
+            "$class": "gm-content-section",
+            "$childs": [
+              { "$class": "gm-content-header", "$childs": [{ "$el": "h2", "$class": "gm-content-title", "$text": "{{gm.header_users}}" }] },
+              { "$id": "user-list", "$class": "char-list-container" }
+            ]
+          },
+          {
+            "$id": "characters-section",
+            "$class": "gm-content-section",
+            "$childs": [
+              { "$class": "gm-content-header", "$childs": [{ "$el": "h2", "$class": "gm-content-title", "$text": "{{gm.header_characters}}" }] },
+              { "$id": "character-list", "$class": "char-list-container" }
+            ]
+          },
+          {
+            "$id": "guilds-section",
+            "$class": "gm-content-section",
+            "$childs": [
+              { "$class": "gm-content-header", "$childs": [{ "$el": "h2", "$class": "gm-content-title", "$text": "{{gm.header_guilds}}" }] },
+              {
+                "$class": "gm-tab-menu",
+                "$childs": [
+                  { "$el": "div", "$class": ["gm-tab-item", "active"], "$text": "{{gm.tab_overview}}", "$dataSet": {"tab": "guilds-overview"} },
+                  { "$el": "div", "$class": "gm-tab-item", "$text": "{{gm.tab_create}}", "$dataSet": {"tab": "guilds-create"} }
+                ]
+              },
+              {
+                "$id": "guilds-overview",
+                "$class": ["gm-tab-content", "active"],
+                "$childs": [{ "$id": "guild-list", "$class": "char-list-container" }]
+              },
+              {
+                "$id": "guilds-create",
+                "$class": "gm-tab-content",
+                "$childs": [
+                  {
+                    "$el": "form",
+                    "$id": "create-guild-form",
+                    "$class": "login-form",
+                    "$childs": [
+                      {
+                        "$class": "gm-form-group",
+                        "$childs": [
+                          { "$el": "label", "$class": "gm-label", "$text": "{{gm.label_guild_name}}" },
+                          { "$el": "input", "$type": "text", "$id": "guild-name", "$class": "gm-input", "$placeholder": "{{gm.placeholder_guild_name}}", "$required": true }
+                        ]
+                      },
+                      {
+                        "$class": "gm-form-group",
+                        "$childs": [
+                          { "$el": "label", "$class": "gm-label", "$text": "{{gm.label_guild_tag}}" },
+                          { "$el": "input", "$type": "text", "$id": "guild-tag", "$class": "gm-input", "$placeholder": "{{gm.placeholder_guild_tag}}", "$required": true, "$maxLength": 5 }
+                        ]
+                      },
+                      { "$el": "button", "$type": "submit", "$class": "login-button", "$text": "{{gm.btn_create_guild}}" }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "$id": "database-section",
+            "$class": "gm-content-section",
+            "$childs": [
+              { "$class": "gm-content-header", "$childs": [{ "$el": "h2", "$class": "gm-content-title", "$text": "{{gm.header_database}}" }] },
+              { "$el": "p", "$text": "{{gm.db_description}}" },
+              {
+                "$el": "table",
+                "$class": "gm-db-table",
+                "$childs": [
+                  { "$el": "thead", "$childs": [{ "$el": "tr", "$childs": [
+                        { "$el": "th", "$text": "{{gm.db_table_name}}" },
+                        { "$el": "th", "$text": "{{gm.db_table_rows}}" },
+                        { "$el": "th", "$text": "{{gm.db_table_actions}}" }
+                  ]}] },
+                  { "$el": "tbody", "$id": "db-tables-list" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  

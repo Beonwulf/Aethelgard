@@ -1,0 +1,33 @@
+{
+  "name": "aethelgard",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "infra:init": "node infra-init.js",
+    "infra:migrate": "node migrate.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node index.js",
+    "start": "node index.js",
+    "setup": "npm run infra:init && npm run infra:migrate",
+    "simon": "node server/index.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.3.1",
+    "fast-simplex-noise": "^4.0.0",
+    "geotiff": "^3.0.3",
+    "gl-matrix": "^3.4.4",
+    "jsonwebtoken": "^9.0.3",
+    "knex": "^3.1.0",
+    "pg": "^8.18.0",
+    "selfsigned": "^5.5.0",
+    "sharp": "^0.34.5",
+    "simplex-noise": "^4.0.3",
+    "slugify": "^1.6.6",
+    "socket.io": "^4.8.3"
+  }
+}

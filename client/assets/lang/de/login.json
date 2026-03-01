@@ -1,0 +1,27 @@
+{
+    "login": {
+        "title": "Willkommen",
+        "title_register": "Schmiede deinen Helden",
+        "btn_submit": "Betrete die Welt",
+        "link_to_register": "Noch kein Held? Registrieren!",
+        "link_to_login": "Bereits ein Held? Login!",
+        "label_user": "Benutzername",
+        "label_pass": "Passwort",
+        "btn_register": "Account erstellen",
+        "label_email": "E-Mail",
+        "label_optional": "(optional)",
+        "msg_registered": "Erfolgreich geschmiedet! Logge dich nun ein.",
+        "err_empty": "Bitte füllen Sie alle Felder aus.",
+        "err_invalid": "Anmeldedaten falsch.",
+        "err_failed": "Zugang verweigert.",
+        "err_invalid_user": "Name muss 3-16 Zeichen lang sein (nur Buchstaben/Zahlen).",
+        "err_invalid_pass": "Passwort muss mindestens 6 Zeichen lang sein.",
+        "err_invalid_email": "Bitte gib eine gültige E-Mail Adresse an.",
+        "err_server": "Verbindung zum Welten-Server unterbrochen."
+    },
+    "register": {
+        "switch": "Bereits dabei? Login!",
+        "error": "Registrierung fehlgeschlagen. Name oder E-Mail bereits vergeben?",
+        "err_exists": "Name oder E-Mail bereits vergeben."
+    }
+}

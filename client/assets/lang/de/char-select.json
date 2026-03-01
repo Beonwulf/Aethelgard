@@ -1,0 +1,15 @@
+{
+  "char": {
+    "title": "Wähle deinen Helden",
+    "no_chars_found": "Noch keine Helden in deinem Gefolge.",
+    "btn_create": "Einen neuen Helden schmieden",
+    "logout": "Zurück zum Menü",
+    "level": "Stufe",
+    "legacy_title": "Gründe dein Vermächtnis",
+    "legacy_desc": "Jeder Held braucht einen Ursprung. Wie soll der ruhmreiche Name deines Kontos lauten? (Z.B. 'Löwenherz', 'vom Amboss-Klan')",
+    "legacy_placeholder": "Dein Vermächtnis...",
+    "btn_gen_legacy": "Namen generieren",
+    "btn_save_legacy": "Vermächtnis besiegeln",
+    "btn_gm": "GM-Bereich betreten"
+  }
+}

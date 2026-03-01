@@ -1,0 +1,27 @@
+{
+    "login": {
+        "title": "Welcome",
+        "title_register": "Forge your Hero",
+        "btn_submit": "Enter the World",
+        "link_to_register": "Not a hero yet? Register!",
+        "link_to_login": "Already a hero? Login!",
+        "label_user": "Username",
+        "label_pass": "Password",
+        "btn_register": "Create Account",
+        "label_email": "Email",
+        "label_optional": "(optional)",
+        "msg_registered": "Successfully forged! You may now login.",
+        "err_empty": "Please fill in all fields.",
+        "err_invalid": "Invalid credentials.",
+        "err_failed": "Access denied.",
+        "err_invalid_user": "Name must be 3-16 characters long (letters/numbers only).",
+        "err_invalid_pass": "Password must be at least 6 characters long.",
+        "err_invalid_email": "Please provide a valid email address.",
+        "err_server": "Connection to the World Server lost."
+    },
+    "register": {
+        "switch": "Already a hero? Login!",
+        "error": "Registration failed. Name or email already taken?",
+        "err_exists": "Name or email already taken."
+    }
+}

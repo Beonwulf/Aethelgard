@@ -1,0 +1,294 @@
+/* GM-Panel Dashboard Styles */
+
+:root {
+    --gm-bg-primary: rgba(15, 15, 20, 0.95);
+    --gm-bg-secondary: rgba(25, 25, 35, 0.95);
+    --gm-bg-tertiary: rgba(40, 40, 50, 0.95);
+    --gm-accent-primary: #cfa94d;
+    --gm-text-primary: #f1ebd9;
+    --gm-border-color: rgba(207, 169, 77, 0.4);
+}
+
+.gm-dashboard {
+    display: flex;
+    height: 100vh;
+    background-color: var(--gm-bg-primary);
+    color: var(--gm-text-primary);
+    font-family: 'IM Fell English', serif;
+}
+
+.gm-sidebar {
+    width: 250px;
+    background-color: var(--gm-bg-secondary);
+    border-right: 2px solid var(--gm-accent-primary);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.gm-sidebar-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--gm-border-color);
+}
+
+.gm-sidebar-title {
+    font-family: 'IM Fell French Canon SC', serif;
+    font-size: 2em;
+    color: var(--gm-accent-primary);
+    margin: 0;
+    text-shadow: 0 0 8px rgba(207, 169, 77, 0.5);
+}
+
+.gm-sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.gm-sidebar-nav li {
+    margin-bottom: 10px;
+}
+
+.gm-sidebar-nav a {
+    display: block;
+    padding: 15px;
+    text-decoration: none;
+    color: var(--gm-text-primary);
+    background-color: var(--gm-bg-tertiary);
+    border: 1px solid transparent;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.gm-sidebar-nav a.active,
+.gm-sidebar-nav a:hover {
+    background-color: var(--gm-bg-primary);
+    color: var(--gm-accent-primary);
+    border-color: var(--gm-border-color);
+}
+
+.gm-main-content {
+    flex-grow: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.gm-content-header {
+    border-bottom: 1px solid var(--gm-border-color);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.gm-content-title {
+    font-size: 2.5em;
+    color: var(--gm-accent-primary);
+    margin: 0;
+    text-shadow: 0 0 10px rgba(207, 169, 77, 0.4);
+}
+
+.gm-content-section {
+    display: none; /* Initially hide all sections */
+    animation: fadeIn 0.5s ease-out;
+}
+
+.gm-content-section.active {
+    display: block; /* Show active section */
+}
+
+/* Table Styles for DB Management */
+.gm-db-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: var(--gm-bg-secondary);
+}
+
+.gm-db-table th,
+.gm-db-table td {
+    padding: 12px 15px;
+    border: 1px solid var(--gm-border-color);
+    text-align: left;
+}
+
+.gm-db-table th {
+    background-color: var(--gm-bg-tertiary);
+    color: var(--gm-accent-primary);
+    font-family: 'IM Fell French Canon SC', serif;
+}
+
+.gm-db-table tbody tr:hover {
+    background-color: var(--gm-bg-tertiary);
+}
+
+/* Sub-Tab Navigation */
+.gm-tab-menu {
+    display: flex;
+    gap: 10px;
+    border-bottom: 1px solid var(--gm-border-color);
+    margin-bottom: 20px;
+}
+
+.gm-tab-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    font-family: 'IM Fell French Canon SC', serif;
+    font-size: 1.2em;
+}
+
+.gm-tab-item:hover {
+    color: var(--gm-accent-primary);
+}
+
+.gm-tab-item.active {
+    color: var(--gm-accent-primary);
+    border-bottom-color: var(--gm-accent-primary);
+}
+
+.gm-tab-content {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.gm-tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dashboard-specific additions */
+.gm-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+#world-section .gm-stats-grid {
+    grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+}
+
+.gm-stat-card {
+    background-color: var(--gm-bg-secondary);
+    border: 1px solid var(--gm-border-color);
+    border-radius: 8px;
+    padding: 25px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+}
+
+.gm-stat-card .flex-align-center-gap {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap; /* Allow buttons to wrap */
+    margin-top: auto; /* Push buttons to the bottom */
+}
+
+.gm-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.gm-stat-card-title {
+    font-family: 'IM Fell French Canon SC', serif;
+    font-size: 1.3em;
+    color: var(--gm-text-primary);
+    margin: 0 0 10px 0;
+}
+
+.gm-stat-card-value {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--gm-accent-primary);
+    margin: 0;
+}
+
+/* UI Fixes for Dashboard */
+.gm-dashboard .btn-small {
+    width: auto;
+    height: auto;
+    padding: 8px 15px;
+}
+
+.gm-dashboard .char-list-container {
+    max-height: none;
+    overflow-y: visible;
+}
+
+/* Button Refinement for Dashboard */
+.gm-dashboard .login-button {
+    background: linear-gradient(145deg, #5a4515 0%, #cfa94d 100%);
+    border: 1px solid #2a2010;
+    color: #0a0a0f; /* Dunkler Text auf Gold */
+    text-shadow: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.gm-dashboard .login-button:hover {
+    background: linear-gradient(145deg, #7a5d20 0%, #ebd488 100%);
+    box-shadow: 0 6px 15px rgba(207, 169, 77, 0.3);
+    transform: translateY(-2px);
+}
+
+.gm-dashboard .login-button.btn-danger {
+    background: linear-gradient(145deg, #4a1414 0%, #a83232 100%);
+    border-color: #2a0a0a;
+    color: #f1ebd9;
+}
+
+.gm-dashboard .login-button.btn-danger:hover {
+    background: linear-gradient(145deg, #7a2a2a 0%, #d14f4f 100%);
+}
+
+/* Form Styles for Dashboard */
+.gm-form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.gm-label {
+    display: block;
+    margin-bottom: 8px;
+    font-family: 'IM Fell French Canon SC', serif;
+    font-size: 1.1em;
+    color: var(--gm-accent-primary);
+}
+
+.gm-input, .gm-dashboard textarea {
+    width: calc(100% - 24px);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--gm-border-color);
+    border-radius: 6px;
+    color: var(--gm-text-primary);
+    padding: 12px;
+    font-family: 'IM Fell English', serif;
+    font-size: 1.1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.gm-input:focus, .gm-dashboard textarea:focus {
+    outline: none;
+    border-color: var(--gm-accent-primary);
+    box-shadow: 0 0 10px rgba(207, 169, 77, 0.2);
+}
+
+.gm-input.invalid {
+    border-color: #ff6b6b;
+}
+
+.gm-dashboard .login-form {
+    max-width: 500px;
+    margin: 0;
+    padding: 25px;
+    background: var(--gm-bg-secondary);
+    border: 1px solid var(--gm-border-color);
+    border-radius: 8px;
+}

@@ -1,0 +1,48 @@
+{
+  "$class": ["login-container", "fade-in"],
+  "$childs": [
+    { "$class": "login-background" },
+    {
+      "$class": "login-box",
+      "$childs": [
+        { "$el": "h2", "$id": "auth-title", "$text": "{{login.title}}" },
+        {
+          "$class": "login-input-group",
+          "$childs": [
+            { "$el": "label", "$text": "{{login.label_user}}" },
+            { "$el": "input", "$id": "username", "$att": { "type": "text" } }
+          ]
+        },
+        {
+          "$class": ["login-input-group", "hidden"],
+          "$id": "email-group",
+          "$childs": [
+            { "$el": "label", "$text": "{{login.label_email}} {{login.label_optional}}" },
+            { "$el": "input", "$id": "email", "$att": { "type": "email" } }
+          ]
+        },
+        {
+          "$class": "login-input-group",
+          "$childs": [
+            { "$el": "label", "$text": "{{login.label_pass}}" },
+            { "$el": "input", "$id": "password", "$att": { "type": "password" } }
+          ]
+        },
+        {
+          "$el": "button",
+          "$id": "submit-btn",
+          "$class": "login-button",
+          "$text": "{{login.btn_submit}}",
+          "$action": "handleAuth"
+        },
+        {
+          "$el": "a",
+          "$class": "switch-mode-link",
+          "$text": "{{login.link_to_register}}",
+          "$action": "toggleMode"
+        },
+        { "$el": "p", "$id": "error-display", "$class": "error-text" }
+      ]
+    }
+  ]
+}

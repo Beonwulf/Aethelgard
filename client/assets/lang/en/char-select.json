@@ -1,0 +1,15 @@
+{
+  "char": {
+    "title": "Choose your Hero",
+    "no_chars_found": "No heroes in your retinue yet.",
+    "btn_create": "Forge a new Hero",
+    "logout": "Back to Menu",
+    "level": "Level",
+    "legacy_title": "Found your Legacy",
+    "legacy_desc": "Every hero needs an origin. What shall be the glorious name of your legacy? (e.g. 'Lionheart', 'of the Anvil Clan')",
+    "legacy_placeholder": "Your legacy...",
+    "btn_gen_legacy": "Generate Name",
+    "btn_save_legacy": "Seal Legacy",
+    "btn_gm": "Enter GM Area"
+  }
+}
