@@ -46,8 +46,8 @@ export class CharSelectController extends BaseController {
 
 			// If no legacy and no characters, show legacy creator
 			if (!this.legacy && this.characters.length === 0) {
-				selectContainer.style.display = 'none';
-				legacyContainer.style.display = 'block';
+				selectContainer.classList.add('hidden');
+				legacyContainer.classList.remove('hidden');
 				return;
 			}
 
