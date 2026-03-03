@@ -1,5 +1,6 @@
 ﻿import { AuthService } from './services/AuthService.js';
 import { ApiService } from './services/ApiService.js';
+import { AdminService } from './services/AdminService.js';
 import { Lang } from './utils/Lang.js';
 import { StageManager } from './core/StageManager.js';
 
@@ -18,6 +19,7 @@ class BeonClient {
 		this.lang = Lang;
 		this.auth = new AuthService();
 		this.api = new ApiService(this);
+		this.admin = new AdminService(this);
 
 		// Platzhalter für später
 		this.stageManager = null; // Der StageManager bekommt die App-Instanz

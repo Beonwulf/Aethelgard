@@ -86,7 +86,7 @@ export class GMPanelController extends BaseController {
 
 	async loadDashboardStats() {
 		try {
-			const response = await this.app.api.get('/admin/stats');
+			const response = await this.app.admin.getStats();
 			if (response && response.success) {
 				const stats = response.data;
 				this.container.querySelector('#stat-users').textContent = stats.users;
@@ -97,7 +97,6 @@ export class GMPanelController extends BaseController {
 				this.container.querySelector('#stat-npcs').textContent = '89'; // Placeholder
 				this.container.querySelector('#stat-cultures').textContent = stats.cultures;
 				this.container.querySelector('#stat-professions').textContent = stats.professions;
-
 			}
 		} catch (err) {
 			console.error("Error loading stats:", err);
@@ -107,9 +106,8 @@ export class GMPanelController extends BaseController {
 	async loadWorldData() {
 		const section = this.container.querySelector('#world-section');
 		const statusText = section.querySelector('.gm-stat-card-value');
-
 		try {
-			const response = await this.app.api.get('/admin/stats');
+			const response = await this.app.admin.getStats();
 			if (response && response.success) {
 				const uptime = Math.floor(response.data.uptime / 60);
 				statusText.textContent = `Online (${uptime}m)`;
@@ -123,10 +121,10 @@ export class GMPanelController extends BaseController {
 		const listContainer = this.container.querySelector('#user-list');
 		listContainer.innerHTML = `<em>${this.app.lang.get('gm.loading')}</em>`;
 		try {
-			const response = await this.app.api.get('/admin/users');
+			const response = await this.app.admin.getUsers();
 			listContainer.innerHTML = '';
 			if (response && response.success) {
-				response.data.forEach(user => listContainer.appendChild(this.renderUserCard(user)));
+				response.data.forEach($user => listContainer.appendChild(this.renderUserCard($user)));
 			} else {
 				listContainer.innerHTML = `<p>${this.app.lang.get('gm.access_denied')}</p>`;
 			}
@@ -139,12 +137,12 @@ export class GMPanelController extends BaseController {
 		const listContainer = this.container.querySelector('#character-list');
 		listContainer.innerHTML = `<em>${this.app.lang.get('gm.loading')}</em>`;
 		try {
-			const response = await this.app.api.get('/admin/characters');
+			const response = await this.app.admin.getCharacters();
 			listContainer.innerHTML = '';
 			if (response && response.success && response.data.length > 0) {
-				response.data.forEach(char => listContainer.appendChild(this.renderCharacterCard(char)));
+				response.data.forEach($char => listContainer.appendChild(this.renderCharacterCard($char)));
 			} else {
-				listContainer.innerHTML = `<p>${this.app.lang.get('gm.no_characters_found') || 'No characters found.'}</p>`;
+				listContainer.innerHTML = `<p>${this.app.lang.get('gm.no_characters_found')}</p>`;
 			}
 		} catch (err) {
 			listContainer.innerHTML = `<p>${this.app.lang.get('gm.network_error')}</p>`;
@@ -155,10 +153,10 @@ export class GMPanelController extends BaseController {
 		const listContainer = this.container.querySelector('#guild-list');
 		listContainer.innerHTML = `<em>${this.app.lang.get('gm.loading')}</em>`;
 		try {
-			const response = await this.app.api.get('/admin/guilds');
+			const response = await this.app.admin.getGuilds();
 			listContainer.innerHTML = '';
 			if (response && response.success && response.data.length > 0) {
-				response.data.forEach(guild => listContainer.appendChild(this.renderGuildCard(guild)));
+				response.data.forEach($guild => listContainer.appendChild(this.renderGuildCard($guild)));
 			} else {
 				listContainer.innerHTML = `<p>${this.app.lang.get('gm.no_guilds_found')}</p>`;
 			}
@@ -171,16 +169,16 @@ export class GMPanelController extends BaseController {
 		const listContainer = this.container.querySelector('#db-tables-list');
 		listContainer.innerHTML = `<tr><td colspan="3"><em>${this.app.lang.get('gm.loading')}</em></td></tr>`;
 		try {
-			const response = await this.app.api.get('/admin/database/tables');
+			const response = await this.app.admin.getDbTables();
 			listContainer.innerHTML = '';
 			if (response && response.success) {
-				response.data.forEach(table => {
+				response.data.forEach($table => {
 					const row = cE({
 						$el: 'tr',
 						$childs: [
-							{ $el: 'td', $text: table.name },
-							{ $el: 'td', $text: table.rows.toString() },
-							{ $el: 'td', $childs: [{ $el: 'button', $class: 'btn-small', $text: 'View', $onclick: () => this.viewTableContent(table.name) }] }
+							{ $el: 'td', $text: $table.name },
+							{ $el: 'td', $text: $table.rows.toString() },
+							{ $el: 'td', $childs: [{ $el: 'button', $class: 'btn-small', $text: 'View', $onclick: () => this.viewTableContent($table.name) }] }
 						]
 					});
 					listContainer.appendChild(row);
@@ -191,32 +189,30 @@ export class GMPanelController extends BaseController {
 		}
 	}
 
-	async viewTableContent(tableName) {
+	async viewTableContent($tableName) {
 		const modal = this.container.querySelector('#gm-modal');
 		const modalTitle = this.container.querySelector('#gm-modal-title');
 		const modalBody = this.container.querySelector('#gm-modal-body');
 
-		modalTitle.textContent = `Table: ${tableName}`;
+		modalTitle.textContent = `Table: ${$tableName}`;
 		modalBody.innerHTML = `<em>${this.app.lang.get('gm.loading')}</em>`;
 		modal.classList.add('active');
 
 		try {
-			const response = await this.app.api.get(`/admin/database/table/${tableName}`);
-			
+			const response = await this.app.admin.getTableContent($tableName);
 			if (response && response.success) {
 				if (response.data && response.data.length > 0) {
 					const columns = Object.keys(response.data[0]);
-					
 					modalBody.innerHTML = '';
 					const table = cE({
 						$el: 'table',
 						$class: 'gm-modal-table',
 						$childs: [
-							{ $el: 'thead', $childs: [{ $el: 'tr', $childs: columns.map(col => ({ $el: 'th', $text: col })) }] },
-							{ $el: 'tbody', $childs: response.data.map(row => ({
+							{ $el: 'thead', $childs: [{ $el: 'tr', $childs: columns.map($col => ({ $el: 'th', $text: $col })) }] },
+							{ $el: 'tbody', $childs: response.data.map($row => ({
 								$el: 'tr',
-								$childs: columns.map(col => {
-									let val = row[col];
+								$childs: columns.map($col => {
+									let val = $row[$col];
 									if (typeof val === 'object' && val !== null) val = JSON.stringify(val);
 									return { $el: 'td', $text: (val !== undefined && val !== null) ? val.toString() : 'NULL' };
 								})
@@ -314,7 +310,7 @@ export class GMPanelController extends BaseController {
 	async deleteCharacter($uuid) {
 		this.showConfirm(this.app.lang.get('gm.confirm_delete_character'), async () => {
 			try {
-				const response = await this.app.api.delete(`/admin/characters/${$uuid}`);
+				const response = await this.app.admin.deleteCharacter($uuid);
 				if (response && response.success) {
 					this.showToast(this.app.lang.get('gm.success_deleted'), 'success');
 					await this.loadCharacters();
@@ -329,7 +325,7 @@ export class GMPanelController extends BaseController {
 	}
 	async createGuild($name, $tag) {
 		try {
-			const response = await this.app.api.post('/admin/guilds', { name: $name, tag: $tag });
+			const response = await this.app.admin.createGuild($name, $tag);
 			if (response && response.success) {
 				this.showToast(this.app.lang.get('gm.success_guild_created'), 'success');
 				await this.loadGuilds();
@@ -347,7 +343,7 @@ export class GMPanelController extends BaseController {
 	async deleteGuild($guildId) {
 		this.showConfirm(this.app.lang.get('gm.confirm_delete_guild'), async () => {
 			try {
-				const response = await this.app.api.delete(`/admin/guilds/${$guildId}`);
+				const response = await this.app.admin.deleteGuild($guildId);
 				if (response && response.success) {
 					this.showToast(this.app.lang.get('gm.success_deleted'), 'success');
 					await this.loadGuilds();
@@ -363,7 +359,7 @@ export class GMPanelController extends BaseController {
 
 	async changeRole($userId, $newRole) {
 		try {
-			const response = await this.app.api.post('/admin/users/role', { userId: $userId, role: $newRole });
+			const response = await this.app.admin.changeRole($userId, $newRole);
 			if (response && response.success) {
 				this.showToast(this.app.lang.get('gm.success_role_updated'), 'success');
 				await this.loadUsers();
