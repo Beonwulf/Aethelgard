@@ -78,7 +78,6 @@ export class BaseController {
 		this.container = cE(this.viewData, this);
 		targetElement.innerHTML = '';
 		targetElement.appendChild(this.container);
-		this.onReady(); // Lifecycle Hook
 	}
 
 

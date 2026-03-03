@@ -17,6 +17,10 @@
     "btn_gen_name_title": "Random name based on culture",
     "manifestation": "Manifestation in the Nexus follows shortly...",
     "gods_blessing": "Blessings of the Gods",
+    "label_info": "Information",
+    "label_attributes": "Attributes",
+    "btn_close": "Close",
+    "btn_details": "Show Details",
     "titles": {
       "1": "The Origin",
       "2": "The Attributes",

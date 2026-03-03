@@ -59,6 +59,14 @@
                   { "$class": "gm-stat-card", "$childs": [
                     { "$el": "h3", "$class": "gm-stat-card-title", "$text": "{{gm.stat_npcs}}" },
                     { "$el": "p", "$id": "stat-npcs", "$class": "gm-stat-card-value", "$text": "..." }
+                  ]},
+                  { "$class": "gm-stat-card", "$childs": [
+                    { "$el": "h3", "$class": "gm-stat-card-title", "$text": "{{gm.stat_cultures}}" },
+                    { "$el": "p", "$id": "stat-cultures", "$class": "gm-stat-card-value", "$text": "..." }
+                  ]},
+                  { "$class": "gm-stat-card", "$childs": [
+                    { "$el": "h3", "$class": "gm-stat-card-title", "$text": "{{gm.stat_professions}}" },
+                    { "$el": "p", "$id": "stat-professions", "$class": "gm-stat-card-value", "$text": "..." }
                   ]}
                 ]
               }
@@ -169,6 +177,26 @@
                   { "$el": "tbody", "$id": "db-tables-list" }
                 ]
               }
+            ]
+          }
+        ]
+      },
+      {
+        "$id": "gm-modal",
+        "$class": "gm-modal-overlay",
+        "$childs": [
+          {
+            "$class": "gm-modal-content",
+            "$childs": [
+              {
+                "$class": "gm-modal-header",
+                "$childs": [
+                  { "$el": "h3", "$id": "gm-modal-title", "$text": "Modal Title" },
+                  { "$el": "span", "$class": "gm-modal-close", "$text": "X", "$action": "closeModal" }
+                ]
+              },
+
+              { "$id": "gm-modal-body", "$class": "gm-modal-body" }
             ]
           }
         ]

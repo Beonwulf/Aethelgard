@@ -17,6 +17,10 @@
     "btn_gen_name_title": "Zufälliger Name passend zur Kultur",
     "manifestation": "Die Manifestation im Nexus folgt in Kürze...",
     "gods_blessing": "Die Segnungen der Götter",
+    "label_info": "Informationen",
+    "label_attributes": "Attribute",
+    "btn_close": "Schließen",
+    "btn_details": "Details anzeigen",
     "titles": {
       "1": "Die Herkunft",
       "2": "Die Eigenschaften",

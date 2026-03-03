@@ -1,173 +1,165 @@
-:root {
-  --color-rarity-common: #9d9d9d;
-  --color-rarity-standard: #ffffff;
-  --color-rarity-uncommon: #1eff00;
-  --color-rarity-rare: #0070dd;
-  --color-rarity-epic: #a335ee;
-  --color-rarity-legendary: #ff8000;
-  --color-rarity-artifact: #e6cc80;
-}
+@import 'variables.css';
 
 /* Beispiel für eine Item-Karte */
 .item-card.rare {
-    border-color: var(--color-rarity-rare);
-    box-shadow: 0 0 10px rgba(0, 112, 221, 0.3);
+	border-color: var(--color-rarity-rare);
+	box-shadow: 0 0 10px rgba(var(--color-rarity-rare-rgb), 0.3);
 }
 
 /* --- Globale Einstellungen (für den ganzen HTML-Body) --- */
 body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Oder deine bevorzugte Schriftart */
-    color: #E0E0E0; /* Helle Textfarbe für dunklen Hintergrund */
-    overflow: hidden; /* Verhindert Scrollbalken bei Animationen */
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Oder deine bevorzugte Schriftart */
+	color: #E0E0E0; /* Helle Textfarbe für dunklen Hintergrund */
+	overflow: hidden; /* Verhindert Scrollbalken bei Animationen */
 }
 
 /* --- Hintergrund des Login-Screens --- */
 .login-background {
-    position: fixed; /* Fixiert das Bild im Hintergrund */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('../images/bifrostark_loginscreen.jpg'); /* Dein gewähltes Bild hier einfügen! */
-    background-size: cover; /* Bild deckt den gesamten Bereich ab */
-    background-position: center center; /* Bild zentrieren */
-    
-    /* Sanfte Zoom-Animation */
-    animation: backgroundZoom 60s infinite alternate ease-in-out; 
+	position: fixed; /* Fixiert das Bild im Hintergrund */
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url('../images/bifrostark_loginscreen.jpg'); /* Dein gewähltes Bild hier einfügen! */
+	background-size: cover; /* Bild deckt den gesamten Bereich ab */
+	background-position: center center; /* Bild zentrieren */
+	
+	/* Sanfte Zoom-Animation */
+	animation: backgroundZoom 60s infinite alternate ease-in-out; 
 
-    /* Dunkle Überlagerung für bessere Lesbarkeit des Textes */
-    filter: brightness(0.7); /* Leicht abdunkeln */
-    z-index: -1; /* Hinter allen anderen Elementen */
+	/* Dunkle Überlagerung für bessere Lesbarkeit des Textes */
+	filter: brightness(0.7); /* Leicht abdunkeln */
+	z-index: -1; /* Hinter allen anderen Elementen */
 	/*backdrop-filter: blur(15px);/* */
 }
 
 @keyframes backgroundZoom {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.1); /* Zoomt sanft bis 110% */
-    }
+	from {
+		transform: scale(1);
+	}
+	to {
+		transform: scale(1.1); /* Zoomt sanft bis 110% */
+	}
 }
 
 /* --- Container für die Login-Box (zentriert) --- */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box; /* Padding wird in die Höhe/Breite eingerechnet */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	padding: 20px;
+	box-sizing: border-box; /* Padding wird in die Höhe/Breite eingerechnet */
 }
 
 /* --- Die Login-Box selbst (Frosted Glass Look) --- */
 .login-box {
-    background: rgba(255, 255, 255, 0.08); /* Sehr transparenter weißer Hintergrund */
-    backdrop-filter: blur(15px); /* Der Frosted-Glass-Effekt */
-    border: 1px solid rgba(255, 255, 255, 0.15); /* Dezenter Rahmen */
-    border-radius: 15px; /* Abgerundete Ecken */
-    padding: 40px 50px; /* Innenabstand */
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); /* Starker Schatten für Tiefe */
-    text-align: center;
-    max-width: 400px; /* Maximale Breite der Box */
-    width: 100%; /* Passt sich der Breite an */
+	background: rgba(255, 255, 255, 0.08); /* Sehr transparenter weißer Hintergrund */
+	backdrop-filter: blur(15px); /* Der Frosted-Glass-Effekt */
+	border: 1px solid rgba(255, 255, 255, 0.15); /* Dezenter Rahmen */
+	border-radius: 15px; /* Abgerundete Ecken */
+	padding: 40px 50px; /* Innenabstand */
+	box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); /* Starker Schatten für Tiefe */
+	text-align: center;
+	max-width: 400px; /* Maximale Breite der Box */
+	width: 100%; /* Passt sich der Breite an */
 }
 
 .login-box h2 {
-    color: #FFFFFF; /* Weißer Titel */
-    margin:0px 0px 30px 0px;
-    font-size: 2.2em;
-    text-shadow: 0 0 10px rgba(120, 200, 255, 0.7); /* Leichter Leuchteffekt */
+	color: #FFFFFF; /* Weißer Titel */
+	margin:0px 0px 30px 0px;
+	font-size: 2.2em;
+	text-shadow: 0 0 10px rgba(120, 200, 255, 0.7); /* Leichter Leuchteffekt */
 }
 
 /* --- Eingabefelder --- */
 .login-input-group {
-    margin-bottom: 20px;
-    text-align: left;
+	margin-bottom: 20px;
+	text-align: left;
 }
 
 .login-input-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 0.9em;
-    color: #B0D0FF; /* Helles Blau für Labels */
+	display: block;
+	margin-bottom: 8px;
+	font-size: 0.9em;
+	color: #B0D0FF; /* Helles Blau für Labels */
 }
 
 .login-input-group input[type="text"],
 .login-input-group input[type="password"],
 .login-input-group input[type="email"] {
-    width: calc(100% - 20px); /* 100% Breite minus Padding */
-    padding: 12px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    background: rgba(0, 0, 0, 0.3); /* Dunkleres Feld */
-    color: #FFFFFF;
-    font-size: 1em;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+	width: calc(100% - 20px); /* 100% Breite minus Padding */
+	padding: 12px 10px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 8px;
+	background: rgba(0, 0, 0, 0.3); /* Dunkleres Feld */
+	color: #FFFFFF;
+	font-size: 1em;
+	transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .login-input-group input:focus {
-    outline: none;
-    border-color: #78C8FF; /* Hellerer Rahmen beim Fokus */
-    box-shadow: 0 0 15px rgba(120, 200, 255, 0.4); /* Leuchten beim Fokus */
+	outline: none;
+	border-color: #78C8FF; /* Hellerer Rahmen beim Fokus */
+	box-shadow: 0 0 15px rgba(120, 200, 255, 0.4); /* Leuchten beim Fokus */
 }
 
 /* --- Buttons --- */
 .login-button {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(145deg, #4A90E2 0%, #78C8FF 100%); /* Farbverlauf für Button */
-    color: #FFFFFF;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    margin-top: 20px;
+	width: 100%;
+	padding: 15px;
+	background: linear-gradient(145deg, #4A90E2 0%, #78C8FF 100%); /* Farbverlauf für Button */
+	color: #FFFFFF;
+	border: none;
+	border-radius: 8px;
+	font-size: 1.1em;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+	margin-top: 20px;
 }
 
 .login-button:hover {
-    background: linear-gradient(145deg, #357ABD 0%, #5DAAEF 100%);
-    transform: translateY(-2px); /* Leichter "Hover-Effekt" */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+	background: linear-gradient(145deg, #357ABD 0%, #5DAAEF 100%);
+	transform: translateY(-2px); /* Leichter "Hover-Effekt" */
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
 .login-button:active {
-    transform: translateY(0);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+	transform: translateY(0);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* --- Link für Registrierung / Zurück --- */
 .switch-mode-link {
-    display: block;
-    margin-top: 20px;
-    color: #B0D0FF;
-    text-decoration: none;
-    font-size: 0.9em;
-    transition: color 0.3s ease;
+	display: block;
+	margin-top: 20px;
+	color: #B0D0FF;
+	text-decoration: none;
+	font-size: 0.9em;
+	transition: color 0.3s ease;
 	cursor: pointer;
 }
 
 .switch-mode-link:hover {
-    color: #78C8FF;
-    text-decoration: underline;
+	color: #78C8FF;
+	text-decoration: underline;
 }
 
 /* --- Fehlermeldungen --- */
 .error-message {
-    color: #FF6B6B; /* Rote Farbe für Fehler */
-    margin-top: 15px;
-    font-size: 0.9em;
-    animation: fadeIn 0.5s ease-out;
+	color: #FF6B6B; /* Rote Farbe für Fehler */
+	margin-top: 15px;
+	font-size: 0.9em;
+	animation: fadeIn 0.5s ease-out;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+	from { opacity: 0; transform: translateY(-10px); }
+	to { opacity: 1; transform: translateY(0); }
 }
 
 .success { color:lightgreen; }
@@ -175,312 +167,497 @@ body, html {
 
 
 .char-list-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin: 20px 0;
-    max-height: 300px;
-    overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	margin: 20px 0;
+	max-height: 300px;
+	overflow-y: auto;
 }
 
 .char-card {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 15px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
+	background: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	padding: 15px;
+	border-radius: 8px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	transition: background 0.2s, transform 0.2s;
 }
 
 .char-card:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.02);
+	background: rgba(255, 255, 255, 0.2);
+	transform: scale(1.02);
 }
 
 .char-avatar {
-    width: 40px;
-    height: 40px;
-    background: #4A90E2;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    margin-right: 15px;
+	width: 40px;
+	height: 40px;
+	background: #4A90E2;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	margin-right: 15px;
 }
 
 .attribute-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Zwei Spalten für die 8 Attribute */
-    gap: 10px;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 15px;
-    border-radius: 8px;
-    margin: 10px 0;
+	display: grid;
+	grid-template-columns: 1fr; /* Einspaltig für Attribute untereinander */
+	gap: 10px;
+	background: rgba(0, 0, 0, 0.2);
+	padding: 15px;
+	border-radius: 8px;
+	margin: 10px 0;
 }
 
 .attr-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 5px 10px;
-    border-radius: 4px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.05);
+	padding: 5px 10px;
+	border-radius: 4px;
 }
 
 .attr-label {
-    font-weight: bold;
-    color: #e0ca82; /* Goldton für DSA */
-    width: 30px;
+	font-weight: bold;
+	color: #e0ca82; /* Goldton für DSA */
+	width: 30px;
 }
 
 .attr-value {
-    font-size: 1.1em;
-    min-width: 25px;
-    text-align: center;
+	font-size: 1.1em;
+	min-width: 25px;
+	text-align: center;
 }
 
 .stat-badge {
-    display: inline-block;
-    padding: 5px 15px;
-    margin-right: 10px;
-    background: #4a1414; /* Dunkelrot für LeP */
-    border-radius: 20px;
-    font-weight: bold;
-    border: 1px solid #7a2a2a;
+	display: inline-block;
+	padding: 5px 15px;
+	margin-right: 10px;
+	background: #4a1414; /* Dunkelrot für Energie/KaP */
+	border-radius: 20px;
+	font-weight: bold;
+	border: 1px solid #7a2a2a;
+	transition: all 0.3s ease;
+}
+
+.stat-hp {
+	background: #144a14 !important; /* Dunkelgrün für LP/HP */
+	border-color: #2a7a2a !important;
+	box-shadow: 0 0 10px rgba(42, 122, 42, 0.4);
+}
+
+/* --- Details-Panel (SlideIn/FadeIn) --- */
+.details-panel {
+	position: fixed;
+	top: 50%;
+	right: 370px; /* Direkt neben der Sidebar */
+	transform: translateY(-50%) translateX(20px);
+	width: 400px;
+	background: rgba(20, 20, 25, 0.95);
+	backdrop-filter: blur(20px);
+	border: 2px solid #cfa94d;
+	border-radius: 12px;
+	padding: 25px;
+	box-shadow: 0 0 50px rgba(0,0,0,0.9);
+	z-index: 100;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.details-panel.active {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(-50%) translateX(0);
+}
+
+.details-close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+	color: #cfa94d;
+	font-size: 1.5em;
+}
+
+.select-card-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}
+
+.select-card .help-icon {
+	margin-left: 0;
+	margin-right: -5px;
+	opacity: 0.6;
+	transition: opacity 0.2s;
+}
+
+.select-card .help-icon:hover {
+	opacity: 1;
 }
 /* ==========================================================================
    RPG CHARACTER CREATOR STYLES
    ========================================================================== */
 
+.creator-layout {
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	position: relative;
+	justify-content: space-between;
+}
+
+.creator-left-sidebar, .creator-right-sidebar {
+	width: 350px;
+	height: 100%;
+	background: rgba(15, 15, 20, 0.85); /* Dunkler, mystischer Hintergrund */
+	backdrop-filter: blur(20px);
+	border: 2px solid #cfa94d; /* DSA-Gold */
+	color: #f1ebd9;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	z-index: 10;
+	overflow-y: auto;
+	padding: 20px;
+	box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(207, 169, 77, 0.1);
+}
+
+.creator-left-sidebar {
+	border-left: none;
+	border-top: none;
+	border-bottom: none;
+}
+
+.creator-right-sidebar {
+	border-right: none;
+	border-top: none;
+	border-bottom: none;
+}
+
+.creator-center-area {
+	flex-grow: 1;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	z-index: 5;
+}
+
+.creator-wizard-header {
+	position: absolute;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 20;
+	background: rgba(15, 15, 20, 0.85);
+	backdrop-filter: blur(10px);
+	border: 2px solid #cfa94d;
+	border-radius: 12px;
+	padding: 15px 30px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	min-width: 650px;
+	box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.creator-header-inner {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	margin-bottom: 10px;
+	border-bottom: 1px solid rgba(207, 169, 77, 0.3);
+	padding-bottom: 10px;
+}
+
+.creator-header-inner h2 {
+	font-family: 'IM Fell English', serif;
+	color: #cfa94d;
+	font-size: 2.2em;
+	margin: 0;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+	text-align: center;
+	flex-grow: 1;
+}
+
+.creator-wizard-overlay {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -40%);
+	z-index: 20;
+	background: rgba(15, 15, 20, 0.85);
+	backdrop-filter: blur(15px);
+	border: 2px solid #cfa94d;
+	border-radius: 12px;
+	padding: 30px;
+	width: 600px;
+	max-height: 70vh;
+	overflow-y: auto;
+	pointer-events: auto;
+	box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+	color: #f1ebd9;
+}
+
+.creator-3d-canvas-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 10;
+	pointer-events: auto; /* allow rotating character */
+}
+
+.creator-3d-canvas {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+.selection-grid-single {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 15px;
+	margin-bottom: 20px;
+}
+
 .creator-box {
-    background: rgba(15, 15, 20, 0.85); /* Dunkler, mystischer Hintergrund */
-    backdrop-filter: blur(20px);
-    border: 2px solid #cfa94d; /* DSA-Gold */
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(207, 169, 77, 0.1);
-    color: #f1ebd9;
-    max-width: 800px;
-    width: 100%;
-    margin: 40px auto;
-    font-family: 'Segoe UI', sans-serif;
+	background: rgba(15, 15, 20, 0.85); /* Dunkler, mystischer Hintergrund */
+	backdrop-filter: blur(20px);
+	border: 2px solid #cfa94d; /* DSA-Gold */
+	border-radius: 12px;
+	padding: 30px;
+	box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(207, 169, 77, 0.1);
+	color: #f1ebd9;
+	width: 100%;
+	font-family: 'Segoe UI', sans-serif;
+	max-height: 90vh;
+	overflow-y: auto;
 }
 
 .creator-header {
-    text-align: center;
-    border-bottom: 1px solid rgba(207, 169, 77, 0.3);
-    margin-bottom: 25px;
-    padding-bottom: 15px;
+	text-align: center;
+	border-bottom: 1px solid rgba(207, 169, 77, 0.3);
+	margin-bottom: 25px;
+	padding-bottom: 15px;
 }
 
 .creator-header h2 {
-    font-family: 'IM Fell English', serif;
-    color: #cfa94d;
-    font-size: 2.8em;
-    margin: 0;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+	font-family: 'IM Fell English', serif;
+	color: #cfa94d;
+	font-size: 2.8em;
+	margin: 0;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
 }
 
 .wizard-steps-indicator {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-    font-family: 'IM Fell French Canon SC', serif;
-    color: #888;
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+	margin-bottom: 20px;
+	font-family: 'IM Fell French Canon SC', serif;
+	color: #888;
 }
 
 .step-indicator {
-    padding: 5px 15px;
-    border-bottom: 2px solid transparent;
-    transition: all 0.3s ease;
+	padding: 5px 15px;
+	border-bottom: 2px solid transparent;
+	transition: all 0.3s ease;
 }
 
 .step-indicator.active {
-    color: #cfa94d;
-    border-bottom: 2px solid #cfa94d;
-    text-shadow: 0 0 8px rgba(207, 169, 77, 0.5);
+	color: #cfa94d;
+	border-bottom: 2px solid #cfa94d;
+	text-shadow: 0 0 8px rgba(207, 169, 77, 0.5);
 }
 
 /* Auswahl-Karten (Berufe, Kulturen) */
 .selection-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
-    margin-bottom: 20px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 15px;
+	margin-bottom: 20px;
 }
 
 .select-card {
-    background: linear-gradient(180deg, rgba(40,40,50,0.9) 0%, rgba(20,20,25,0.9) 100%);
-    border: 1px solid #444;
-    border-radius: 8px;
-    padding: 15px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s ease;
+	background: linear-gradient(180deg, rgba(40,40,50,0.9) 0%, rgba(20,20,25,0.9) 100%);
+	border: 1px solid #444;
+	border-radius: 8px;
+	padding: 15px;
+	cursor: pointer;
+	text-align: center;
+	transition: all 0.2s ease;
 }
 
 .select-card:hover {
-    border-color: #888;
-    transform: translateY(-2px);
+	border-color: #888;
+	transform: translateY(-2px);
 }
 
 .select-card.active {
-    border-color: #cfa94d;
-    background: linear-gradient(180deg, rgba(80,60,20,0.9) 0%, rgba(40,30,10,0.9) 100%);
-    box-shadow: 0 0 15px rgba(207, 169, 77, 0.3);
+	border-color: #cfa94d;
+	background: linear-gradient(180deg, rgba(80,60,20,0.9) 0%, rgba(40,30,10,0.9) 100%);
+	box-shadow: 0 0 15px rgba(207, 169, 77, 0.3);
 }
 
 .select-card.locked {
-    opacity: 0.4;
-    cursor: not-allowed;
-    filter: grayscale(100%);
+	opacity: 0.4;
+	cursor: not-allowed;
+	filter: grayscale(100%);
 }
 
 .card-title {
-    display: block;
-    font-family: 'IM Fell English', serif;
-    font-size: 1.4em;
-    color: #fff;
-    margin-bottom: 5px;
+	display: block;
+	font-family: 'IM Fell English', serif;
+	font-size: 1.4em;
+	color: #fff;
+	margin-bottom: 5px;
 }
 
 .card-desc {
-    color: #aaa;
-    font-size: 0.85em;
+	color: #aaa;
+	font-size: 0.85em;
 }
 
 /* Attributs- und Talent-Pools */
 .points-left {
-    text-align: center;
-    font-family: 'IM Fell French Canon SC', serif;
-    font-size: 1.5em;
-    color: #78C8FF;
-    margin-bottom: 20px;
-    text-shadow: 0 0 10px rgba(120, 200, 255, 0.4);
+	text-align: center;
+	font-family: 'IM Fell French Canon SC', serif;
+	font-size: 1.5em;
+	color: #78C8FF;
+	margin-bottom: 20px;
+	text-shadow: 0 0 10px rgba(120, 200, 255, 0.4);
 }
 
 .btn-small {
-    background: #333;
-    color: #cfa94d;
-    border: 1px solid #555;
-    border-radius: 4px;
-    width: 30px;
-    height: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.2s;
+	background: #333;
+	color: #cfa94d;
+	border: 1px solid #555;
+	border-radius: 4px;
+	width: 30px;
+	height: 30px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: all 0.2s;
 }
 
 .btn-small:hover {
-    background: #555;
-    border-color: #cfa94d;
+	background: #555;
+	border-color: #cfa94d;
 }
 
 .btn-small:active {
-    transform: scale(0.95);
+	transform: scale(0.95);
 }
 
 .skill-cat-header {
-    font-family: 'IM Fell English', serif;
-    color: #cfa94d;
-    border-bottom: 1px solid rgba(207, 169, 77, 0.3);
-    margin-top: 20px;
-    padding-bottom: 5px;
+	font-family: 'IM Fell English', serif;
+	color: #cfa94d;
+	border-bottom: 1px solid rgba(207, 169, 77, 0.3);
+	margin-top: 20px;
+	padding-bottom: 5px;
 }
 
 .skill-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 8px 15px;
-    border-radius: 6px;
-    margin-bottom: 5px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.03);
+	padding: 8px 15px;
+	border-radius: 6px;
+	margin-bottom: 5px;
 }
 
 .skill-info {
-    flex-grow: 1;
+	flex-grow: 1;
 }
 
 .skill-name {
-    display: block;
-    font-weight: bold;
-    color: #e0ca82;
+	display: block;
+	font-weight: bold;
+	color: #e0ca82;
 }
 
 .skill-check {
-    color: #888;
+	color: #888;
 }
 
 .skill-value {
-    font-size: 1.2em;
-    min-width: 30px;
-    text-align: center;
-    margin: 0 10px;
+	font-size: 1.2em;
+	min-width: 30px;
+	text-align: center;
+	margin: 0 10px;
 }
 
 /* Footer & Navigation */
 .creator-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-    border-top: 1px solid rgba(207, 169, 77, 0.3);
-    padding-top: 20px;
+	display: flex;
+	justify-content: space-between;
+	margin-top: 30px;
+	border-top: 1px solid rgba(207, 169, 77, 0.3);
+	padding-top: 20px;
 }
 
 /* ==========================================================================
    CUSTOM INLINE SCROLLBAR (RPG STYLE)
    ========================================================================== */
 
-/* Custom Scrollbar f�r Webkit (Chrome, Edge, Safari) */
+/* Custom Scrollbar fr Webkit (Chrome, Edge, Safari) */
 ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
+	width: 12px;
+	height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(15, 15, 20, 0.95);
-    border-left: 1px solid rgba(207, 169, 77, 0.2);
-    border-radius: 0 8px 8px 0;
+	background: rgba(15, 15, 20, 0.95);
+	border-left: 1px solid rgba(207, 169, 77, 0.2);
+	border-radius: 0 8px 8px 0;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #5a4515 0%, #cfa94d 50%, #5a4515 100%);
-    border: 1px solid #2a2010;
-    border-radius: 6px;
-    box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2);
+	background: linear-gradient(180deg, #5a4515 0%, #cfa94d 50%, #5a4515 100%);
+	border: 1px solid #2a2010;
+	border-radius: 6px;
+	box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #7a5d20 0%, #ebd488 50%, #7a5d20 100%);
+	background: linear-gradient(180deg, #7a5d20 0%, #ebd488 50%, #7a5d20 100%);
 }
 
 /* Firefox Scrollbar */
 * {
-    scrollbar-width: thin;
-    scrollbar-color: #cfa94d rgba(15, 15, 20, 0.95);
+	scrollbar-width: thin;
+	scrollbar-color: #cfa94d rgba(15, 15, 20, 0.95);
 }
 
-/* Scroll-Verhalten f�r die Hauptbox */
+/* Scroll-Verhalten fr die Hauptbox */
 .creator-box {
-    max-height: 85vh; /* Maximal 85% der Bildschirmh�he */
-    overflow-y: auto; /* Erlaubt internes Scrollen */
-    overflow-x: hidden;
+	max-height: 85vh; /* Maximal 85% der Bildschirmhhe */
+	overflow-y: auto; /* Erlaubt internes Scrollen */
+	overflow-x: hidden;
 }
 
 /* Falls die Talentliste extrem lang wird, eigenen Scrollbereich geben */
 .skill-scroll-container {
-    max-height: 60vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-right: 15px; /* Platz f�r die Scrollbar, damit der Text nicht klebt */
-    border-top: 1px solid rgba(207, 169, 77, 0.1);
-    border-bottom: 1px solid rgba(207, 169, 77, 0.1);
-    margin-top: 10px;
+	max-height: 60vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-right: 15px; /* Platz fr die Scrollbar, damit der Text nicht klebt */
+	border-top: 1px solid rgba(207, 169, 77, 0.1);
+	border-bottom: 1px solid rgba(207, 169, 77, 0.1);
+	margin-top: 10px;
 }
 
 /* ==========================================================================
@@ -488,52 +665,52 @@ body, html {
    ========================================================================== */
 
 .help-icon {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    background: #1a1a20;
-    color: #cfa94d;
-    border: 1px solid #cfa94d;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 16px;
-    font-size: 12px;
-    margin-left: 8px;
-    cursor: help;
-    position: relative;
-    font-family: 'Segoe UI', sans-serif;
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	background: #1a1a20;
+	color: #cfa94d;
+	border: 1px solid #cfa94d;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 16px;
+	font-size: 12px;
+	margin-left: 8px;
+	cursor: help;
+	position: relative;
+	font-family: 'Segoe UI', sans-serif;
 }
 
 .help-icon:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: 150%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(15, 15, 20, 0.95);
-    border: 1px solid #cfa94d;
-    color: #f1ebd9;
-    padding: 10px 15px;
-    border-radius: 6px;
-    white-space: pre-wrap;
-    width: 260px;
-    z-index: 100;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.9);
-    font-size: 13px;
-    line-height: 1.5;
-    text-shadow: none;
-    font-weight: normal;
-    pointer-events: none;
+	content: attr(data-tooltip);
+	position: absolute;
+	bottom: 150%;
+	left: 50%;
+	transform: translateX(-50%);
+	background: rgba(15, 15, 20, 0.95);
+	border: 1px solid #cfa94d;
+	color: #f1ebd9;
+	padding: 10px 15px;
+	border-radius: 6px;
+	white-space: pre-wrap;
+	width: 260px;
+	z-index: 100;
+	box-shadow: 0 5px 20px rgba(0,0,0,0.9);
+	font-size: 13px;
+	line-height: 1.5;
+	text-shadow: none;
+	font-weight: normal;
+	pointer-events: none;
 }
 
 .attr-label.recommended {
-    text-shadow: 0 0 10px rgba(207, 169, 77, 0.8);
-    animation: pulseGold 2s infinite alternate;
+	text-shadow: 0 0 10px rgba(207, 169, 77, 0.8);
+	animation: pulseGold 2s infinite alternate;
 }
 
 @keyframes pulseGold {
-    from { color: #cfa94d; }
-    to { color: #fff; }
+	from { color: #cfa94d; }
+	to { color: #fff; }
 }
 
 /* ==========================================================================
@@ -541,69 +718,69 @@ body, html {
    ========================================================================== */
 
 .chronicle-entry {
-    opacity: 0;
-    transform: translateY(15px);
-    animation: revealEntry 1.5s forwards ease-out;
+	opacity: 0;
+	transform: translateY(15px);
+	animation: revealEntry 1.5s forwards ease-out;
 }
 
 @keyframes revealEntry {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 /* ==========================================================================
    RPG INFO-PANEL TOOLTIPS (VERBESSERT)
    ========================================================================== */
 .help-icon:hover::after {
-    /* Uberschreibt die alte relative Positionierung */
-    position: fixed !important;
-    bottom: 40px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 80% !important;
-    max-width: 600px !important;
-    padding: 15px 20px !important;
-    font-size: 1.1em !important;
-    text-align: center !important;
-    z-index: 99999 !important;
-    border-top: 3px solid #cfa94d !important;
-    background: linear-gradient(180deg, rgba(30,30,40,0.95) 0%, rgba(10,10,15,0.95) 100%) !important;
+	/* Uberschreibt die alte relative Positionierung */
+	position: fixed !important;
+	bottom: 40px !important;
+	left: 50% !important;
+	transform: translateX(-50%) !important;
+	width: 80% !important;
+	max-width: 600px !important;
+	padding: 15px 20px !important;
+	font-size: 1.1em !important;
+	text-align: center !important;
+	z-index: 99999 !important;
+	border-top: 3px solid #cfa94d !important;
+	background: linear-gradient(180deg, rgba(30,30,40,0.95) 0%, rgba(10,10,15,0.95) 100%) !important;
 }
 
 /* --- Char Select --- */
 .char-select-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	padding: 20px;
+	box-sizing: border-box;
 }
 
 .char-select-box {
-    background: rgba(15, 15, 20, 0.85);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(207, 169, 77, 0.4);
-    border-radius: 12px;
-    padding: 30px;
-    width: 100%;
-    max-width: 500px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(207, 169, 77, 0.1);
-    text-align: center;
-    margin: 0 auto;
-    color: #e0ca82;
+	background: rgba(15, 15, 20, 0.85);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(207, 169, 77, 0.4);
+	border-radius: 12px;
+	padding: 30px;
+	width: 100%;
+	max-width: 500px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(207, 169, 77, 0.1);
+	text-align: center;
+	margin: 0 auto;
+	color: #e0ca82;
 }
 
 .char-select-box h2 {
-    color: #cfa94d;
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-size: 2em;
-    text-shadow: 0 0 10px rgba(207, 169, 77, 0.5);
-    border-bottom: 1px solid rgba(207, 169, 77, 0.3);
-    padding-bottom: 10px;
+	color: #cfa94d;
+	margin-top: 0;
+	margin-bottom: 20px;
+	font-size: 2em;
+	text-shadow: 0 0 10px rgba(207, 169, 77, 0.5);
+	border-bottom: 1px solid rgba(207, 169, 77, 0.3);
+	padding-bottom: 10px;
 }
 
 /* --- Utilities --- */
@@ -622,151 +799,151 @@ body, html {
 
 /* --- Components --- */
 .creator-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-bottom: 10px;
 }
 
 .btn-prev {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2em;
+	width: 40px;
+	height: 40px;
+	font-size: 1.2em;
 }
 
 .btn-next {
-    width: auto;
-    padding: 0 15px;
-    height: 40px;
-    font-size: 1.2em;
-    font-family: 'IM Fell English', serif;
+	width: auto;
+	padding: 0 15px;
+	height: 40px;
+	font-size: 1.2em;
+	font-family: 'IM Fell English', serif;
 }
 
 .btn-auto {
-    width: auto !important;
-    margin: 0 !important;
+	width: auto !important;
+	margin: 0 !important;
 }
 
 .btn-dice {
-    width: 44px;
-    height: 44px;
-    margin-top: 0;
-    font-size: 1.2em;
-    border-radius: 8px;
+	width: 44px;
+	height: 44px;
+	margin-top: 0;
+	font-size: 1.2em;
+	border-radius: 8px;
 }
 
 .btn-dark {
-    background: #333 !important;
+	background: #333 !important;
 }
 
 .btn-reroll {
-    margin: 0 !important;
-    width: auto !important;
-    background: linear-gradient(145deg, #a83232 0%, #d14f4f 100%) !important;
+	margin: 0 !important;
+	width: auto !important;
+	background: linear-gradient(145deg, #a83232 0%, #d14f4f 100%) !important;
 }
 
 .step-title {
-    flex-grow: 1;
-    text-align: center;
-    border: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
+	flex-grow: 1;
+	text-align: center;
+	border: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
 .chronicle-container {
-    min-height: 200px;
-    padding: 15px;
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(207, 169, 77, 0.3);
-    border-radius: 8px;
-    font-family: 'IM Fell English', serif;
-    font-size: 1.2em;
-    line-height: 1.5;
+	min-height: 200px;
+	padding: 15px;
+	background: rgba(0,0,0,0.3);
+	border: 1px solid rgba(207, 169, 77, 0.3);
+	border-radius: 8px;
+	font-family: 'IM Fell English', serif;
+	font-size: 1.2em;
+	line-height: 1.5;
 }
 
 .chronicle-entry {
-    margin-bottom: 15px;
-    color: #e0ca82;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+	margin-bottom: 15px;
+	color: #e0ca82;
+	text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
 }
 
 .p-20-center {
-    text-align: center;
-    padding: 20px;
+	text-align: center;
+	padding: 20px;
 }
 
 .mt-15-center {
-    margin-top: 15px;
-    text-align: center;
+	margin-top: 15px;
+	text-align: center;
 }
 
 .legacy-title {
-    color: #cfa94d;
-    font-family: 'IM Fell English', serif;
-    font-size: 1.5em;
-    margin-top: -10px;
-    margin-bottom: 20px;
-    text-shadow: 0 0 5px rgba(207,169,77,0.5);
+	color: #cfa94d;
+	font-family: 'IM Fell English', serif;
+	font-size: 1.5em;
+	margin-top: -10px;
+	margin-bottom: 20px;
+	text-shadow: 0 0 5px rgba(207,169,77,0.5);
 }
 
 .mb-20-muted {
-    margin-bottom: 20px;
-    color: #aaa;
+	margin-bottom: 20px;
+	color: #aaa;
 }
 
 .flex-gap-mb-20 {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+	display: flex;
+	gap: 10px;
+	margin-bottom: 20px;
 }
 
 .no-chars-message {
-    text-align: center;
-    color: #aaa;
-    margin: 20px 0;
-    font-style: italic;
+	text-align: center;
+	color: #aaa;
+	margin: 20px 0;
+	font-style: italic;
 }
 
 .char-avatar {
-    width: 50px;
-    height: 50px;
-    background: #cfa94d;
-    color: #0a0a0f;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: bold;
-    flex-shrink: 0;
-    box-shadow: 0 0 10px rgba(207,169,77,0.3);
+	width: 50px;
+	height: 50px;
+	background: #cfa94d;
+	color: #0a0a0f;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 24px;
+	font-weight: bold;
+	flex-shrink: 0;
+	box-shadow: 0 0 10px rgba(207,169,77,0.3);
 }
 
 .select-card-dynamic {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 15px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 15px;
 }
 
 .char-info {
-    flex-grow: 1;
+	flex-grow: 1;
 }
 
 .char-action-icon {
-    color: #cfa94d;
-    font-size: 1.5em;
-    text-shadow: 0 0 5px rgba(207,169,77,0.5);
+	color: #cfa94d;
+	font-size: 1.5em;
+	text-shadow: 0 0 5px rgba(207,169,77,0.5);
 }
 
 .restriction-note {
-    color: #ff6b6b;
-    font-size: 0.8em;
-    margin-top: 5px;
+	color: #ff6b6b;
+	font-size: 0.8em;
+	margin-top: 5px;
 }
 
 .attr-label-box {
-    display: flex;
-    align-items: center;
-    min-width: 80px;
+	display: flex;
+	align-items: center;
+	min-width: 80px;
 }

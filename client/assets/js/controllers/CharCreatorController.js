@@ -1,5 +1,9 @@
-﻿import { BaseController } from './BaseController.js';
+import { BaseController } from './BaseController.js';
 import { cE } from '../utils/cE.js';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { CharacterCreater3d } from '../utils/CharacterCreater3d.js';
+
 
 /**
  * Der Charakter-Editor von Aethelgard.
@@ -11,24 +15,42 @@ export class CharCreatorController extends BaseController {
 		this.currentStep = 1;
 		this.maxSteps = 5;
 
+		// Basis-Werte (Alles auf 8)
+		this.baseAttributes = { MU: 8, KL: 8, IN: 8, CH: 8, FF: 8, GE: 8, KO: 8, KK: 8 };
+		
+		// Vom User manuell investierte Punkte
+		this.investedAttributes = { MU: 0, KL: 0, IN: 0, CH: 0, FF: 0, GE: 0, KO: 0, KK: 0 };
+		this.investedSkills = {};
+
 		this.charData = {
 			name: '',
 			culture: 'kaiserliche',
 			profession: 'krieger',
-			attributes: { MU: 8, KL: 8, IN: 8, CH: 8, FF: 8, GE: 8, KO: 8, KK: 8 },
+			attributes: { ...this.baseAttributes },
 			skills: {},
 			biography: []
 		};
 
-		this.attrPoints = 36;
-		this.skillPoints = 50;
+		this.attrPointsPool = 36;
+		this.skillPointsPool = 50;
 		this.masterData = null;
 		this.rerolls = 3;
 		this.appliedLifepathBonuses = [];
 		this.legacy = null;
+		
+		// 3D Rendering variables
+		this.scene = null;
+		this.camera = null;
+		this.renderer = null;
+		this.model = null;
+		this.animationId = null;
 	}
 
 	async onReady() {
+		// Init 3D Scene
+		this.init3DScene();
+		this.updateBackground();
+
 		// 1. Stammdaten vom Server laden
 		const response = await this.app.api.get('/game/master-data');
 		if (response.success) {
@@ -40,6 +62,9 @@ export class CharCreatorController extends BaseController {
 				this.legacy = charDataResponse.legacy;
 			}
 
+			// Initial einmal alles berechnen
+			this.recalculateAll();
+
 			// Initiales Rendering
 			this.renderCultureSelection();
 			this.renderProfessionSelection();
@@ -47,10 +72,157 @@ export class CharCreatorController extends BaseController {
 			this.renderSkillPool();
 
 			this.updateStepVisibility();
-			this.updateDerivedStatsPreview();
 		} else {
 			console.error("Fehler beim Abruf der Welt-Chroniken.");
 		}
+	}
+	
+	init3DScene() {
+		this.characterCreater3d = new CharacterCreater3d('creator-canvas', this.view);
+		/*
+		const canvas = this.view.querySelector('#creator-canvas');
+		if (!canvas) return;
+
+		const parent = canvas.parentElement;
+		
+		this.scene = new THREE.Scene();
+		this.camera = new THREE.PerspectiveCamera(45, parent.clientWidth / parent.clientHeight, 0.1, 100);
+		this.camera.position.set(0, 1.2, 4);
+
+		this.renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+		this.renderer.setSize(parent.clientWidth, parent.clientHeight);
+		this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+		// Beleuchtung
+		const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+		this.scene.add(ambientLight);
+
+		const dirLight = new THREE.DirectionalLight(0xffeedd, 1);
+		dirLight.position.set(2, 5, 3);
+		this.scene.add(dirLight);
+
+		// Modell laden
+		const loader = new GLTFLoader();
+		loader.load('/assets/models/dummy.glb', (gltf) => {
+			this.model = gltf.scene;
+			console.log("3D-Modell erfolgreich geladen:", gltf);
+			// Das Modell leicht nach unten und vorne rotieren für eine bessere Präsentation
+			this.model.position.set(0, -1, 0); 
+			this.scene.add(this.model);
+		}, undefined, (error) => {
+			console.error("Fehler beim Laden des 3D-Modells:", error);
+		});
+
+		// Resize Event für dieses Layout
+		this.resizeHandler = () => {
+			if (!parent) return;
+			this.camera.aspect = parent.clientWidth / parent.clientHeight;
+			this.camera.updateProjectionMatrix();
+			this.renderer.setSize(parent.clientWidth, parent.clientHeight);
+		};
+		window.addEventListener('resize', this.resizeHandler);
+
+		const renderLoop = () => {
+			if (!this.renderer) return;
+			this.animationId = requestAnimationFrame(renderLoop);
+			
+			if (this.model) {
+				// Leichtes Drehen zur Präsentation
+				this.model.rotation.y += 0.005;
+			}
+			
+			this.renderer.render(this.scene, this.camera);
+		};
+		renderLoop();*/
+	}
+
+	updateBackground() {
+		const bg = this.view.querySelector('#creator-bg');
+		if (bg) {
+			// Wir nutzen ein Fallback auf das alte Bild, wenn kein spezifisches exisitert
+			// Später kann hier `/assets/images/cultures/${this.charData.culture}.jpg` verwendet werden.
+			bg.style.backgroundImage = `url('/assets/images/cultures/${this.charData.culture}.jpg'), url('/assets/images/bifrostark_loginscreen.jpg')`;
+		}
+	}
+
+	destroy() {
+		if (this.animationId) cancelAnimationFrame(this.animationId);
+		if (this.renderer) this.renderer.dispose();
+		if (this.resizeHandler) window.removeEventListener('resize', this.resizeHandler);
+		super.destroy();
+	}
+
+	/**
+	 * Berechnet alle Finalen Werte basierend auf Basis + Investition + Berufsanforderungen
+	 */
+	recalculateAll() {
+		if (!this.masterData) return;
+
+		const prof = this.masterData.professions.find($p => $p.slug === this.charData.profession);
+		const cult = this.masterData.cultures.find($c => $c.slug === this.charData.culture);
+
+		// 1. ATTRIBUTE
+		let usedAttrPoints = 0;
+		Object.keys(this.baseAttributes).forEach($attr => {
+			let val = this.baseAttributes[$attr] + this.investedAttributes[$attr];
+			
+			// Berufsanforderungen (Minimums)
+			if (prof && prof.requirements?.min_attributes?.[$attr]) {
+				const min = prof.requirements.min_attributes[$attr];
+				if (val < min) {
+					// Wenn der Wert unter dem Minimum liegt, "erzwingen" wir ihn
+					// Die Differenz zwischen (Basis+Invest) und Minimum kostet zusätzliche Punkte
+					const forceDiff = min - val;
+					usedAttrPoints += forceDiff;
+					val = min;
+				}
+			}
+
+			// Kultur-Modifikatoren (Boni/Mali)
+			if (cult && cult.attr_mods?.[$attr]) {
+				val += cult.attr_mods[$attr];
+			}
+
+			// Berufs-Modifikatoren (Boni/Mali)
+			if (prof && prof.attr_mods?.[$attr]) {
+				val += prof.attr_mods[$attr];
+			}
+
+			this.charData.attributes[$attr] = val;
+			usedAttrPoints += this.investedAttributes[$attr];
+		});
+		this.attrPoints = this.attrPointsPool - usedAttrPoints;
+
+		// 2. SKILLS
+		this.charData.skills = {};
+		let usedSkillPoints = 0;
+
+		// Start-Skills vom Beruf
+		if (prof && prof.start_skills) {
+			Object.entries(prof.start_skills).forEach(([$slug, $val]) => {
+				this.charData.skills[$slug] = $val;
+			});
+		}
+
+		// Manuell investierte Skill-Punkte
+		Object.entries(this.investedSkills).forEach(([$slug, $val]) => {
+			const startVal = this.charData.skills[$slug] || 0;
+			this.charData.skills[$slug] = startVal + $val;
+			usedSkillPoints += $val;
+		});
+		this.skillPoints = this.skillPointsPool - usedSkillPoints;
+
+		this.updateDerivedStatsPreview();
+	}
+
+	getSkillLevelLabel($val) {
+		if ($val <= 3) return "Unwissender";
+		if ($val <= 6) return "Lehrling";
+		if ($val <= 10) return "Geselle";
+		if ($val <= 14) return "Altgeselle";
+		if ($val <= 18) return "Experte";
+		if ($val <= 22) return "Meister";
+		return "Großmeister";
 	}
 
 	async generateName() {
@@ -124,9 +296,16 @@ export class CharCreatorController extends BaseController {
 			prevBtn.classList.remove('invisible');
 		}
 
-		// In a real i18n, we might add these to char-creator.json
-		// For now we assume they are accessible or fallback to these strings if missing
 		this.view.querySelector('#next-btn').textContent = (this.currentStep === this.maxSteps) ? this.app.lang.get('char.btn_create', {}, "Held erschaffen") : "►";
+
+		const overlay = this.view.querySelector('#wizard-overlay-container');
+		if (overlay) {
+			if (this.currentStep === 1 || this.currentStep === 2) {
+				overlay.classList.add('hidden');
+			} else {
+				overlay.classList.remove('hidden');
+			}
+		}
 	}
 
 	// --- SCHICKSALSWEBER (LIFEPATH) ---
@@ -142,8 +321,11 @@ export class CharCreatorController extends BaseController {
 
 		if (this.appliedLifepathBonuses.length > 0) {
 			this.appliedLifepathBonuses.forEach($b => {
-				if ($b.attr) this.charData.attributes[$b.attr] -= $b.val;
-				if ($b.skill) this.charData.skills[$b.skill] -= $b.val;
+				if ($b.attr) this.investedAttributes[$b.attr] -= $b.val;
+				if ($b.skill) {
+					const curInvest = this.investedSkills[$b.skill] || 0;
+					this.investedSkills[$b.skill] = Math.max(0, curInvest - $b.val);
+				}
 			});
 			this.appliedLifepathBonuses = [];
 		}
@@ -182,13 +364,13 @@ export class CharCreatorController extends BaseController {
 			this.charData.biography.push($evt.id);
 
 			if ($evt.bonus) {
-				if ($evt.bonus.attr && this.charData.attributes[$evt.bonus.attr] !== undefined) {
-					this.charData.attributes[$evt.bonus.attr] += $evt.bonus.val;
+				if ($evt.bonus.attr && this.investedAttributes[$evt.bonus.attr] !== undefined) {
+					this.investedAttributes[$evt.bonus.attr] += $evt.bonus.val;
 					this.appliedLifepathBonuses.push({ attr: $evt.bonus.attr, val: $evt.bonus.val });
 				}
 				if ($evt.bonus.skill) {
-					const curVal = this.charData.skills[$evt.bonus.skill] || 0;
-					this.charData.skills[$evt.bonus.skill] = curVal + $evt.bonus.val;
+					const curVal = this.investedSkills[$evt.bonus.skill] || 0;
+					this.investedSkills[$evt.bonus.skill] = curVal + $evt.bonus.val;
 					this.appliedLifepathBonuses.push({ skill: $evt.bonus.skill, val: $evt.bonus.val });
 				}
 			}
@@ -202,9 +384,7 @@ export class CharCreatorController extends BaseController {
 				$text: localizedText
 			});
 			
-			// Dynamic delay is set via style object property for security/CSP reasons
 			entry.style.animationDelay = ($index * 1.5) + 's';
-			
 			container.appendChild(entry);
 		};
 
@@ -224,9 +404,9 @@ export class CharCreatorController extends BaseController {
 			rerollBtn.classList.add('hidden');
 		}
 
+		this.recalculateAll();
 		this.renderAttributePool();
 		this.renderSkillPool();
-		this.updateDerivedStatsPreview();
 	}
 
 	// --- RENDERING METHODEN ---
@@ -236,14 +416,19 @@ export class CharCreatorController extends BaseController {
 		if (!container || !this.masterData) return;
 		container.innerHTML = '';
 
+		const tooltipText = this.app.lang.get('creator.btn_details') || "Details anzeigen";
+
 		this.masterData.cultures.forEach($cult => {
 			const card = cE({
 				$el: 'div',
 				$class: ['select-card', this.charData.culture === $cult.slug ? 'active' : ''],
 				$onclick: () => this.selectCulture($cult.slug),
+				$onmouseover: () => this.updateInfoDesc($cult),
 				$childs: [
-					{ $el: 'span', $class: 'card-title', $text: $cult.name.de || $cult.slug },
-					{ $el: 'small', $class: ['card-desc', 'text-muted'], $text: $cult.description?.de || $cult.aspect || '' }     
+					{ $class: 'select-card-header', $childs: [
+						{ $el: 'span', $class: 'card-title', $text: $cult.name.de || $cult.slug },
+						{ $el: 'span', $class: 'help-icon', $att: { 'data-tooltip': tooltipText }, $text: '?', $onclick: ($e) => { $e.stopPropagation(); this.openDetails($cult); } }
+					]}
 				]
 			});
 			container.appendChild(card);
@@ -256,6 +441,7 @@ export class CharCreatorController extends BaseController {
 		container.innerHTML = '';
 
 		const selectedCulture = this.charData.culture;
+		const tooltipText = this.app.lang.get('creator.btn_details') || "Details anzeigen";
 
 		this.masterData.professions.forEach($prof => {
 			let isAllowed = true;
@@ -267,9 +453,12 @@ export class CharCreatorController extends BaseController {
 				$el: 'div',
 				$class: ['select-card', isAllowed ? '' : 'locked', this.charData.profession === $prof.slug ? 'active' : ''],
 				$onclick: isAllowed ? () => this.selectProfession($prof.slug) : null,
+				$onmouseover: () => this.updateInfoDesc($prof),
 				$childs: [
-					{ $el: 'span', $class: 'card-title', $text: $prof.name.de || $prof.slug },
-					{ $el: 'small', $class: ['card-desc', 'text-muted'], $text: $prof.energy_type ? 'Energie: ' + $prof.energy_type : 'Weltlich' },
+					{ $class: 'select-card-header', $childs: [
+						{ $el: 'span', $class: 'card-title', $text: $prof.name.de || $prof.slug },
+						{ $el: 'span', $class: 'help-icon', $att: { 'data-tooltip': tooltipText }, $text: '?', $onclick: ($e) => { $e.stopPropagation(); this.openDetails($prof); } }
+					]},
 					!isAllowed ? { $el: 'div', $class: 'restriction-note', $text: '(Kultur-Restriktion)' } : null
 				]
 			});
@@ -279,43 +468,40 @@ export class CharCreatorController extends BaseController {
 
 	renderAttributePool() {
 		const container = this.view.querySelector('#attr-pool');
-		if (!container || !this.masterData) return;
+		if (!container) return;
 		container.innerHTML = '';
 
-		container.appendChild(cE({ $el: 'div', $class: 'points-left', $text: 'Verfügbare Punkte: ' + this.attrPoints }));    
+		const pointsLabel = cE({ 
+			$el: 'div', 
+			$class: ['points-left', this.attrPoints < 0 ? 'text-danger' : ''], 
+			$text: `Verfügbare Attributpunkte: ${this.attrPoints}` 
+		});
+		container.appendChild(pointsLabel);
 
-		const selectedProf = this.masterData.professions.find($p => $p.slug === this.charData.profession);
-		const profMods = selectedProf && selectedProf.attr_mods ? selectedProf.attr_mods : {};
-
-		const attrDesc = {
-			MU: "Mut - Wichtig für Initiative, Angriff und das Widerstehen von Furcht.",
-			KL: "Klugheit - Bestimmt magische Energie (AsP) und Wissenstalente.",
-			IN: "Intuition - Wichtig für Ausweichen, Fernkampf und Aufmerksamkeit.",
-			CH: "Charisma - Beeinflusst NPC-Interaktionen und soziale Talente.",
-			FF: "Fingerfertigkeit - Nützlich für Handwerk, Diebstahl und Präzision.",
-			GE: "Gewandtheit - Bestimmt Geschwindigkeit, Parade und körperliche Talente.",
-			KO: "Konstitution - Bestimmt Lebenspunkte (LeP), Ausdauer und Giftresistenz.",
-			KK: "Körperkraft - Bestimmt Nahkampfschaden und Tragkraft."
+		const attrDescs = {
+			MU: "Mut: Willenskraft, Furchtlosigkeit und Entschlossenheit.",
+			KL: "Klugheit: Logisches Denken, Gedächtnis und Wissen.",
+			IN: "Intuition: Menschenkenntnis, Instinkt und Aufmerksamkeit.",
+			CH: "Charisma: Ausstrahlung, Überzeugungskraft und Führungstalent.",
+			FF: "Fingerfertigkeit: Handwerkliches Geschick und Präzision.",
+			GE: "Gewandtheit: Beweglichkeit, Balance und Reflexe.",
+			KO: "Konstitution: Ausdauer, Widerstandskraft und Zähigkeit.",
+			KK: "Körperkraft: Muskelkraft, Wucht und Tragkraft."
 		};
 
 		Object.keys(this.charData.attributes).forEach($attr => {
-			const isRecommended = profMods[$attr] !== undefined && profMods[$attr] > 0;
-			const tooltipText = attrDesc[$attr] + (isRecommended ? "\n\n★ Besonders wichtig für deinen Beruf!" : "");   
-
+			const val = this.charData.attributes[$attr];
 			const row = cE({
 				$class: 'attr-row',
 				$childs: [
-					{
-						$el: 'div',
-						$class: 'attr-label-box',
-						$childs: [
-							{ $el: 'span', $class: isRecommended ? ['attr-label', 'recommended'] : 'attr-label', $text: $attr },
-							{ $el: 'span', $class: 'help-icon', $text: '?', $att: { 'data-tooltip': tooltipText } }
-						]
-					},
-					{ $el: 'button', $class: 'btn-small', $text: '-', $onclick: () => this.modAttr($attr, -1) },  
-					{ $el: 'span', $class: 'attr-value', $text: this.charData.attributes[$attr] },
-					{ $el: 'button', $class: 'btn-small', $text: '+', $onclick: () => this.modAttr($attr, 1) }    
+					{ $el: 'div', $class: 'attr-label-box', $childs: [
+						{ $el: 'span', $class: 'attr-label', $text: $attr },
+						{ $el: 'span', $class: 'help-icon', $att: { 'data-tooltip': attrDescs[$attr] || '' }, $text: '?' },
+						{ $el: 'small', $class: 'text-muted', $text: val >= 12 ? ' (Herausragend)' : '' }
+					]},
+					{ $el: 'button', $class: 'btn-small', $text: '-', $onclick: () => this.modAttr($attr, -1) },
+					{ $el: 'span', $class: 'attr-value', $text: val },
+					{ $el: 'button', $class: 'btn-small', $text: '+', $onclick: () => this.modAttr($attr, 1) }
 				]
 			});
 			container.appendChild(row);
@@ -326,30 +512,30 @@ export class CharCreatorController extends BaseController {
 		const container = this.view.querySelector('#skill-pool');
 		if (!container || !this.masterData) return;
 
-		this.view.querySelector('#skill-points-left').textContent = 'Talentpunkte: ' + this.skillPoints;
+		const pointsDisplay = this.view.querySelector('#skill-points-left');
+		pointsDisplay.textContent = `Talentpunkte: ${this.skillPoints}`;
+		pointsDisplay.className = this.skillPoints < 0 ? 'text-danger' : '';
+		
 		container.innerHTML = '';
 
-		const categories = ['talent', 'kampf', 'koerper', 'gesellschaft', 'wissen', 'handwerk'];
+		const categories = ['kampf', 'koerper', 'gesellschaft', 'wissen', 'handwerk'];
 
 		categories.forEach($cat => {
 			const catSkills = this.masterData.skills.filter($s => $s.category === $cat);
 			if (catSkills.length === 0) return;
 
-			container.appendChild(cE({ $el: 'h3', $class: 'skill-cat-header', $text: $cat.toUpperCase() }));
+			container.appendChild(cE({ $el: 'h4', $class: 'skill-cat-header', $text: $cat.toUpperCase() }));
 
 			catSkills.forEach($skill => {
 				const val = this.charData.skills[$skill.slug] || 0;
-				const tooltipText = $skill.description?.de || "Ein Talent der Welt Aethelgard.";
+				const levelLabel = this.getSkillLevelLabel(val);
 
 				const row = cE({
 					$class: 'skill-row',
 					$childs: [
 						{ $el: 'div', $class: 'skill-info', $childs: [
-							{ $el: 'span', $class: ['skill-name', 'flex-align-center'], $childs: [
-								{ $el: 'span', $text: $skill.name?.de || $skill.slug }, 
-								{ $el: 'span', $class: ['help-icon', 'mr-8'], $text: '?', $att: { 'data-tooltip': tooltipText } }
-							]},
-							{ $el: 'small', $class: 'skill-check', $text: '(' + $skill.attr_check + ')' }      
+							{ $el: 'span', $class: 'skill-name', $text: $skill.name.de },
+							{ $el: 'small', $class: 'skill-level-tag', $text: levelLabel }
 						]},
 						{ $el: 'button', $class: 'btn-small', $text: '-', $onclick: () => this.modSkill($skill.slug, -1) },
 						{ $el: 'span', $class: 'skill-value', $text: val },
@@ -363,45 +549,74 @@ export class CharCreatorController extends BaseController {
 
 	// --- AKTIONEN ---
 
+	updateInfoDesc($item) {
+		const infoDesc = this.view.querySelector('#info-desc');
+		if (!infoDesc) return;
+		
+		const name = $item.name?.de || $item.slug;
+		const tooltipText = this.app.lang.get('creator.btn_details') || "Details anzeigen";
+		infoDesc.innerHTML = `<strong>${name}</strong><br><br>Klicke auf das '?', um ${tooltipText.toLowerCase()}.`;
+	}
+
+	openDetails($item) {
+		const panel = this.view.querySelector('#details-panel');
+		const content = this.view.querySelector('#details-content');
+		if (!panel || !content) return;
+
+		const name = $item.name?.de || $item.slug;
+		const desc = $item.description?.de || $item.aspect || "Keine weitere Beschreibung verfügbar.";
+		
+		content.innerHTML = `
+			<h2 class="skill-cat-header" style="margin-top:0">${name}</h2>
+			<div class="text-muted" style="line-height:1.6; font-size:1.1em;">
+				${desc.replace(/\n/g, '<br>')}
+			</div>
+		`;
+
+		panel.classList.add('active');
+	}
+
+	closeDetails() {
+		const panel = this.view.querySelector('#details-panel');
+		if (panel) panel.classList.remove('active');
+	}
+
 	selectCulture($slug) {
 		this.charData.culture = $slug;
-		const currentProf = this.masterData.professions.find($p => $p.slug === this.charData.profession);
-		if (currentProf && currentProf.requirements && currentProf.requirements.allowed_cultures) {
-			if (!currentProf.requirements.allowed_cultures.includes($slug)) {
-				this.charData.profession = null;
-			}
-		}
-
+		this.recalculateAll();
 		this.renderCultureSelection();
 		this.renderProfessionSelection();
-		this.updateDerivedStatsPreview();
+		this.renderAttributePool();
+		this.renderSkillPool();
 	}
 
 	selectProfession($slug) {
 		this.charData.profession = $slug;
+		// Wir setzen die investierten Skills zurück, wenn der Beruf wechselt
+		this.investedSkills = {}; 
+		this.recalculateAll();
 		this.renderProfessionSelection();
 		this.renderAttributePool();
-		this.updateDerivedStatsPreview();
+		this.renderSkillPool();
 	}
 
 	modAttr($attr, $delta) {
-		const val = this.charData.attributes[$attr];
-		if ($delta > 0 && (this.attrPoints <= 0 || val >= 14)) return;
-		if ($delta < 0 && val <= 8) return;
+		const currentInvest = this.investedAttributes[$attr];
+		if ($delta > 0 && (this.attrPoints <= 0 || (this.baseAttributes[$attr] + currentInvest) >= 14)) return;
+		if ($delta < 0 && currentInvest <= 0) return;
 
-		this.charData.attributes[$attr] += $delta;
-		this.attrPoints -= $delta;
+		this.investedAttributes[$attr] += $delta;
+		this.recalculateAll();
 		this.renderAttributePool();
-		this.updateDerivedStatsPreview();
 	}
 
 	modSkill($slug, $delta) {
-		const val = this.charData.skills[$slug] || 0;
+		const currentInvest = this.investedSkills[$slug] || 0;
 		if ($delta > 0 && this.skillPoints <= 0) return;
-		if ($delta < 0 && val <= 0) return;
+		if ($delta < 0 && currentInvest <= 0) return;
 
-		this.charData.skills[$slug] = val + $delta;
-		this.skillPoints -= $delta;
+		this.investedSkills[$slug] = currentInvest + $delta;
+		this.recalculateAll();
 		this.renderSkillPool();
 	}
 
@@ -413,24 +628,33 @@ export class CharCreatorController extends BaseController {
 
 		if (!selectedProf || !selectedCult) return;
 
+		const hpLabel = this.app.lang.currentLang === 'en' ? 'HP' : 'LP';
 		const lep = (selectedCult.base_stats?.LeP || 30) + this.charData.attributes.KO;
-		this.view.querySelector('#lep-preview').textContent = 'LeP: ' + lep;
+		this.view.querySelector('#lep-preview').textContent = hpLabel + ': ' + lep;
 
 		const aspEl = this.view.querySelector('#asp-preview');
 		const kapEl = this.view.querySelector('#kap-preview');
 
-		if (selectedProf.energy_type === 'AsP') {
+		if (selectedProf.energy_type === 'AsP' || selectedProf.energy_type === 'Mana') {
 			const asp = (selectedProf.energy_base || 0) + this.charData.attributes.KL;
 			aspEl.textContent = 'AsP: ' + asp;
 			aspEl.classList.remove('hidden');
 			kapEl.classList.add('hidden');
-		} else if (selectedProf.energy_type === 'KaP') {
+		} else if (selectedProf.energy_type === 'KaP' || selectedProf.energy_type === 'Gunst') {
 			kapEl.textContent = 'KaP: ' + (selectedProf.energy_base || 0);
 			kapEl.classList.remove('hidden');
 			aspEl.classList.add('hidden');
 		} else {
 			aspEl.classList.add('hidden');
 			kapEl.classList.add('hidden');
+		}
+
+		const infoDesc = this.view.querySelector('#info-desc');
+		if (infoDesc) {
+			const cultName = selectedCult.name?.de || selectedCult.slug;
+			const profName = selectedProf.name?.de || selectedProf.slug;
+			const tooltipText = this.app.lang.get('creator.btn_details') || "Details anzeigen";
+			infoDesc.innerHTML = `<strong>${profName} der Kultur ${cultName}</strong><br><br>Klicke auf das '?', um ${tooltipText.toLowerCase()}.`;
 		}
 	}
 

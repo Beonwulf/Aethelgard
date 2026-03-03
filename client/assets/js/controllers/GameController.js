@@ -25,8 +25,6 @@ export class GameController extends BaseController {
             // Now that the canvas is in the DOM, start the game
             this.game = new Aethelgard();
             await this.game.ignite(worldData);
-
-            this.onReady();
         } catch (error) {
             console.error("Failed to render game:", error);
             // Optionally, display an error message to the user

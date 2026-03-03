@@ -85,16 +85,38 @@ export class GMPanelController extends BaseController {
 	}
 
 	async loadDashboardStats() {
-		this.container.querySelector('#stat-users').textContent = (await this.app.api.get('/admin/users')).data.length;
-		this.container.querySelector('#stat-guilds').textContent = (await this.app.api.get('/admin/guilds')).data.length;
-		this.container.querySelector('#stat-characters').textContent = '0'; // Placeholder
-		this.container.querySelector('#stat-quests').textContent = '42'; // Placeholder
-		this.container.querySelector('#stat-items').textContent = '256'; // Placeholder
-		this.container.querySelector('#stat-npcs').textContent = '89'; // Placeholder
+		try {
+			const response = await this.app.api.get('/admin/stats');
+			if (response && response.success) {
+				const stats = response.data;
+				this.container.querySelector('#stat-users').textContent = stats.users;
+				this.container.querySelector('#stat-guilds').textContent = stats.guilds;
+				this.container.querySelector('#stat-characters').textContent = stats.characters;
+				this.container.querySelector('#stat-quests').textContent = '42'; // Placeholder
+				this.container.querySelector('#stat-items').textContent = '256'; // Placeholder
+				this.container.querySelector('#stat-npcs').textContent = '89'; // Placeholder
+				this.container.querySelector('#stat-cultures').textContent = stats.cultures;
+				this.container.querySelector('#stat-professions').textContent = stats.professions;
+
+			}
+		} catch (err) {
+			console.error("Error loading stats:", err);
+		}
 	}
 
 	async loadWorldData() {
-		console.log("Loading world data (e.g., server status)...");
+		const section = this.container.querySelector('#world-section');
+		const statusText = section.querySelector('.gm-stat-card-value');
+
+		try {
+			const response = await this.app.api.get('/admin/stats');
+			if (response && response.success) {
+				const uptime = Math.floor(response.data.uptime / 60);
+				statusText.textContent = `Online (${uptime}m)`;
+			}
+		} catch (err) {
+			statusText.textContent = 'Offline?';
+		}
 	}
 
 	async loadUsers() {
@@ -116,7 +138,17 @@ export class GMPanelController extends BaseController {
 	async loadCharacters() {
 		const listContainer = this.container.querySelector('#character-list');
 		listContainer.innerHTML = `<em>${this.app.lang.get('gm.loading')}</em>`;
-		listContainer.innerHTML = '<p>Character list will be implemented in a future step.</p>';
+		try {
+			const response = await this.app.api.get('/admin/characters');
+			listContainer.innerHTML = '';
+			if (response && response.success && response.data.length > 0) {
+				response.data.forEach(char => listContainer.appendChild(this.renderCharacterCard(char)));
+			} else {
+				listContainer.innerHTML = `<p>${this.app.lang.get('gm.no_characters_found') || 'No characters found.'}</p>`;
+			}
+		} catch (err) {
+			listContainer.innerHTML = `<p>${this.app.lang.get('gm.network_error')}</p>`;
+		}
 	}
 
 	async loadGuilds() {
@@ -137,19 +169,77 @@ export class GMPanelController extends BaseController {
 
 	async loadDbTables() {
 		const listContainer = this.container.querySelector('#db-tables-list');
-		listContainer.innerHTML = '';
-		const tables = ['users', 'characters', 'guilds', 'guild_members', 'items', 'npcs', 'quests'];
-		tables.forEach(tableName => {
-			const row = cE({
-				$el: 'tr',
-				$childs: [
-					{ $el: 'td', $text: tableName },
-					{ $el: 'td', $text: '...' },
-					{ $el: 'td', $childs: [{ $el: 'button', $class: 'btn-small', $text: 'View' }] }
-				]
-			});
-			listContainer.appendChild(row);
-		});
+		listContainer.innerHTML = `<tr><td colspan="3"><em>${this.app.lang.get('gm.loading')}</em></td></tr>`;
+		try {
+			const response = await this.app.api.get('/admin/database/tables');
+			listContainer.innerHTML = '';
+			if (response && response.success) {
+				response.data.forEach(table => {
+					const row = cE({
+						$el: 'tr',
+						$childs: [
+							{ $el: 'td', $text: table.name },
+							{ $el: 'td', $text: table.rows.toString() },
+							{ $el: 'td', $childs: [{ $el: 'button', $class: 'btn-small', $text: 'View', $onclick: () => this.viewTableContent(table.name) }] }
+						]
+					});
+					listContainer.appendChild(row);
+				});
+			}
+		} catch (err) {
+			listContainer.innerHTML = '<tr><td colspan="3">Error loading table stats.</td></tr>';
+		}
+	}
+
+	async viewTableContent(tableName) {
+		const modal = this.container.querySelector('#gm-modal');
+		const modalTitle = this.container.querySelector('#gm-modal-title');
+		const modalBody = this.container.querySelector('#gm-modal-body');
+
+		modalTitle.textContent = `Table: ${tableName}`;
+		modalBody.innerHTML = `<em>${this.app.lang.get('gm.loading')}</em>`;
+		modal.classList.add('active');
+
+		try {
+			const response = await this.app.api.get(`/admin/database/table/${tableName}`);
+			
+			if (response && response.success) {
+				if (response.data && response.data.length > 0) {
+					const columns = Object.keys(response.data[0]);
+					
+					modalBody.innerHTML = '';
+					const table = cE({
+						$el: 'table',
+						$class: 'gm-modal-table',
+						$childs: [
+							{ $el: 'thead', $childs: [{ $el: 'tr', $childs: columns.map(col => ({ $el: 'th', $text: col })) }] },
+							{ $el: 'tbody', $childs: response.data.map(row => ({
+								$el: 'tr',
+								$childs: columns.map(col => {
+									let val = row[col];
+									if (typeof val === 'object' && val !== null) val = JSON.stringify(val);
+									return { $el: 'td', $text: (val !== undefined && val !== null) ? val.toString() : 'NULL' };
+								})
+							}))}
+						],
+						controller: this
+					});
+					modalBody.appendChild(table);
+				} else {
+					modalBody.innerHTML = '<p>Diese Tabelle enthält aktuell keine Einträge.</p>';
+				}
+			} else {
+				modalBody.innerHTML = `<p>Fehler beim Laden: ${response.error || 'Unbekannter Fehler'}</p>`;
+			}
+		} catch (err) {
+			console.error("ViewTable Error:", err);
+			modalBody.innerHTML = '<p>Kritischer Netzwerkfehler beim Laden der Tabellendaten.</p>';
+		}
+	}
+
+	closeModal() {
+		const modal = this.container.querySelector('#gm-modal');
+		if (modal) modal.classList.remove('active');
 	}
 
 	renderUserCard(user) {
@@ -163,7 +253,24 @@ export class GMPanelController extends BaseController {
 					]
 				},
 				{ $el: 'div', $class: 'char-action', $childs: [
-					{ $el: 'button', $class: 'btn-small', $text: 'Make Admin', $onclick: () => this.changeRole(user.id, 'admin') }
+					{ $el: 'button', $class: 'btn-small', $text: 'Make Admin', $onclick: () => this.changeRole(user.id, 'admin') }	
+				]}
+			]
+		});
+	}
+
+	renderCharacterCard(char) {
+		return cE({
+			$el: 'div', $class: 'select-card-dynamic',
+			$childs: [
+				{ $el: 'div', $class: 'char-info',
+					$childs: [
+						{ $el: 'span', $class: 'card-title', $text: char.name },
+						{ $el: 'small', $class: 'text-muted', $text: `Level: ${char.level} | Owner: ${char.owner_name}` }
+					]
+				},
+				{ $el: 'div', $class: 'char-action', $childs: [
+					{ $el: 'button', $class: ['btn-small', 'btn-danger'], $text: 'Delete', $onclick: () => this.deleteCharacter(char.uuid) }	
 				]}
 			]
 		});
@@ -180,12 +287,22 @@ export class GMPanelController extends BaseController {
 					]
 				},
 				{ $el: 'div', $class: 'char-action', $childs: [
-					{ $el: 'button', $class: ['btn-small', 'btn-danger'], $text: 'Delete', $onclick: () => this.deleteGuild(guild.id) }
+					{ $el: 'button', $class: ['btn-small', 'btn-danger'], $text: 'Delete', $onclick: () => this.deleteGuild(guild.id) }	
 				]}
 			]
 		});
 	}
 
+	async deleteCharacter(uuid) {
+		if (!confirm('Are you sure you want to delete this character?')) return;
+		try {
+			const response = await this.app.api.delete(`/admin/characters/${uuid}`);
+			if (response && response.success) await this.loadCharacters();
+			else alert('Error deleting character.');
+		} catch (err) {
+			console.error("Error deleting character:", err);
+		}
+	}
 	async createGuild(name, tag) {
 		try {
 			const response = await this.app.api.post('/admin/guilds', { name, tag });

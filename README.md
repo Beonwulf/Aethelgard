@@ -1,37 +1,36 @@
 # ⚔️ Aethelgard - MMORPG Core
-Ein modulares Backend-System für ein MMORPG, das eine tiefe Lore mit einem komplexen RPG-Regelwerk verbindet. Basierend auf Node.js, PostgreSQL und Socket.io.
+A modular backend system for an MMORPG that combines deep lore with a complex RPG rulebook. Based on Node.js, PostgreSQL, and Socket.io.
 
 
-# 🛠️ Tech-Stack & Architektur (Update)
-* Networking & Middleware: Bifrost (Eigenentwicklung) – Regelt die Kommunikation zwischen Client und Server effizienter als Standard-Frameworks.
-* Kommunikation: Socket.io & WebSockets für Low-Latency MMORPG-Echtzeit-Interaktionen.
-* Datenbank: PostgreSQL & Knex.js (Query Builder) für ein robustes Persistenz-Layer.
-* Sicherheit: JWT & Bcrypt für verschlüsselte Authentifizierung.
+# 🛠️ Tech-Stack & Architecture (Update)
+* Networking & Middleware: Bifrost (In-house development) – Manages communication between client and server more efficiently than standard frameworks.
+* Communication: Socket.io & WebSockets for low-latency MMORPG real-time interactions.
+* Database: PostgreSQL & Knex.js (Query Builder) for a robust persistence layer.
+* Security: JWT & Bcrypt for encrypted authentication.
 
 
 # 🏰 Aethelgard - Project Mallorca
 
-## 📌 Grundgerüst (Erledigt)
-- [x] Projektstruktur & Umbenennung (Aethelgard)
-- [x] ThreeEngine Basis (Renderer, Camera, OrbitControls)
-- [x] Environment (Sonne, Licht, Nebel)
-- [x] WorldManager (Chunk-Loading & 16-Bit Heightmaps)
+## 📌 Framework (Completed)
+- [x] Project structure & renaming (Aethelgard)
+- [x] ThreeEngine base (Renderer, Camera, OrbitControls)
+- [x] Environment (Sun, light, fog)
+- [x] WorldManager (Chunk loading & 16-bit heightmaps)
 - [x] Player Spawn System
-- [x] Basis-Wasser (Ozean-Plane)
+- [x] Basic water (Ocean plane)
 
 
-## 🛠 Offene Optimierungen (Später)
-- [ ] **Terrain:** Normalen-Glättung im Shader (Treppen-Schatten entfernen)
-- [ ] **Wasser:** Animation (Scrolling Noise), Specular Glanz & Schaum
-- [ ] **Wasser:** Soft-Edges / Transparenz am Ufer
-- [ ] **Himmel:** Atmospheric Scattering (Realistischer Horizont)
-- [ ] **Performance:** AssetManager & Loading-Screen
+## 🛠 Open Optimizations (Later)
+- [ ] **Terrain:** Normal smoothing in the shader (remove staircase shadows)
+- [ ] **Water:** Animation (scrolling noise), specular glint & foam
+- [ ] **Water:** Soft edges / transparency at the shore
+- [ ] **Sky:** Atmospheric scattering (realistic horizon)
+- [ ] **Performance:** AssetManager & Loading Screen
 
 
-## 🚀 Nächste Meilensteine (Grundgerüst erweitern)
-1. **ESC:** ESC-System, erstellen und einbinden. (mit Trigger von Socket)
-2. **ThirdPersonCamera:** Kamera die auf den Spieler schaut
-2. **Player-Klasse:** Kamera-Steuerung, die auf dem Boden "läuft" (Raycasting).
-3. **Kollision:** Verhindern, dass man unter das Wasser oder durch Berge fliegt.
-4. **Interaktion:** Erste Objekte (Bäume/Häuser) auf dem Terrain platzieren.
-
+## 🚀 Next Milestones (Expanding the framework)
+1. **ESC:** ECS system, create and integrate (with socket trigger).
+2. **ThirdPersonCamera:** Camera that looks at the player.
+2. **Player Class:** Camera control that "walks" on the ground (raycasting).
+3. **Collision:** Prevent flying under the water or through mountains.
+4. **Interaction:** Place first objects (trees/houses) on the terrain.

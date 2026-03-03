@@ -29,6 +29,8 @@
       "stat_quests": "Verfügbare Quests",
       "stat_items": "Items in der Welt",
       "stat_npcs": "NPCs in der Welt",
+      "stat_cultures": "Kulturen",
+      "stat_professions": "Berufe",
       "world_server_status": "Server Status",
       "world_restart": "Server Neustart",
       "world_maintenance": "Wartungsmodus",
@@ -43,6 +45,9 @@
       "btn_back": "Zurück zum Spiel",
       "loading": "Lade Daten...",
       "access_denied": "Zugriff verweigert.",
-      "network_error": "Netzwerkfehler."
-    }
-  }
+      "network_error": "Netzwerkfehler.",
+      "no_characters_found": "Keine Charaktere in der Welt gefunden.",
+      "role_update_error": "Fehler beim Aktualisieren der Spieler-Rolle."
+      }
+      }
+

@@ -1,0 +1,37 @@
+:root {
+	/* Rarity Colors */
+	--color-rarity-common: #9d9d9d;
+	--color-rarity-common-rgb: 157, 157, 157;
+	--color-rarity-standard: #ffffff;
+	--color-rarity-standard-rgb: 255, 255, 255;
+	--color-rarity-uncommon: #1eff00;
+	--color-rarity-uncommon-rgb: 30, 255, 0;
+	--color-rarity-rare: #0070dd;
+	--color-rarity-rare-rgb: 0, 112, 221;
+	--color-rarity-epic: #a335ee;
+	--color-rarity-epic-rgb: 163, 53, 238;
+	--color-rarity-legendary: #ff8000;
+	--color-rarity-legendary-rgb: 255, 128, 0;
+	--color-rarity-artifact: #e6cc80;
+	--color-rarity-artifact-rgb: 230, 204, 128;
+
+	/* General UI Colors */
+	--color-accent-gold: #cfa94d;
+	--color-accent-gold-rgb: 207, 169, 77;
+	--color-accent-blue: #78c8ff;
+	--color-accent-blue-rgb: 120, 200, 255;
+	--color-bg-dark: #0f0f14;
+	--color-bg-dark-rgb: 15, 15, 20;
+	--color-text-light: #f1ebd9;
+	--color-text-light-rgb: 241, 235, 217;
+	--color-error: #ff6b6b;
+	--color-error-rgb: 255, 107, 107;
+
+	/* GM Panel Colors */
+	--gm-bg-primary: rgba(var(--color-bg-dark-rgb), 0.95);
+	--gm-bg-secondary: rgba(25, 25, 35, 0.95);
+	--gm-bg-tertiary: rgba(40, 40, 50, 0.95);
+	--gm-accent-primary: var(--color-accent-gold);
+	--gm-text-primary: var(--color-text-light);
+	--gm-border-color: rgba(var(--color-accent-gold-rgb), 0.4);
+}

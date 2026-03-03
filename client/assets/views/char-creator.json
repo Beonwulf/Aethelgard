@@ -1,76 +1,112 @@
 {
   "$class": ["char-creator-screen", "fade-in"],
   "$childs": [
-        { "$class": "login-background" },
+        { "$id": "creator-bg", "$class": "login-background" },
         {
-          "$class": "creator-box",
+          "$class": "creator-layout",
           "$childs": [
+            {
+              "$class": "creator-left-sidebar",
+              "$childs": [
+                  { "$el": "h3", "$class": ["skill-cat-header", "mt-0"], "$text": "{{creator.culture}}" },  
+                  { "$id": "culture-list", "$class": "selection-grid-single" },
+                  { "$el": "h3", "$class": "skill-cat-header", "$text": "{{creator.profession}}" },
+                  { "$id": "class-list", "$class": "selection-grid-single" }
+              ]
+            },
+            {
+              "$class": "creator-center-area",
+              "$childs": [
                 {
-                    "$class": "creator-header",
-                    "$childs": [
-                        { "$el": "button", "$id": "prev-btn", "$class": ["btn-small", "btn-prev", "hidden"], "$text": "◄", "$action": "prevStep" },
-                        { "$el": "h2", "$id": "step-title", "$class": "step-title", "$text": "{{creator.titles.1}}" },
-                        { "$el": "button", "$id": "next-btn", "$class": ["btn-small", "btn-next"], "$text": "►", "$action": "nextStep" }
-                    ]
+                  "$class": "creator-3d-canvas-container",
+                  "$childs": [
+                    { "$el": "canvas", "$id": "creator-canvas", "$class": "creator-3d-canvas" }
+                  ]
                 },
                 {
-                    "$class": "wizard-steps-indicator",
-                    "$childs": [
-                        { "$el": "span", "$class": ["step-indicator", "active"], "$text": "{{creator.step_1}}" },
-                        { "$el": "span", "$class": "step-indicator", "$text": "{{creator.step_2}}" },
-                        { "$el": "span", "$class": "step-indicator", "$text": "{{creator.step_3}}" },
-                        { "$el": "span", "$class": "step-indicator", "$text": "{{creator.step_4}}" },
-                        { "$el": "span", "$class": "step-indicator", "$text": "{{creator.step_5}}" }
-                    ]
+                  "$class": "creator-wizard-header",
+                  "$childs": [
+                      {
+                          "$class": "creator-header-inner",
+                          "$childs": [
+                              { "$el": "button", "$id": "prev-btn", "$class": ["btn-small", "btn-prev"], "$text": "◄", "$action": "prevStep" },
+                              { "$el": "h2", "$id": "step-title", "$class": "step-title", "$text": "{{creator.titles.1}}" },
+                              { "$el": "button", "$id": "next-btn", "$class": ["btn-small", "btn-next"], "$text": "►", "$action": "nextStep" }
+                          ]
+                      },
+                      {
+                          "$class": "wizard-steps-indicator",
+                          "$childs": [
+                              { "$el": "span", "$class": ["step-indicator", "active"], "$text": "{{creator.step_1}}" },
+                              { "$el": "span", "$class": "step-indicator", "$text": "{{creator.step_2}}" },
+                              { "$el": "span", "$class": "step-indicator", "$text": "{{creator.step_3}}" },
+                              { "$el": "span", "$class": "step-indicator", "$text": "{{creator.step_4}}" },
+                              { "$el": "span", "$class": "step-indicator", "$text": "{{creator.step_5}}" }
+                          ]
+                      }
+                  ]
                 },
-
-                { "$id": "step-1", "$class": "wizard-step", "$childs": [
-                        { "$el": "h3", "$class": ["skill-cat-header", "mt-0"], "$text": "{{creator.culture}}" },  
-                        { "$id": "culture-list", "$class": "selection-grid" },
-                        { "$el": "h3", "$class": "skill-cat-header", "$text": "{{creator.profession}}" },
-                        { "$id": "class-list", "$class": "selection-grid" }
-                ]},
-
-                { "$id": "step-2", "$class": ["wizard-step", "hidden"], "$childs": [
-                        { "$el": "p", "$text": "{{creator.attr_desc}}" },   
-                        { "$id": "attr-pool", "$class": "attribute-grid" }
-                ]},
-
-                { "$id": "step-3", "$class": ["wizard-step", "hidden"], "$childs": [
-                        { "$id": "skill-points-left", "$class": "points-left" },
-                        { "$id": "skill-pool", "$class": "skill-scroll-container" }
-                ]},
-
-                { "$id": "step-4", "$class": ["wizard-step", "hidden"], "$childs": [
-                        { "$el": "p", "$text": "{{creator.chronicle_desc}}" },
-                        { "$el": "div", "$class": "flex-center-gap", "$childs": [
-                            { "$el": "button", "$id": "weave-btn", "$class": ["login-button", "btn-auto"], "$text": "{{creator.btn_weave}}", "$action": "generateLifepath" },
-                            { "$el": "button", "$id": "reroll-btn", "$class": ["login-button", "btn-reroll", "hidden"], "$text": "{{creator.btn_reweave}}", "$action": "rerollLifepath" }
+                {
+                  "$id": "wizard-overlay-container",
+                  "$class": ["creator-wizard-overlay", "hidden"],
+                  "$childs": [
+                        { "$id": "step-1", "$class": ["wizard-step", "hidden"] },
+                        { "$id": "step-2", "$class": ["wizard-step", "hidden"] },
+                        { "$id": "step-3", "$class": ["wizard-step", "hidden"], "$childs": [
+                                { "$id": "skill-points-left", "$class": "points-left" },
+                                { "$id": "skill-pool", "$class": "skill-scroll-container" }
                         ]},
-                        { "$id": "chronicle-container", "$class": "chronicle-container", "$childs": [
-                            { "$el": "p", "$class": "text-muted-center", "$text": "{{creator.chronicle_empty}}" }
+                        { "$id": "step-4", "$class": ["wizard-step", "hidden"], "$childs": [
+                                { "$el": "p", "$text": "{{creator.chronicle_desc}}" },
+                                { "$el": "div", "$class": "flex-center-gap", "$childs": [
+                                    { "$el": "button", "$id": "weave-btn", "$class": ["login-button", "btn-auto"], "$text": "{{creator.btn_weave}}", "$action": "generateLifepath" },
+                                    { "$el": "button", "$id": "reroll-btn", "$class": ["login-button", "btn-reroll", "hidden"], "$text": "{{creator.btn_reweave}}", "$action": "rerollLifepath" }
+                                ]},
+                                { "$id": "chronicle-container", "$class": "chronicle-container", "$childs": [
+                                    { "$el": "p", "$class": "text-muted-center", "$text": "{{creator.chronicle_empty}}" }
+                                ]}
+                        ]},
+                        { "$id": "step-5", "$class": ["wizard-step", "hidden"], "$childs": [
+                                { "$el": "div", "$class": "login-input-group", "$childs": [
+                                    { "$el": "label", "$text": "{{creator.label_name}}" },
+                                    { "$el": "div", "$class": "flex-align-center-gap", "$childs": [       
+                                        { "$el": "input", "$id": "char-name", "$class": "flex-grow-1", "$att": { "type": "text", "placeholder": "{{creator.placeholder_name}}" } },
+                                        { "$el": "button", "$class": ["btn-small", "btn-dice"], "$text": "🎲", "$action": "generateName", "$att": { "title": "{{creator.btn_gen_name_title}}" } } 
+                                    ]}
+                                ]},
+                                { "$class": "p-20-center", "$childs": [      
+                                        { "$el": "p", "$text": "{{creator.manifestation}}" }
+                                ]}
                         ]}
-                ]},
-
-                { "$id": "step-5", "$class": ["wizard-step", "hidden"], "$childs": [
-                        { "$el": "div", "$class": "login-input-group", "$childs": [
-                            { "$el": "label", "$text": "{{creator.label_name}}" },
-                            { "$el": "div", "$class": "flex-align-center-gap", "$childs": [       
-                                { "$el": "input", "$id": "char-name", "$class": "flex-grow-1", "$att": { "type": "text", "placeholder": "{{creator.placeholder_name}}" } },
-                                { "$el": "button", "$class": ["btn-small", "btn-dice"], "$text": "🎲", "$action": "generateName", "$att": { "title": "{{creator.btn_gen_name_title}}" } } 
-                            ]}
-                        ]},
-                        { "$class": "p-20-center", "$childs": [      
-                                { "$el": "div", "$class": "avatar-preview" },
-                                { "$el": "p", "$text": "{{creator.manifestation}}" }
-                        ]},
-                        { "$el": "h3", "$class": "skill-cat-header", "$text": "{{creator.gods_blessing}}" },
-                        { "$class": "mt-15-center", "$childs": [  
-                                { "$el": "span", "$id": "lep-preview", "$class": "stat-badge", "$text": "LeP: ?" },
-                                { "$el": "span", "$id": "asp-preview", "$class": ["stat-badge", "hidden"], "$text": "AsP: ?" },
-                                { "$el": "span", "$id": "kap-preview", "$class": ["stat-badge", "hidden"], "$text": "KaP: ?" }
-                        ]}
-                ]}
+                  ]
+                }
+              ]
+            },
+            {
+              "$class": "creator-right-sidebar",
+              "$childs": [
+                  { "$class": "infobox", "$id": "creator-infobox", "$childs": [
+                      { "$el": "h3", "$class": ["skill-cat-header", "mt-0"], "$text": "{{creator.label_info}}" },
+                      { "$id": "info-desc", "$el": "p", "$class": "text-muted", "$text": "Wähle eine Kultur und einen Beruf, um mehr zu erfahren." },
+                      { "$class": "mt-15-center", "$childs": [  
+                              { "$el": "span", "$id": "lep-preview", "$class": ["stat-badge", "stat-hp"], "$text": "LP: ?" },
+                              { "$el": "span", "$id": "asp-preview", "$class": ["stat-badge", "hidden"], "$text": "AsP: ?" },
+                              { "$el": "span", "$id": "kap-preview", "$class": ["stat-badge", "hidden"], "$text": "KaP: ?" }
+                      ]}
+                  ]},
+                  { "$el": "h3", "$class": "skill-cat-header", "$text": "{{creator.label_attributes}}" },
+                  { "$el": "p", "$class": "text-muted", "$style": "font-size: 0.9em;", "$text": "{{creator.attr_desc}}" },   
+                  { "$id": "attr-pool", "$class": "attribute-grid" }
+              ]
+            },
+            {
+              "$id": "details-panel",
+              "$class": "details-panel",
+              "$childs": [
+                  { "$el": "span", "$class": "details-close", "$text": "×", "$action": "closeDetails" },
+                  { "$id": "details-content" }
+              ]
+            }
           ]
         }
   ]

@@ -10,8 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node index.js",
     "start": "node index.js",
-    "setup": "npm run infra:init && npm run infra:migrate",
-    "simon": "node server/index.mjs"
+    "setup": "npm run infra:init && npm run infra:migrate"
   },
   "author": "",
   "license": "ISC",

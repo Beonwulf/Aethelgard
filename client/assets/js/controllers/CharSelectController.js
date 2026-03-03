@@ -129,11 +129,13 @@ export class CharSelectController extends BaseController {
 	}
 
 	renderCharacterCard($char, $index) {
-		const levelText = this.app.lang.get('char.level');
-		const classKey = 'char.classes.' + $char.class;
+		const levelText = this.app.lang.get('char.level') || 'Stufe';
+		const charClass = $char.class || $char.profession || 'abenteurer';
+		const classKey = 'char.classes.' + charClass;
 		const classText = this.app.lang.get(classKey);
 		
-		const displayClass = (classText === classKey) ? ($char.class.charAt(0).toUpperCase() + $char.class.slice(1)) : classText;
+		const displayClass = (classText === classKey) ? (charClass.charAt(0).toUpperCase() + charClass.slice(1)) : classText;
+		const charName = $char.name || 'Unbekannt';
 
 		const card = cE({
 			$el: 'div',
@@ -143,14 +145,14 @@ export class CharSelectController extends BaseController {
 				{ 
 					$el: 'div', 
 					$class: 'char-avatar',
-					$text: $char.name[0].toUpperCase() 
+					$text: charName.charAt(0).toUpperCase() 
 				},
 				{
 					$el: 'div',
 					$class: 'char-info',
 					$childs: [
-						{ $el: 'span', $class: 'card-title', $text: $char.name + (this.legacy ? (' ' + this.legacy) : '') },
-						{ $el: 'small', $class: ['card-desc', 'text-muted'], $text: levelText + ' ' + $char.level + ' - ' + displayClass }
+						{ $el: 'span', $class: 'card-title', $text: charName + (this.legacy ? (' ' + this.legacy) : '') },
+						{ $el: 'small', $class: ['card-desc', 'text-muted'], $text: levelText + ' ' + ($char.level || 1) + ' - ' + displayClass }
 					]
 				},
 				{
