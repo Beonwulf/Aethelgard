@@ -191,18 +191,6 @@ body, html {
 	transform: scale(1.02);
 }
 
-.char-avatar {
-	width: 40px;
-	height: 40px;
-	background: var(--color-btn-blue);
-	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-weight: bold;
-	margin-right: 15px;
-}
-
 .attribute-grid {
 	display: grid;
 	grid-template-columns: 1fr; /* Einspaltig für Attribute untereinander */
@@ -442,15 +430,18 @@ body, html {
 	color: var(--color-text-light);
 	width: 100%;
 	font-family: var(--font-ui);
-	max-height: 90vh;
+	max-height: 85vh;
 	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .creator-header {
-	text-align: center;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	border-bottom: 1px solid rgba(var(--color-accent-gold-rgb), 0.3);
 	margin-bottom: 25px;
-	padding-bottom: 15px;
+	padding-bottom: 10px;
 }
 
 .creator-header h2 {
@@ -642,13 +633,6 @@ body, html {
 	scrollbar-color: var(--color-accent-gold) rgba(var(--color-bg-dark-rgb), 0.95);
 }
 
-/* Scroll-Verhalten fr die Hauptbox */
-.creator-box {
-	max-height: 85vh; /* Maximal 85% der Bildschirmhhe */
-	overflow-y: auto; /* Erlaubt internes Scrollen */
-	overflow-x: hidden;
-}
-
 /* Falls die Talentliste extrem lang wird, eigenen Scrollbereich geben */
 .skill-scroll-container {
 	max-height: 60vh;
@@ -683,21 +667,24 @@ body, html {
 
 .help-icon:hover::after {
 	content: attr(data-tooltip);
-	position: absolute;
-	bottom: 150%;
+	position: fixed;
+	bottom: 40px;
 	left: 50%;
 	transform: translateX(-50%);
-	background: rgba(var(--color-bg-dark-rgb), 0.95);
+	background: linear-gradient(180deg, rgba(30,30,40,0.95) 0%, rgba(10,10,15,0.95) 100%);
 	border: 1px solid var(--color-accent-gold);
+	border-top: 3px solid var(--color-accent-gold);
 	color: var(--color-text-light);
-	padding: 10px 15px;
+	padding: 15px 20px;
 	border-radius: 6px;
 	white-space: pre-wrap;
-	width: 260px;
-	z-index: 100;
+	width: 80%;
+	max-width: 600px;
+	z-index: 99999;
 	box-shadow: 0 5px 20px rgba(0,0,0,0.9);
-	font-size: 13px;
+	font-size: 1.1em;
 	line-height: 1.5;
+	text-align: center;
 	text-shadow: none;
 	font-weight: normal;
 	pointer-events: none;
@@ -721,6 +708,9 @@ body, html {
 	opacity: 0;
 	transform: translateY(15px);
 	animation: revealEntry 1.5s forwards ease-out;
+	margin-bottom: 15px;
+	color: var(--color-text-gold-soft);
+	text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
 }
 
 @keyframes revealEntry {
@@ -730,24 +720,6 @@ body, html {
 	}
 }
 
-/* ==========================================================================
-   RPG INFO-PANEL TOOLTIPS (VERBESSERT)
-   ========================================================================== */
-.help-icon:hover::after {
-	/* Uberschreibt die alte relative Positionierung */
-	position: fixed !important;
-	bottom: 40px !important;
-	left: 50% !important;
-	transform: translateX(-50%) !important;
-	width: 80% !important;
-	max-width: 600px !important;
-	padding: 15px 20px !important;
-	font-size: 1.1em !important;
-	text-align: center !important;
-	z-index: 99999 !important;
-	border-top: 3px solid var(--color-accent-gold) !important;
-	background: linear-gradient(180deg, rgba(30,30,40,0.95) 0%, rgba(10,10,15,0.95) 100%) !important;
-}
 
 /* --- Char Select --- */
 .char-select-screen {
@@ -798,13 +770,6 @@ body, html {
 .block-mt-15 { display: block; margin-top: 15px; }
 
 /* --- Components --- */
-.creator-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding-bottom: 10px;
-}
-
 .btn-prev {
 	width: 40px;
 	height: 40px;
@@ -859,12 +824,6 @@ body, html {
 	font-family: var(--font-rpg);
 	font-size: 1.2em;
 	line-height: 1.5;
-}
-
-.chronicle-entry {
-	margin-bottom: 15px;
-	color: var(--color-text-gold-soft);
-	text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
 }
 
 .p-20-center {
