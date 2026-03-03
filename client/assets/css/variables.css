@@ -20,12 +20,44 @@
 	--color-accent-gold-rgb: 207, 169, 77;
 	--color-accent-blue: #78c8ff;
 	--color-accent-blue-rgb: 120, 200, 255;
+	--color-btn-blue: #4a90e2;
+	--color-btn-blue-rgb: 74, 144, 226;
 	--color-bg-dark: #0f0f14;
 	--color-bg-dark-rgb: 15, 15, 20;
 	--color-text-light: #f1ebd9;
 	--color-text-light-rgb: 241, 235, 217;
+	--color-text-gold-soft: #e0ca82;
+	--color-text-muted: #aaa;
+	--color-text-muted-dark: #888;
+	--color-text-label-blue: #b0d0ff;
 	--color-error: #ff6b6b;
 	--color-error-rgb: 255, 107, 107;
+
+	/* Stat Colors */
+	--color-stat-hp-bg: #144a14;
+	--color-stat-hp-border: #2a7a2a;
+	--color-stat-hp-glow-rgb: 42, 122, 42;
+	--color-stat-energy-bg: #4a1414;
+	--color-stat-energy-border: #7a2a2a;
+
+	/* Panel / Glass Backgrounds */
+	--color-bg-glass: rgba(255, 255, 255, 0.08);
+	--color-bg-glass-border: rgba(255, 255, 255, 0.15);
+	--color-bg-panel: rgba(15, 15, 20, 0.85);
+	--color-bg-panel-dark: rgba(20, 20, 25, 0.95);
+	--color-bg-input: rgba(0, 0, 0, 0.3);
+	--color-bg-card: rgba(255, 255, 255, 0.1);
+	--color-bg-card-hover: rgba(255, 255, 255, 0.2);
+
+	/* Fonts */
+	--font-ui: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	--font-rpg: 'IM Fell English', serif;
+	--font-rpg-sc: 'IM Fell French Canon SC', serif;
+
+	/* Border Radii */
+	--radius-box: 12px;
+	--radius-card: 8px;
+	--radius-pill: 20px;
 
 	/* GM Panel Colors */
 	--gm-bg-primary: rgba(var(--color-bg-dark-rgb), 0.95);
