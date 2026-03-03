@@ -82,6 +82,15 @@ export class BaseController {
 
 
 	onReady() { /* Wird in Subklassen überschrieben */ }
+
+
+	showToast($message, $type = 'info') {
+		const toast = document.createElement('div');
+		toast.className = `gm-toast ${$type}`;
+		toast.textContent = $message;
+		document.body.appendChild(toast);
+		setTimeout(() => toast.remove(), 3000);
+	}
 	
 
 	destroy() {

@@ -370,3 +370,50 @@
     from { opacity: 0; transform: translateY(50px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+/* ==========================================================================
+   TOAST NOTIFICATIONS
+   ========================================================================== */
+
+.gm-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 12px 20px;
+    border-radius: var(--radius-card);
+    font-family: var(--font-rpg-sc);
+    font-size: 1em;
+    z-index: 99999;
+    pointer-events: none;
+    border-left: 4px solid;
+    background: var(--gm-bg-secondary);
+    animation: toastIn 0.3s ease-out, toastOut 0.4s ease-in 2.6s forwards;
+}
+
+.gm-toast.success { border-color: var(--color-stat-hp-border); color: lightgreen; }
+.gm-toast.error   { border-color: var(--color-error); color: var(--color-error); }
+.gm-toast.info    { border-color: var(--color-accent-gold); color: var(--color-text-light); }
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toastOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+/* Confirm-Dialog im Modal */
+.gm-confirm-message {
+    font-size: 1.2em;
+    margin-bottom: 25px;
+    color: var(--gm-text-primary);
+    text-align: center;
+}
+
+.gm-confirm-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}

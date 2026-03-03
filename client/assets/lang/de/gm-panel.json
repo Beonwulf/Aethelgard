@@ -47,7 +47,18 @@
       "access_denied": "Zugriff verweigert.",
       "network_error": "Netzwerkfehler.",
       "no_characters_found": "Keine Charaktere in der Welt gefunden.",
-      "role_update_error": "Fehler beim Aktualisieren der Spieler-Rolle."
+      "role_update_error": "Fehler beim Aktualisieren der Spieler-Rolle.",
+      "confirm_title": "Bitte bestätigen",
+      "confirm_yes": "Ja, löschen",
+      "confirm_cancel": "Abbrechen",
+      "confirm_delete_character": "Charakter wirklich unwiderruflich löschen?",
+      "confirm_delete_guild": "Gilde wirklich unwiderruflich auflösen?",
+      "success_deleted": "Erfolgreich gelöscht.",
+      "success_guild_created": "Gilde erfolgreich gegründet!",
+      "success_role_updated": "Rolle erfolgreich aktualisiert.",
+      "error_delete_character": "Fehler beim Löschen des Charakters.",
+      "error_delete_guild": "Fehler beim Auflösen der Gilde.",
+      "error_create_guild": "Fehler beim Gründen der Gilde."
       }
       }
 

@@ -75,8 +75,8 @@ export class GMPanelController extends BaseController {
 	setupForms() {
 		const createGuildForm = this.container.querySelector('#create-guild-form');
 		if (createGuildForm) {
-			createGuildForm.addEventListener('submit', async (e) => {
-				e.preventDefault();
+			createGuildForm.addEventListener('submit', async ($e) => {
+				$e.preventDefault();
 				const guildName = this.container.querySelector('#guild-name').value;
 				const guildTag = this.container.querySelector('#guild-tag').value;
 				await this.createGuild(guildName, guildTag);
@@ -242,6 +242,24 @@ export class GMPanelController extends BaseController {
 		if (modal) modal.classList.remove('active');
 	}
 
+	showConfirm($message, $onConfirm) {
+		const modal = this.container.querySelector('#gm-modal');
+		const modalTitle = this.container.querySelector('#gm-modal-title');
+		const modalBody = this.container.querySelector('#gm-modal-body');
+
+		modalTitle.textContent = this.app.lang.get('gm.confirm_title');
+		modalBody.innerHTML = '';
+		modalBody.appendChild(cE({ $class: 'gm-confirm-message', $text: $message }));
+		modalBody.appendChild(cE({
+			$class: 'gm-confirm-actions',
+			$childs: [
+				{ $el: 'button', $class: ['login-button', 'btn-auto', 'btn-danger'], $text: this.app.lang.get('gm.confirm_yes'), $onclick: () => { this.closeModal(); $onConfirm(); } },
+				{ $el: 'button', $class: ['login-button', 'btn-auto'], $text: this.app.lang.get('gm.confirm_cancel'), $onclick: () => this.closeModal() }
+			]
+		}));
+		modal.classList.add('active');
+	}
+
 	renderUserCard(user) {
 		return cE({
 			$el: 'div', $class: 'select-card-dynamic',
@@ -293,52 +311,68 @@ export class GMPanelController extends BaseController {
 		});
 	}
 
-	async deleteCharacter(uuid) {
-		if (!confirm('Are you sure you want to delete this character?')) return;
-		try {
-			const response = await this.app.api.delete(`/admin/characters/${uuid}`);
-			if (response && response.success) await this.loadCharacters();
-			else alert('Error deleting character.');
-		} catch (err) {
-			console.error("Error deleting character:", err);
-		}
+	async deleteCharacter($uuid) {
+		this.showConfirm(this.app.lang.get('gm.confirm_delete_character'), async () => {
+			try {
+				const response = await this.app.api.delete(`/admin/characters/${$uuid}`);
+				if (response && response.success) {
+					this.showToast(this.app.lang.get('gm.success_deleted'), 'success');
+					await this.loadCharacters();
+				} else {
+					this.showToast(this.app.lang.get('gm.error_delete_character'), 'error');
+				}
+			} catch (err) {
+				console.error("Error deleting character:", err);
+				this.showToast(this.app.lang.get('gm.network_error'), 'error');
+			}
+		});
 	}
-	async createGuild(name, tag) {
+	async createGuild($name, $tag) {
 		try {
-			const response = await this.app.api.post('/admin/guilds', { name, tag });
+			const response = await this.app.api.post('/admin/guilds', { name: $name, tag: $tag });
 			if (response && response.success) {
+				this.showToast(this.app.lang.get('gm.success_guild_created'), 'success');
 				await this.loadGuilds();
 				this.container.querySelector('#create-guild-form').reset();
 				this.container.querySelector('[data-tab="guilds-overview"]').click();
 			} else {
-				alert('Error creating guild.');
+				this.showToast(this.app.lang.get('gm.error_create_guild'), 'error');
 			}
 		} catch (err) {
 			console.error("Error creating guild:", err);
+			this.showToast(this.app.lang.get('gm.network_error'), 'error');
 		}
 	}
 
-	async deleteGuild(guildId) {
-		if (!confirm('Are you sure you want to delete this guild?')) return;
-		try {
-			const response = await this.app.api.delete(`/admin/guilds/${guildId}`);
-			if (response && response.success) await this.loadGuilds();
-			else alert('Error deleting guild.');
-		} catch (err) {
-			console.error("Error deleting guild:", err);
-		}
+	async deleteGuild($guildId) {
+		this.showConfirm(this.app.lang.get('gm.confirm_delete_guild'), async () => {
+			try {
+				const response = await this.app.api.delete(`/admin/guilds/${$guildId}`);
+				if (response && response.success) {
+					this.showToast(this.app.lang.get('gm.success_deleted'), 'success');
+					await this.loadGuilds();
+				} else {
+					this.showToast(this.app.lang.get('gm.error_delete_guild'), 'error');
+				}
+			} catch (err) {
+				console.error("Error deleting guild:", err);
+				this.showToast(this.app.lang.get('gm.network_error'), 'error');
+			}
+		});
 	}
 
-	async changeRole(userId, newRole) {
+	async changeRole($userId, $newRole) {
 		try {
-			const response = await this.app.api.post('/admin/users/role', { userId, role: newRole });
+			const response = await this.app.api.post('/admin/users/role', { userId: $userId, role: $newRole });
 			if (response && response.success) {
+				this.showToast(this.app.lang.get('gm.success_role_updated'), 'success');
 				await this.loadUsers();
 			} else {
-				alert(this.app.lang.get('gm.role_update_error') || 'Error updating role.');
+				this.showToast(this.app.lang.get('gm.role_update_error'), 'error');
 			}
 		} catch (err) {
 			console.error("Error changing role:", err);
+			this.showToast(this.app.lang.get('gm.network_error'), 'error');
 		}
 	}
 
