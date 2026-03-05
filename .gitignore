@@ -17,6 +17,7 @@ client/assets/world/heightmaps/
 client/assets/textures/*
 client/assets/models/*
 client/favicon.ico
+tools/source/
 tools/tiles/
 tools/mallorca_tiles/
 tools/models/

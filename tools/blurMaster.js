@@ -4,8 +4,8 @@ import sharp from 'sharp';
 import fs from 'fs';
 
 const SIZE = 26624;
-const RAW_FILE = 'Aethelgard_Final_16bit.raw';
-const OUT_PNG  = 'Aethelgard_Final_Perfect.png';
+const RAW_FILE = 'tools/source/Aethelgard_Final_16bit.raw';
+const OUT_PNG  = 'tools/source/Aethelgard_Final_Perfect.png';
 const BLUR     = 40.0; // Weniger Blur nötig dank bikubischer Interpolation im Stitcher
 
 console.log('📂 Lese RAW...');
@@ -28,7 +28,7 @@ await sharp(Uint16Array.from(buffer), {
 })
 .blur(BLUR)
 .jpeg({ quality: 85 })
-.toFile('Aethelgard_Final_Perfect.jpg');
+.toFile('tools/source/Aethelgard_Final_Perfect.jpg');
 
 
 console.log(`✅ ${OUT_PNG} gespeichert – jetzt worldSlicer laufen lassen!`);

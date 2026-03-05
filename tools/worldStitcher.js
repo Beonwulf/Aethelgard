@@ -4,7 +4,7 @@ import sharp from 'sharp';
 
 const TARGET_SIZE = 26624;
 const TILE_FOLDER = './tools/mallorca_tiles/HU30/';  // HU30 allein = komplettes Mallorca
-const OUTPUT_RAW = 'Aethelgard_Final_16bit.raw';
+const OUTPUT_RAW = 'tools/source/Aethelgard_Final_16bit.raw';
 
 
 async function getRawData($build=false) {
@@ -35,7 +35,7 @@ async function buildAethelgard() {
 	})
 	.toColorspace("grey16")
 	.png({ bitdepth: 16, compressionLevel: 6 })
-	.toFile('Aethelgard_Final_RAW.png');
+	.toFile('tools/source/Aethelgard_Final_RAW.png');
 
 	console.log("🖼️  Erzeuge JPEG-Preview (8-bit)...");
 
@@ -44,7 +44,7 @@ async function buildAethelgard() {
 		limitInputPixels: false
 	})
 	.jpeg({ quality: 85 })
-	.toFile('Aethelgard_Final_Perfect.jpg');
+	.toFile('tools/source/Aethelgard_Final_Perfect.jpg');
 
 	console.log("✅ Master-PNG (16-bit, geblurt) + JPEG-Preview fertig.");
 }

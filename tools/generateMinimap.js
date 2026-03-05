@@ -3,7 +3,7 @@
 import sharp from 'sharp';
 import fs from 'fs';
 
-const RAW_FILE  = 'Aethelgard_Final_16bit.raw';
+const RAW_FILE  = 'tools/source/Aethelgard_Final_16bit.raw';
 const OUT_FILE  = './client/assets/world/minimap.jpg';
 const SIZE      = 26624;
 const OUT_SIZE  = 1024;

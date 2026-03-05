@@ -2,7 +2,7 @@ import sharp from 'sharp';
 import fs from 'fs';
 
 
-const SOURCE_IMAGE = 'Aethelgard_Final_Perfect.png';
+const SOURCE_IMAGE = 'tools/source/Aethelgard_Final_Perfect.png';
 const TILE_SIZE = 512;
 const OUTPUT_DIR = './client/assets/world/heightmaps/mallorca/';
 

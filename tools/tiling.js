@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import fs from 'fs';
 
-const MASTER_RAW = 'Aethelgard_Final_16bit.raw';
+const MASTER_RAW = 'tools/source/Aethelgard_Final_16bit.raw';
 const FULL_SIZE = 26624;
 const TILE_SIZE = 512; 
 const OUTPUT_DIR = './client/assets/world/heightmaps/mallorca/';
