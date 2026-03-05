@@ -93,4 +93,24 @@ export const cultures = [
         attr_mods: { KL: 1, CH: 1 },
         base_stats: { LeP: 28 },
     },
+    {
+        slug: 'wurzelvolk',
+        name: { de: 'Wurzelvolk', en: 'Root Folk' },
+        description: {
+            de: 'Uralte lebende Baumwesen, die seit Äonen die Wälder von Yldra bewachen. Wer einem Wurzelvolk begegnet, erzählt davon noch seinen Enkeln.',
+            en: 'Ancient living tree beings who have guarded the forests of Yldra for aeons. Those who meet one of the Root Folk tell their grandchildren about it.'
+        },
+        attr_mods: { KO: 3, KK: 2, GE: -2, CH: -1 },
+        base_stats: { LeP: 40 },
+    },
+    {
+        slug: 'gnomolk',
+        name: { de: 'Gnomolk', en: 'Gnomolk' },
+        description: {
+            de: 'Kleine bipedale Eisbärwesen, kaum einen Meter groß, mit einem Hang zu Dampfmaschinen, Getrieben und unbeirrbarem Selbstvertrauen. Niemand weiß, woher sie kommen.',
+            en: 'Small bipedal polar bear creatures, barely a meter tall, with a penchant for steam engines, gears, and unshakeable self-confidence. Nobody knows where they come from.'
+        },
+        attr_mods: { KL: 3, FF: 2, IN: 1, KK: -2, KO: -1 },
+        base_stats: { LeP: 26 },
+    },
 ];

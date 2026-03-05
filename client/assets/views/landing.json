@@ -1,0 +1,58 @@
+{
+  "$class": "landing-page",
+  "$childs": [
+    {
+      "$id": "landing-topnav",
+      "$class": "landing-topnav",
+      "$childs": [
+        {
+          "$class": "landing-logo",
+          "$el": "span",
+          "$text": "Aethelgard"
+        },
+        {
+          "$class": "topnav-links",
+          "$childs": [
+            { "$el": "a", "$class": "topnav-link", "$text": "{{landing.nav_cultures}}", "$action": "handleCultures" },
+            { "$el": "a", "$class": "topnav-link", "$text": "{{landing.nav_calling}}", "$action": "handleCalling" },
+            { "$el": "a", "$class": "topnav-link", "$text": "{{landing.nav_talents}}", "$action": "handleTalents" },
+            { "$el": "a", "$class": "topnav-link", "$text": "{{landing.nav_world}}", "$action": "handleWorld" }
+          ]
+        },
+        {
+          "$id": "topnav-actions",
+          "$class": "topnav-actions"
+        }
+      ]
+    },
+    {
+      "$class": "landing-hero",
+      "$childs": [
+        { "$class": "hero-overlay" },
+        {
+          "$class": "hero-content",
+          "$childs": [
+            { "$el": "h1", "$class": "hero-title", "$text": "Aethelgard" },
+            { "$el": "p", "$class": "hero-subtitle", "$text": "{{landing.hero_subtitle}}" },
+            { "$el": "button", "$id": "hero-cta", "$class": ["btn-wow", "btn-hero-cta"], "$text": "{{landing.btn_play}}", "$action": "handlePlay" }
+          ]
+        }
+      ]
+    },
+    {
+      "$class": "landing-cultures-section",
+      "$childs": [
+        { "$el": "h2", "$class": "section-title", "$text": "{{landing.cultures_title}}" },
+        { "$id": "cultures-grid", "$class": "cultures-grid" }
+      ]
+    },
+    {
+      "$class": "landing-footer",
+      "$childs": [
+        { "$el": "span", "$text": "{{landing.footer}}" }
+      ]
+    }
+  ]
+}
+
+

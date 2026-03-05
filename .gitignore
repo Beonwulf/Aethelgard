@@ -1,4 +1,5 @@
 node_modules
+resources
 .env
 *.log
 .vscode/
@@ -22,4 +23,6 @@ tools/models/
 CLAUDE.md
 GEMINI.md
 AGENT.md
+COPILOT.md
 *.old.*
+Aethelgard_Final_RAW.png

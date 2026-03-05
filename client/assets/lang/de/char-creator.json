@@ -21,6 +21,10 @@
     "label_attributes": "Attribute",
     "btn_close": "Schließen",
     "btn_details": "Details anzeigen",
+    "focus_head": "Kopf",
+    "focus_torso": "Torso",
+    "focus_legs": "Beine",
+    "focus_body": "Ganzkörper",
     "titles": {
       "1": "Die Herkunft",
       "2": "Die Eigenschaften",

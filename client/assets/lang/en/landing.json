@@ -1,0 +1,18 @@
+{
+  "landing": {
+    "nav_cultures": "Cultures",
+    "nav_calling": "Hero's Path",
+    "nav_talents": "Talents",
+    "nav_world": "The World",
+    "hero_subtitle": "Choose your fate. Forge your legend.",
+    "btn_play": "▶ Play Now",
+    "btn_play_hero": "▶ Play for Free",
+    "btn_login": "Login",
+    "btn_register": "Register",
+    "btn_greeting": "Hello, {{name}}",
+    "cultures_title": "Choose your Culture",
+    "footer": "© Aethelgard – A World on the Brink of the World-Fire"
+  }
+}
+
+

@@ -18,7 +18,7 @@ import { npcsLegends } from './data/migrate/npcsLegends.js';
 import { npcsCivilized } from './data/migrate/npcsCivilized.js';
 import { npcsBeasts } from './data/migrate/npcsBeasts.js';
 import { npcsAntagonists } from './data/migrate/npcsAntagonists.js';
-import { npcsUndead } from './data/migrate/npcsUndead.js';
+import { npcsTrainers } from './data/migrate/npcsTrainers.js';
 
 
 const db = knex({
@@ -43,7 +43,7 @@ const seedData = {
 		...loreItems, ...itemsGrey, ...itemsStandard, ...itemsUncommon,
 		...itemsRare, ...itemsEpic, ...itemsLegendary, ...itemsArtifact
 	],
-	npcs: [ ...npcsLegends, ...npcsCivilized, ...npcsBeasts, ...npcsAntagonists, ...npcsUndead ]
+	npcs: [ ...npcsLegends, ...npcsCivilized, ...npcsBeasts, ...npcsAntagonists, ...npcsUndead, ...npcsTrainers ]
 };
 
 
@@ -375,14 +375,35 @@ async function setupDatabase() {
 				table.increments('id').primary();
 				table.string('slug').unique().notNullable();
 				table.jsonb('name');
-				table.string('faction_slug').nullable(); // Verknüpfung zur Lore
-				table.string('type').defaultTo('neutral'); // 'boss', 'enemy', 'merchant', 'questgiver'
-				table.jsonb('base_stats'); // HP, ATK, etc.
-				table.jsonb('description').nullable(); // NEU
-				table.string('loot_pool_slug').nullable(); // Welchen Loot-Pool nutzt dieser NPC?
+				table.string('faction_slug').nullable();
+				table.string('type').defaultTo('neutral'); // 'boss', 'enemy', 'merchant', 'questgiver', 'trainer'
+				table.jsonb('base_stats');
+				table.jsonb('description').nullable();
+				table.string('loot_pool_slug').nullable();
+				// Trainer-spezifische Felder
+				table.jsonb('location').nullable();          // { name, tile, world: {x,y,z} }
+				table.jsonb('teaches').nullable();           // ['schwerter', 'hiebwaffen']
+				table.integer('max_teach_level').nullable();
+				table.jsonb('cost_per_level').nullable();    // { '1': 0, '2': 50, ... }
+				table.string('intro_quest').nullable();
+				table.integer('min_level_required').defaultTo(0);
 				table.timestamps(true, true);
 			});
 			console.log('✅ Tabelle "npcs" für die Bewohner Aethelgards erstellt.');
+		} else {
+			// Trainer-Spalten nachrüsten falls Tabelle schon existiert
+			const hasLocation = await db.schema.hasColumn('npcs', 'location');
+			if (!hasLocation) {
+				await db.schema.alterTable('npcs', table => {
+					table.jsonb('location').nullable();
+					table.jsonb('teaches').nullable();
+					table.integer('max_teach_level').nullable();
+					table.jsonb('cost_per_level').nullable();
+					table.string('intro_quest').nullable();
+					table.integer('min_level_required').defaultTo(0);
+				});
+				console.log('✅ Trainer-Spalten zur "npcs"-Tabelle nachgerüstet.');
+			}
 		}
 
 

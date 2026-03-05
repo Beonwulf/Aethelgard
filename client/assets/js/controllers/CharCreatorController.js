@@ -152,6 +152,23 @@ export class CharCreatorController extends BaseController {
 		super.destroy();
 	}
 
+	// --- Kamera-Fokus ---
+
+	focusHead()  { this._focusOn('head'); }
+	focusTorso() { this._focusOn('torso'); }
+	focusLegs()  { this._focusOn('legs'); }
+	focusBody()  { this._focusOn('body'); }
+
+	_focusOn($part) {
+		if (!this.characterCreater3d) return;
+		this.characterCreater3d.focusOn($part);
+
+		// Aktiven Button hervorheben
+		this.container.querySelectorAll('.btn-focus').forEach($btn => $btn.classList.remove('active'));
+		const activeBtn = this.container.querySelector(`.btn-focus[data-action="${$part}"]`);
+		if (activeBtn) activeBtn.classList.add('active');
+	}
+
 	/**
 	 * Berechnet alle Finalen Werte basierend auf Basis + Investition + Berufsanforderungen
 	 */
@@ -216,11 +233,11 @@ export class CharCreatorController extends BaseController {
 	}
 
 	getSkillLevelLabel($val) {
-		if ($val <= 3) return "Unwissender";
-		if ($val <= 6) return "Lehrling";
+		if ($val <= 4)  return "Unwissender";
+		if ($val <= 6)  return "Lehrling";
 		if ($val <= 10) return "Geselle";
 		if ($val <= 14) return "Altgeselle";
-		if ($val <= 18) return "Experte";
+		if ($val <= 18) return "Fachmann";
 		if ($val <= 22) return "Meister";
 		return "Großmeister";
 	}

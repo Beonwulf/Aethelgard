@@ -76,7 +76,7 @@ export class CharacterCreater3d {
 		this.clock = new THREE.Clock();
 		this.animations = {};
 		this.scene = new THREE.Scene();
-		this.camera = new THREE.PerspectiveCamera(45, this.parent.clientWidth / this.parent.clientHeight, 0.1, 10);
+		this.camera = new THREE.PerspectiveCamera(60, this.parent.clientWidth / this.parent.clientHeight, 0.1, 10);
 
 		this.renderer = new THREE.WebGLRenderer({ canvas:this.canvas, alpha: true, antialias: true });
 		this.renderer.setSize(this.parent.clientWidth, this.parent.clientHeight);
@@ -97,25 +97,22 @@ export class CharacterCreater3d {
 
 	initControls() {
 		this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-		// Zielpunkt: Der Dummy (unser Fokus)
-		// Da dein Model bei (0, -0.3, 0) steht, setzen wir das Ziel etwas höher (Richtung Kopf)
-		this.desiredTarget = this.model.position.clone();
-		this.desiredTarget.y += 0.2;
-		this.controls.target.copy( this.desiredTarget);
 
-		this.controls.enablePan = false; // Verhindert das Verschieben der Kamera
+		const modelPos = this.model.position;
+		this.desiredTarget   = new THREE.Vector3(modelPos.x, modelPos.y + 0.6, modelPos.z);
+		this.desiredCamPos   = new THREE.Vector3(modelPos.x, modelPos.y + 0.6, modelPos.z + 3.5);
+		this.controls.target.copy(this.desiredTarget);
+		this.camera.position.copy(this.desiredCamPos);
 
-		// Features aktivieren
-		this.controls.enableDamping = true; // Macht die Bewegung "weich" (Smoothness)
+		this.controls.enablePan = false;
+		this.controls.enableDamping = true;
 		this.controls.dampingFactor = 0.05;
 
-		// Zoom-Limits (damit man nicht im Charakter landet oder unendlich weit weg fliegt)
-		this.controls.minDistance = 0.5; // Wie nah darf man ran?
-		this.controls.maxDistance = 5.0; // Wie weit weg?
+		this.controls.minDistance = 0.3;
+		this.controls.maxDistance = 8.0;
 
-		// Rotation einschränken (verhindert, dass man unter den Boden guckt)
-		this.controls.minPolarAngle = 0; // Direkt von oben
-		this.controls.maxPolarAngle = Math.PI * 0.55; // Knapp unter die Horizontale
+		this.controls.minPolarAngle = 0;
+		this.controls.maxPolarAngle = Math.PI * 0.55;
 
 		this.controls.update();
 	}
@@ -182,7 +179,7 @@ export class CharacterCreater3d {
 			this.stateMachine.setState('idle_hot');
 
 			this.scene.add(this.model);
-			this.model.position.set(0, 2, -2);
+			this.model.position.set(0, 2.5, -2);
 			//this.camera.position.set(0, -1.8, 12);
 			this.initControls();
 			//this.camera.lookAt(this.model.position);
@@ -240,40 +237,33 @@ export class CharacterCreater3d {
 
 
 	focusOn($part) {
-		if (!this.controls) return;
+		if (!this.controls || !this.model) return;
 
-		let targetY = 0;
-		let zoomDistance = 0;
+		const modelPos = this.model.position;
+		let targetOffsetY = 1.3;
+		let zoomDist      = 3.5;
 
 		switch ($part) {
 			case 'head':
-				targetY = 0.65; // Höhe des Kopfes
-				zoomDistance = 0.6; // Näher ran
+				targetOffsetY = 1.85;
+				zoomDist = 0.8;
 				break;
 			case 'torso':
-				targetY = 0.3; // Mitte des Körpers
-				zoomDistance = 1.2;
+				targetOffsetY = 1.2;
+				zoomDist = 1.2;
 				break;
 			case 'legs':
-				targetY = -0.1; // Beine/Füße
-				zoomDistance = 1.0;
+				targetOffsetY = 0.4;
+				zoomDist = 1.5;
 				break;
-			default: // Reset / Full Body
-				targetY = 0.4;
-				zoomDistance = 2.5;
+			default: // body – volle Ansicht, Basis wie legs aber weiter raus
+				targetOffsetY = 0.6;
+				zoomDist = 3.5;
 				break;
 		}
 
-		// 1. Zielpunkt der Controls setzen
-		//this.controls.target.set(0, targetY, 0);
-		this.desiredTarget.set(0, targetY, 0);
-
-		// 2. Kamera-Position für den Zoom anpassen
-		// Wir behalten den Winkel bei, ändern aber die Entfernung
-		this.camera.position.set(0, targetY + 0.2, zoomDistance);
-
-		// 3. Wichtig: Controls updaten, damit die Kamera das neue Target anschaut
-		this.controls.update();
+		this.desiredTarget.set(modelPos.x, modelPos.y + targetOffsetY, modelPos.z);
+		this.desiredCamPos.set(modelPos.x, modelPos.y + targetOffsetY, modelPos.z + zoomDist);
 	}
 
 
@@ -371,9 +361,9 @@ export class CharacterCreater3d {
 		}
 
 		if (this.controls) {
-			// LERP: 0.05 ist die Geschwindigkeit (kleiner = langsamer/weicher)
-			this.controls.target.lerp( this.desiredTarget, 0.05 );
-			this.camera.position.lerp( new THREE.Vector3(0, this.desiredTarget.y + 0.2, this.camera.position.z), 0.05 );
+			// Target und Kamera direkt zur gewünschten Position lerpen
+			this.controls.target.lerp(this.desiredTarget, 0.05);
+			this.camera.position.lerp(this.desiredCamPos, 0.05);
 			this.controls.update();
 		}
 

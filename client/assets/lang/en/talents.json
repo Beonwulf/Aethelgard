@@ -1,0 +1,27 @@
+{
+  "talents": {
+    "nav_cultures": "Cultures",
+    "nav_calling": "Hero's Path",
+    "nav_talents": "Talents",
+    "nav_world": "The World",
+    "nav_back": "← Home",
+    "title": "The Talent System of Aethelgard",
+    "subtitle": "From Ignorant to Grandmaster – every talent is a path, every path a story.",
+    "section_categories": "Talent Categories",
+    "section_progression": "Advancement & Progression",
+    "section_teachers": "Talent Teachers of the World",
+    "progression_intro": "Talents are not unlocked by character level, but through practice, quests, and seeking out NPC masters. Only from level 5 (Apprentice) can a talent be used professionally.",
+    "teachers_intro": "Spread across all of Aethelgard are masters of their craft – some in busy cities, others in remote hideouts. They all have a story and a price.",
+    "prog_range": "Level",
+    "prog_label": "Title",
+    "prog_note": "Advancement",
+    "categories": {
+      "kampf": "Combat",
+      "koerper": "Body & Movement",
+      "gesellschaft": "Society & Rhetoric",
+      "wissen": "Knowledge & Magic",
+      "handwerk": "Crafting & Seafaring"
+    },
+    "footer": "© Aethelgard – A World on the Edge of the World-Fire"
+  }
+}

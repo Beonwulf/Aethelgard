@@ -3,8 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 
-const inputDir = './client/assets/world/heightmaps/mallorca/';
-const outputDir = './client/assets/world/heightmaps/mallorca_smooth/';
+const inputDir = './client/assets/world/heightmaps/mallorca_smooth/';
+const outputDir = './client/assets/world/heightmaps/mallorca_smooth2/';
 
 
 if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
@@ -19,7 +19,7 @@ async function processTiles() {
             .ensureAlpha(1) // Stellt sicher, dass Kanäle stabil bleiben
             // Ein Radius von 1.5 bis 2.0 ist der Sweetspot: 
             // Er entfernt die Treppen, ohne die Berge "einzuschmelzen".
-            .blur(1.8)
+            .blur(6.0)
             .toColourspace('rgb16')
             .png({ bitdepth: 16, compressionLevel: 9 })
             .toFile(path.join(outputDir, file));

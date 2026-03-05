@@ -24,6 +24,15 @@
                   ]
                 },
                 {
+                  "$class": "creator-focus-controls",
+                  "$childs": [
+                    { "$el": "button", "$class": "btn-focus", "$text": "🗣", "$action": "focusHead",  "$att": {"title": "{{creator.focus_head}}"}, "$dataSet": {"action": "head"} },
+                    { "$el": "button", "$class": "btn-focus", "$text": "🧥", "$action": "focusTorso", "$att": {"title": "{{creator.focus_torso}}"}, "$dataSet": {"action": "torso"} },
+                    { "$el": "button", "$class": "btn-focus", "$text": "🦵", "$action": "focusLegs",  "$att": {"title": "{{creator.focus_legs}}"}, "$dataSet": {"action": "legs"} },
+                    { "$el": "button", "$class": "btn-focus", "$text": "🧍", "$action": "focusBody",  "$att": {"title": "{{creator.focus_body}}"}, "$dataSet": {"action": "body"} }
+                  ]
+                },
+                {
                   "$class": "creator-wizard-header",
                   "$childs": [
                       {

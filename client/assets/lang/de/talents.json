@@ -1,0 +1,27 @@
+{
+  "talents": {
+    "nav_cultures": "Kulturen",
+    "nav_calling": "Heldenpfad",
+    "nav_talents": "Talente",
+    "nav_world": "Die Welt",
+    "nav_back": "← Startseite",
+    "title": "Das Talentsystem Aethelgards",
+    "subtitle": "Vom Unwissenden zum Großmeister – jedes Talent ist ein Weg, jeder Weg eine Geschichte.",
+    "section_categories": "Talentbereiche",
+    "section_progression": "Aufstieg & Progression",
+    "section_teachers": "Talentlehrer der Welt",
+    "progression_intro": "Talente werden nicht durch Charakterlevel freigeschaltet, sondern durch Übung, Quests und das Aufsuchen von NPC-Lehrmeistern. Erst ab Stufe 5 (Lehrling) kann ein Talent beruflich eingesetzt werden.",
+    "teachers_intro": "Über ganz Aethelgard verteilt finden sich Meister ihres Fachs – manche in belebten Städten, andere in abgelegenen Verstecken. Sie alle haben eine Geschichte und einen Preis.",
+    "prog_range": "Stufe",
+    "prog_label": "Bezeichnung",
+    "prog_note": "Aufstieg",
+    "categories": {
+      "kampf": "Kampf",
+      "koerper": "Körper & Bewegung",
+      "gesellschaft": "Gesellschaft & Rhetorik",
+      "wissen": "Wissen & Magie",
+      "handwerk": "Handwerk & Seefahrt"
+    },
+    "footer": "© Aethelgard – Ein Welt am Rande des Weltenbrandes"
+  }
+}

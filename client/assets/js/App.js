@@ -70,9 +70,9 @@ class BeonClient {
 
 			console.log("⚔️ Midgard-Portal ist bereit.");
 
-			// 4. Start-Szene laden (z.B. Login)
+			// 4. Immer mit der Landingpage starten
 			this.stageManager.setup(document.getElementById('app-root'))
-			this.stageManager.load(controller);
+			this.stageManager.load('landing');
 
 		} catch (error) {
 			console.error("⏱ Kritischer Fehler beim Start:", error);

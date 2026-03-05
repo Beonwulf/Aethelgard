@@ -21,6 +21,10 @@
     "label_attributes": "Attributes",
     "btn_close": "Close",
     "btn_details": "Show Details",
+    "focus_head": "Head",
+    "focus_torso": "Torso",
+    "focus_legs": "Legs",
+    "focus_body": "Full Body",
     "titles": {
       "1": "The Origin",
       "2": "The Attributes",

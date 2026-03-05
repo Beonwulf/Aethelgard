@@ -1,0 +1,28 @@
+{
+  "world": {
+    "nav_cultures": "Kulturen",
+    "nav_calling": "Heldenpfad",
+    "nav_talents": "Talente",
+    "nav_world": "Die Welt",
+    "nav_back": "← Startseite",
+    "title": "Die Welt Aethelgard",
+    "subtitle": "Einst beinahe vernichtet durch Surtrs Zorn – heute eine Welt voller Geheimnisse, Macht und Verderbnis.",
+    "locations_title": "Orte & Regionen",
+    "locations_intro": "Von der strahlenden Hauptstadt bis zur verdammten Gläsernen Öde – jede Region hat ihre eigene Geschichte, ihre eigenen Gefahren.",
+    "pantheon_title": "Das Pantheon",
+    "pantheon_intro": "Acht Götter wachen über Aethelgard. Wer ihnen dient, empfängt Gunst – wer sie beleidigt, trägt die Konsequenzen.",
+    "adversaries_title": "Die Widersacher",
+    "adversaries_intro": "Die Widersacher bieten Abkürzungen zur Macht an. Jede Gabe ist ein zweischneidiges Schwert – enorme Boni, aber ein permanenter Preis.",
+    "chronicles_title": "Die Chroniken Aethelgards",
+    "chronicles_intro": "Was in den Archiven der Silbernen Akademie steht – und was zwischen den Zeilen flüstert.",
+    "chronicles_p1": "Vor 500 Jahren schrie das Zentrum der Welt. Es begann mit einem Zittern tief unter den Wurzeln der Gläsernen Berge – dann kam das Feuer. Nicht das Feuer eines Waldbrandes oder einer Esse. Das Feuer Surtrs. Rein, gierig, unersättlich. Drei Provinzen des Kaiserreichs schmolzen in Stunden zu schwarzem Glas. Tausende Menschen, Tiere, Bäume – alles wurde zu einem einzigen, stillen Mahnmal.",
+    "chronicles_p2": "Die acht Götter griffen ein. Zum letzten Mal mit voller Kraft. Sie schmiedeten ein Siegel aus ihrer eigenen Essenz – ein Gefängnis aus gewebtem Licht und Opferblut. Surtr wurde zurückgedrängt. Die Welt überlebte. Aber die Götter bezahlten ihren Preis: Seitdem ist ihre Verbindung zu Aethelgard schwächer. Wunder sind teuer geworden. Gebete werden seltener erhört. Die Stille der Götter ist das eigentliche Erbe des Schwarzen Tages.",
+    "chronicles_p3": "Was blieb, ist die Gläserne Öde – eine unbewohnbare Wüste aus schwarzem Glas im Herzen der Welt. Kein Gras, kein Wasser, kein Leben. Nur der Wind trägt noch die Stimmen derer, die hier starben. Und irgendwo in den Ätherwinden messen Hochmagister Elions Instrumente Schwingungen, die exakt jenen vor 500 Jahren entsprechen. Er nennt es die Thermische Resonanz. Die Akademie nennt es Forschung. Die Priester des Sonnen-Konvents nennt es das Vorzeichen.",
+    "prophecy_text": "\"Wenn der Frost im Sommer brennt und der Stein zu weinen beginnt, wird der Riese aus der Tiefe steigen, um zu beenden, was er begann.\"",
+    "prophecy_source": "— Aus den Archiven der Silbernen Akademie, Urheber unbekannt",
+    "timeline_title": "Historische Meilensteine",
+    "footer": "© Aethelgard – Ein Welt am Rande des Weltenbrandes"
+  }
+}
+
+

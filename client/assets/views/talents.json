@@ -1,0 +1,79 @@
+{
+  "$class": "talents-page",
+  "$childs": [
+    {
+      "$class": "landing-topnav",
+      "$childs": [
+        {
+          "$el": "span",
+          "$class": "landing-logo",
+          "$text": "Aethelgard",
+          "$action": "handleBack"
+        },
+        {
+          "$class": "topnav-links",
+          "$childs": [
+            { "$el": "a", "$class": "topnav-link", "$text": "{{talents.nav_cultures}}", "$action": "handleCultures" },
+            { "$el": "a", "$class": "topnav-link", "$text": "{{talents.nav_calling}}", "$action": "handleCalling" },
+            { "$el": "a", "$class": ["topnav-link", "active"], "$text": "{{talents.nav_talents}}" },
+            { "$el": "a", "$class": "topnav-link", "$text": "{{talents.nav_world}}", "$action": "handleWorld" },
+            { "$el": "a", "$class": "topnav-link", "$text": "{{talents.nav_back}}", "$action": "handleBack" }
+          ]
+        },
+        { "$id": "topnav-actions", "$class": "topnav-actions" }
+      ]
+    },
+    {
+      "$class": "cultures-hero",
+      "$childs": [
+        { "$el": "h1", "$class": "hero-title", "$text": "{{talents.title}}" },
+        { "$el": "p",  "$class": "hero-subtitle", "$text": "{{talents.subtitle}}" }
+      ]
+    },
+    {
+      "$class": "talents-section",
+      "$childs": [
+        { "$el": "h2", "$class": "talents-section-title", "$text": "{{talents.section_categories}}" },
+        { "$id": "talents-categories", "$class": "talents-categories-grid" }
+      ]
+    },
+    {
+      "$class": "talents-section talents-prog-section",
+      "$childs": [
+        { "$el": "h2", "$class": "talents-section-title", "$text": "{{talents.section_progression}}" },
+        { "$el": "p", "$class": "talents-section-intro", "$text": "{{talents.progression_intro}}" },
+        {
+          "$el": "table", "$class": "talents-prog-table",
+          "$childs": [
+            {
+              "$el": "thead",
+              "$childs": [{
+                "$el": "tr",
+                "$childs": [
+                  { "$el": "th", "$text": "{{talents.prog_range}}" },
+                  { "$el": "th", "$text": "{{talents.prog_label}}" },
+                  { "$el": "th", "$text": "{{talents.prog_note}}" }
+                ]
+              }]
+            },
+            { "$el": "tbody", "$id": "talents-prog-tbody" }
+          ]
+        }
+      ]
+    },
+    {
+      "$class": "talents-section",
+      "$childs": [
+        { "$el": "h2", "$class": "talents-section-title", "$text": "{{talents.section_teachers}}" },
+        { "$el": "p", "$class": "talents-section-intro", "$text": "{{talents.teachers_intro}}" },
+        { "$id": "talents-teachers", "$class": "talents-teachers-grid" }
+      ]
+    },
+    {
+      "$class": "landing-footer",
+      "$childs": [
+        { "$el": "span", "$text": "{{talents.footer}}" }
+      ]
+    }
+  ]
+}

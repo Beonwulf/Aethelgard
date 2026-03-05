@@ -1,0 +1,18 @@
+{
+  "landing": {
+    "nav_cultures": "Kulturen",
+    "nav_calling": "Heldenpfad",
+    "nav_talents": "Talente",
+    "nav_world": "Die Welt",
+    "hero_subtitle": "Wähle dein Schicksal. Forme deine Legende.",
+    "btn_play": "▶ Jetzt spielen",
+    "btn_play_hero": "▶ Kostenlos spielen",
+    "btn_login": "Einloggen",
+    "btn_register": "Registrieren",
+    "btn_greeting": "Hallo, {{name}}",
+    "cultures_title": "Wähle deine Kultur",
+    "footer": "© Aethelgard – Ein Welt am Rande des Weltenbrandes"
+  }
+}
+
+

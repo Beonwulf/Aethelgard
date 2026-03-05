@@ -1,0 +1,28 @@
+{
+  "world": {
+    "nav_cultures": "Cultures",
+    "nav_calling": "Hero's Path",
+    "nav_talents": "Talents",
+    "nav_world": "The World",
+    "nav_back": "← Home",
+    "title": "The World of Aethelgard",
+    "subtitle": "Once nearly destroyed by Surtr's wrath – today a world full of secrets, power and corruption.",
+    "locations_title": "Places & Regions",
+    "locations_intro": "From the gleaming capital to the cursed Glassy Wastes – every region has its own history, its own dangers.",
+    "pantheon_title": "The Pantheon",
+    "pantheon_intro": "Eight gods watch over Aethelgard. Those who serve them receive favour – those who offend them bear the consequences.",
+    "adversaries_title": "The Adversaries",
+    "adversaries_intro": "The Adversaries offer shortcuts to power. Every gift is a double-edged sword – enormous bonuses, but a permanent price.",
+    "chronicles_title": "The Chronicles of Aethelgard",
+    "chronicles_intro": "What the archives of the Silver Academy record – and what whispers between the lines.",
+    "chronicles_p1": "Five hundred years ago, the heart of the world screamed. It began with a trembling deep beneath the roots of the Glassy Mountains – then came the fire. Not the fire of a forest blaze or a forge. Surtr's fire. Pure, greedy, insatiable. Three provinces of the Empire melted in hours to black glass. Thousands of people, animals, trees – all became one silent monument.",
+    "chronicles_p2": "The eight gods intervened. For the last time with full force. They forged a seal from their own essence – a prison woven of light and sacrificial blood. Surtr was driven back. The world survived. But the gods paid their price: since then, their connection to Aethelgard has weakened. Miracles have become costly. Prayers are answered less often. The silence of the gods is the true legacy of the Black Day.",
+    "chronicles_p3": "What remained is the Glassy Wastes – an uninhabitable desert of black glass at the heart of the world. No grass, no water, no life. Only the wind still carries the voices of those who died here. And somewhere in the aetheric winds, Archmage Elion's instruments measure vibrations that correspond exactly to those of five hundred years ago. He calls it Thermal Resonance. The Academy calls it research. The priests of the Sun-Convenant call it the omen.",
+    "prophecy_text": "\"When frost burns in summer and stone begins to weep, the giant shall rise from the deep to finish what he began.\"",
+    "prophecy_source": "— From the Archives of the Silver Academy, author unknown",
+    "timeline_title": "Historical Milestones",
+    "footer": "© Aethelgard – A World on the Brink of the World-Fire"
+  }
+}
+
+

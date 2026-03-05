@@ -1,0 +1,91 @@
+{
+  "$class": "world-page",
+  "$childs": [
+    {
+      "$class": "landing-topnav",
+      "$childs": [
+        { "$el": "span", "$class": "landing-logo", "$text": "Aethelgard", "$action": "handleBack" },
+        {
+          "$class": "topnav-links",
+          "$childs": [
+            { "$el": "a", "$class": "topnav-link", "$text": "{{world.nav_cultures}}", "$action": "handleCultures" },
+            { "$el": "a", "$class": "topnav-link", "$text": "{{world.nav_calling}}", "$action": "handleCalling" },
+            { "$el": "a", "$class": "topnav-link", "$text": "{{world.nav_talents}}", "$action": "handleTalents" },
+            { "$el": "a", "$class": ["topnav-link", "active"], "$text": "{{world.nav_world}}" },
+            { "$el": "a", "$class": "topnav-link", "$text": "{{world.nav_back}}", "$action": "handleBack" }
+          ]
+        },
+        { "$id": "topnav-actions", "$class": "topnav-actions" }
+      ]
+    },
+    {
+      "$class": "world-map-section",
+      "$childs": [
+        { "$el": "h1", "$class": "hero-title world-title", "$text": "{{world.title}}" },
+        { "$el": "p", "$class": "hero-subtitle", "$text": "{{world.subtitle}}" },
+        {
+          "$class": "map-container",
+          "$childs": [
+            { "$el": "img", "$class": "world-map-img", "$att": { "src": "/assets/images/AethelgardMap.jpg", "alt": "Karte von Aethelgard" } }
+          ]
+        }
+      ]
+    },
+    {
+      "$class": "locations-section",
+      "$childs": [
+        { "$el": "h2", "$class": "section-title", "$text": "{{world.locations_title}}" },
+        { "$el": "p", "$class": "lore-intro", "$text": "{{world.locations_intro}}" },
+        { "$id": "locations-grid", "$class": "locations-grid" }
+      ]
+    },
+    {
+      "$class": "world-lore-section",
+      "$childs": [
+        { "$el": "h2", "$class": "section-title", "$text": "{{world.pantheon_title}}" },
+        { "$el": "p", "$class": "lore-intro", "$text": "{{world.pantheon_intro}}" },
+        { "$id": "pantheon-grid", "$class": "pantheon-grid" }
+      ]
+    },
+    {
+      "$class": "world-lore-section world-lore-dark",
+      "$childs": [
+        { "$el": "h2", "$class": "section-title section-title-dark", "$text": "{{world.adversaries_title}}" },
+        { "$el": "p", "$class": "lore-intro", "$text": "{{world.adversaries_intro}}" },
+        { "$id": "adversaries-grid", "$class": "adversaries-grid" }
+      ]
+    },
+    {
+      "$class": "world-chronicles-section",
+      "$childs": [
+        { "$el": "h2", "$class": "section-title", "$text": "{{world.chronicles_title}}" },
+        { "$el": "p", "$class": "lore-intro", "$text": "{{world.chronicles_intro}}" },
+        {
+          "$class": "chronicles-story",
+          "$childs": [
+            { "$el": "p", "$class": "chronicles-text", "$text": "{{world.chronicles_p1}}" },
+            { "$el": "p", "$class": "chronicles-text", "$text": "{{world.chronicles_p2}}" },
+            { "$el": "p", "$class": "chronicles-text", "$text": "{{world.chronicles_p3}}" }
+          ]
+        },
+        {
+          "$class": "chronicles-prophecy",
+          "$childs": [
+            { "$el": "blockquote", "$class": "prophecy-quote", "$text": "{{world.prophecy_text}}" },
+            { "$el": "cite", "$class": "prophecy-source", "$text": "{{world.prophecy_source}}" }
+          ]
+        },
+        { "$el": "h3", "$class": "chronicles-timeline-title", "$text": "{{world.timeline_title}}" },
+        { "$id": "chronicles-timeline", "$class": "chronicles-timeline" }
+      ]
+    },
+    {
+      "$class": "landing-footer",
+      "$childs": [
+        { "$el": "span", "$text": "{{world.footer}}" }
+      ]
+    }
+  ]
+}
+
+
