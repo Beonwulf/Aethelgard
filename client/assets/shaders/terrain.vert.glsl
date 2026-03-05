@@ -27,8 +27,8 @@ float getPreciseHeight(vec2 uv) {
     vec2 f = fract(uv * texSize);
     float h = mix(mix(height00, height10, f.x), mix(height01, height11, f.x), f.y);
     
-    // Zusätzliche S-Kurve zur Glättung der 8-Bit Kanten
-    return h * h * (3.0 - 2.0 * h);
+    // Kein S-Kurven-Transform – lineare Höhe für konsistente Tile-Übergänge
+    return h;
 }
 
 void main() {

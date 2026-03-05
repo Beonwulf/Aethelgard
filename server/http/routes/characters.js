@@ -70,7 +70,7 @@ export default function($bifrost, $db) {
 					culture,    // Slug
 					attributes: JSON.stringify(attributes || {}),
 					biography: JSON.stringify(biography || []),
-					position: { x: 10, y: 0, z: 10 },
+					position: { x: 45 * 2395, y: 0, z: 20 * 2395 },
 					rotation: { x: 0, y: 0, z: 0 }
 				}).returning('*');
 

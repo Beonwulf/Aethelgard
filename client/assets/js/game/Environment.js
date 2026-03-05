@@ -9,7 +9,7 @@ const ATMOSPHERE_PRESETS = {
 		fogDensity: 0.00015,
 		ambientColor: 0x77aaff,
 		ambientIntensity: 0.4,
-		sunPos: [10000, 20000, 10000]
+		sunPos: [5000, 30000, 8000]
 	},
 	SUNSET: {
 		sunColor: 0xff7700,
@@ -63,7 +63,7 @@ export class Environment {
 		this.scene.add(this.sun);
 
 		// 2. Umgebungslicht (hellt Schatten auf)
-		this.ambient = new THREE.AmbientLight();
+		this.ambient = new THREE.AmbientLight(0x606070, 0.8);
 		this.scene.add(this.ambient);
 
 		// 3. Nebel-Initialisierung

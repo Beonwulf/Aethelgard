@@ -26,18 +26,20 @@ void main() {
     float hD = getHeight(vUv + vec2(0.0, -texelSize));
     float hU = getHeight(vUv + vec2(0.0, texelSize));
 
-    // Die "wahre" Normale berechnen (2.0 ist ein Glättungsfaktor, höher = flacher)
-    vec3 smoothNormal = normalize(vec3(hL - hR, 2.0, hD - hU));
+    // Glättungsfaktor 4.0: höher = weichere Normalen, weniger Fels-Flackern an Terrassenrändern
+    vec3 smoothNormal = normalize(vec3(hL - hR, 4.0, hD - hU));
 
     // 2. BIOME LOGIK (wie bei dir, aber mit smoothNormal)
-    float repeat = 16.0;
+    float repeat = 128.0;
     vec3 sand = texture2D(tSand, vUv * repeat).rgb;
     vec3 grass = texture2D(tGrass, vUv * repeat).rgb;
     vec3 forest = texture2D(tForest, vUv * repeat).rgb;
     vec3 rock = texture2D(tRock, vUv * (repeat * 0.5)).rgb;
 
-    float slope = 1.0 - smoothNormal.y; // Hier die neue Normale nutzen!
-    float rockMix = smoothstep(0.4, 0.7, slope);
+    float slope = 1.0 - smoothNormal.y;
+    // Fels nur bei echten Steilhängen (>40°) – nicht bei LiDAR-Terrassenrändern
+    // 0.4/0.7 war zu aggressiv; 0.65/0.85 trifft nur wirkliche Felshänge
+    float rockMix = smoothstep(0.65, 0.85, slope);
 
     float s2g = smoothstep(2.0, 12.0, vHeight);
     vec3 col = mix(sand, grass, s2g);
@@ -48,14 +50,15 @@ void main() {
 
     vec3 finalCol = mix(withHeightRock, rock, rockMix);
 
-    // 3. LICHT (Schatten ohne Treppen)
-    // Wir nutzen sunDirection und unsere berechnete smoothNormal
+    // 3. LICHT
     float d = dot(smoothNormal, normalize(sunDirection));
-    d = clamp(d, 0.0, 1.0);
+    // Minimum 0.25: kein komplett schwarzer Schatten in Tälern
+    d = clamp(d, 0.25, 1.0);
     
-    // Schattenfarbe etwas bläulich/dunkel, Lichtfarbe warm
-    vec3 ambient = fogColor * 0.3; 
-    vec3 lightRes = mix(ambient, vec3(1.0, 0.95, 0.8), d);
+    // Ambient höher (0.55): Mulden/Täler bleiben lesbar, kein Schwarz
+    // Lichtfarbe warm-golden für Fantasy-Feeling
+    vec3 ambient = fogColor * 0.55;
+    vec3 lightRes = mix(ambient, vec3(1.05, 0.98, 0.85), d);
     vec3 finalWithLight = finalCol * lightRes;
 
     // 4. NEBEL (Exponential)
