@@ -45,6 +45,7 @@ export class ThirdPersonCameraSystem {
 			}
 		});
 		window.addEventListener('wheel', ($e) => {
+			if ($e.target.id === 'minimap-canvas') return; // Minimap-Zoom nicht an Kamera weitergeben
 			const player = this.ecs.getEntityByTag('player');
 			if (player === undefined) return;
 			const cam = this.ecs.getComponent(player, 'camera');
