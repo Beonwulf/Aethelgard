@@ -18,7 +18,7 @@ export class GUISystem {
         this._minimapImg = null;
         this._minimapSize = 180;
         this._minimapZoom = 10;        // Zoom-Stufe (höher = mehr rein)
-        this._worldTotalSize = 26624;
+        this._worldTotalSize = 52 * 2395; // 52 Tiles × 2395m (GeoTIFF-Koordinatensystem)
         this._mapOpen = false;
     }
 
@@ -296,8 +296,8 @@ export class GUISystem {
         if (!ctx || !this._minimapImg) return;
 
         const S = this._minimapSize;
-        const chunkSize = 1920;
-        const totalWorldMeters = 52 * chunkSize; // 52 Tiles × 1920m
+        const chunkSize = 2395;
+        const totalWorldMeters = 52 * chunkSize;
 
         // Spielerposition als 0..1 auf der Weltkarte
         const px = $pos.x / totalWorldMeters;
