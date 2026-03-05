@@ -1,8 +1,3 @@
----
-layout: default
-title: "LORE"
----
-
 # 📜 Die Chroniken von Aethelgard
 # 📜 Projekt Aethelgard: Lore & System-Referenz
 Dieses Dokument bündelt die zentralen Säulen der Welt Aethelgard, ihre Mächte und die mechanische Architektur des RPG-Systems.

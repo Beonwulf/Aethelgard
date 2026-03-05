@@ -1,8 +1,3 @@
----
-layout: default
-title: "BIFROST"
----
-
 # 🌈 Bifrost Networking Engine
 Der Bifrost ist das Herzstück der Kommunikation von Aethelgard. Er ist ein hybrider Server, der sowohl klassische HTTP/S-Anfragen über ein Runen-System verarbeitet als auch persistente Websocket-Verbindungen für das MMORPG-Echtzeit-Gameplay bereitstellt.
 

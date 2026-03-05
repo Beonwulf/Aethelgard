@@ -1,8 +1,3 @@
----
-layout: default
-title: "CHARACTER DESIGN"
----
-
 # 📜 Aethelgard Character Design Guide
 **Stilrichtung**: WoW-Comic-Style (Stylized, Hand-Painted, Silhouette-Focused)
 

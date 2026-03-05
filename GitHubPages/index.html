@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aethelgard</title>
+  <link rel="stylesheet" href="./assets/css/variables.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body class="web">
+
+  <div id="app">
+    <div class="landing-page">
+
+      <nav class="landing-topnav">
+        <span class="landing-logo">Aethelgard</span>
+        <div class="topnav-links">
+          <a class="topnav-link" href="kulturen.html">Kulturen</a>
+          <a class="topnav-link" href="heldenpfad.html">Heldenpfad</a>
+          <a class="topnav-link" href="welt.html">Die Welt</a>
+          <a class="topnav-link" href="https://github.com/Beonwulf/Aethelgard" target="_blank">GitHub</a>
+        </div>
+        <div class="topnav-actions">
+          <a class="btn-wow-outline btn-topnav" href="https://github.com/Beonwulf/Aethelgard" target="_blank">Zum Projekt</a>
+        </div>
+      </nav>
+
+      <div class="landing-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="hero-title">Aethelgard</h1>
+          <p class="hero-subtitle">Wähle dein Schicksal. Forme deine Legende.</p>
+          <a class="btn-wow btn-hero-cta" href="https://github.com/Beonwulf/Aethelgard" target="_blank">▶ Zum GitHub-Projekt</a>
+        </div>
+      </div>
+
+      <div class="landing-cultures-section">
+        <h2 class="section-title">Wähle deine Kultur</h2>
+        <div id="cultures-grid" class="cultures-grid"></div>
+      </div>
+
+      <footer class="landing-footer">
+        <span>© Aethelgard – Ein Welt am Rande des Weltenbrandes</span>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    const CULTURES = [
+      { slug: 'kaiserliche', name: 'Kaiserliche',  img: 'imperial.png',      desc: 'Disziplin, Ordnung, Erbe.' },
+      { slug: 'skjaldar',    name: 'Skjaldar',     img: 'skjaldar.png',      desc: 'Sturm, Wildheit, Ehre im Kampf.' },
+      { slug: 'zahiri',      name: 'Zahiri',       img: 'zahiri002.png',     desc: 'Mystik, Sternenlicht, Sandmagie.' },
+      { slug: 'felsenzwerge',name: 'Felsenzwerge', img: 'rockdwarf.png',     desc: 'Unbeugsamkeit, Schmiedekunst, Stein.' },
+      { slug: 'tiefenzwerge',name: 'Tiefenzwerge', img: 'deepdwarf.png',     desc: 'Wissen, Runen, Tiefe.' },
+      { slug: 'feynir',      name: 'Feynir',       img: 'feynir.png',        desc: 'Naturgeister, Schnelligkeit, Wölfe.' },
+      { slug: 'lichtalben',  name: 'Lichtalben',   img: 'lightelf.png',      desc: 'Arroganz, Äther, Sternenlicht.' },
+      { slug: 'nachtalben',  name: 'Nachtalben',   img: 'darknightelf.png',  desc: 'Verbotene Magie, Abgrund, Überleben.' },
+      { slug: 'nordfolk',    name: 'Nordfolk',     img: 'nordfolk.png',      desc: 'Kälte, Überlebenswille, Kargheit.' },
+      { slug: 'suedbund',    name: 'Südbund',      img: 'suedbund.png',      desc: 'Handel, Wissen, Diplomatie.' },
+      { slug: 'wurzelvolk',  name: 'Wurzelvolk',   img: 'wurzelvolk.png',    desc: 'Uralte Baumwesen, weise, fast unsterblich.' },
+      { slug: 'gnomolk',     name: 'Gnomolk',      img: 'gnomolk.png',       desc: 'Steampunk-Tüftler, Eisbärwesen, Herkunft unbekannt.' },
+    ];
+
+    const grid = document.getElementById('cultures-grid');
+    CULTURES.forEach(c => {
+      grid.insertAdjacentHTML('beforeend', `
+        <a class="culture-card" href="kulturen.html#${c.slug}">
+          <img src="./assets/images/cultures/${c.img}" alt="${c.name}" class="culture-card-img" loading="lazy">
+          <div class="culture-card-info">
+            <h3 class="culture-card-name">${c.name}</h3>
+            <p class="culture-card-desc">${c.desc}</p>
+          </div>
+        </a>
+      `);
+    });
+  </script>
+
+</body>
+</html>

@@ -1,8 +1,3 @@
----
-layout: default
-title: "WORLD SYSTEM"
----
-
 # 🗺️ Aethelgard World System Documentation
 
 ## 1. Technisches Fundament

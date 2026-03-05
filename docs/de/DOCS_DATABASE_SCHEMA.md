@@ -1,8 +1,3 @@
----
-layout: default
-title: "DATABASE SCHEMA"
----
-
 # 🗄️ Datenbank-Schema - Aethelgard
 Dieses Dokument beschreibt die Tabellenstruktur und die Beziehungen (Relations) innerhalb der PostgreSQL-Datenbank. Die Verwaltung erfolgt über Knex.js.
 

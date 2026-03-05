@@ -1,8 +1,3 @@
----
-layout: default
-title: "MECHANICS"
----
-
 # ⚙️ Spielmechaniken - Aethelgard Core
 
 Dieses Dokument beschreibt die mathematischen und technischen Regeln, nach denen die Welt von Aethelgard funktioniert.
