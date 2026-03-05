@@ -5,8 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "infra:init": "node infra-init.js",
-    "infra:migrate": "node migrate.js",
+    "infra:init": "node tools/db/infra-init.js",
+    "infra:migrate": "node tools/db/migrate.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node index.js",
     "start": "node index.js",
