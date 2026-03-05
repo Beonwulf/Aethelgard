@@ -1,3 +1,8 @@
+---
+layout: default
+title: "LORE"
+---
+
 # 📜 Die Chroniken von Aethelgard
 # 📜 Projekt Aethelgard: Lore & System-Referenz
 Dieses Dokument bündelt die zentralen Säulen der Welt Aethelgard, ihre Mächte und die mechanische Architektur des RPG-Systems.
@@ -88,15 +93,17 @@ Die Kultur bestimmt die grundlegende Physis und die ersten Prägungen eines Held
 | zahiri        | Geist/Magie   | `IN+1`, `CH+1`, `KL+1`, `KO-1`| 28 / 5            | Besitzen natürliches Mana-Potential.|
 | felsenzwerge  | Zähigkeit     | `KO+2`, `KK+1`, `GE-1`, `CH-1`| 35 / 0            | Standfest und stark.              |
 | tiefenzwerge  | Wissen        | `KO+1`, `KK+1`, `KL+1`, `GE-1`| 32 / 0            | Die Gelehrten unter den Zwergen.  |
-| feynir        | Wildnis       | `IN+2`, `GE+1`, `KK-1`        | 30 / 0            | Schnell und intuitiv.
+| feynir        | Wildnis/Transformation | `IN+2`, `GE+1`, `KK-1`  | 30 / 0            | Schnell, intuitiv. Besitzen die Fähigkeit zur **Tiergestalt** (Wolfsform). Erfordert eigenes 3D-Modell für Transformationsform. |
 | lichtalben    | Äther         | `KL+2`, `IN+1`, `CH+1`, `KO-2`| 26 / 15           | Geborene Magier, aber fragil.
 | nachtalben    | Schatten      | `MU+1`, `KL+1`, `GE+2`, `CH-2`| 28 / 10           | Flink, mutig und magisch begabt.
-| nordfolk      | Winter        | `KO+1`, `KK+1`                | 32 / 0            | Abgehärtete Überlebenskünstler.
-| suedbund      | Handel        | `KL+1`, `CH+1`                | 28 / 0            | Diplomaten und Denker.
+| nordfolk      | Winter/Überleben | `KO+1`, `KK+1`              | 32 / 0            | Durch den ewigen Winter abgehärtete Krieger und Jäger des hohen Nordens. |
+| suedbund      | Handel/Wissen  | `KL+1`, `CH+1`                | 28 / 0            | Diplomaten, Gelehrte und Händler – das kulturelle Herz Aethelgards. |
+| wurzelvolk    | Natur/Weisheit | `KO+3`, `KK+2`, `GE-2`, `CH-1` | 40 / 0           | Uralte Baumwesen, Wächter von Yldras Wäldern. |
+| gnomolk       | Wissen/Technik | `KL+3`, `FF+2`, `IN+1`, `KK-2`, `KO-1` | 26 / 0  | Kleine bipedale Eisbärwesen, Steampunk-Tüftler, Herkunft unbekannt. |
 
 
-## ⚔️ 8. Die Professionen (Berufung)
-Professionen bestimmen die Start-Fertigkeiten und das energetische Potential (Mana oder Gunst).
+## ⚔️ 8. Die Heldenpfade (Berufung)
+Heldenpfade bestimmen die Start-Fertigkeiten und das energetische Potential (Mana oder Gunst).
 
 | Profession        | Energie   | Fokus-Attribute   | Besonderheit                  |
 |-------------------|-----------|-------------------|-------------------------------|

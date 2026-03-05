@@ -1,3 +1,8 @@
+---
+layout: default
+title: "PROJECTSTRUCTURE"
+---
+
 # 📂 Projektstruktur von Aethelgard
 
 Dieses Dokument beschreibt den aktuellen Aufbau des Projekts (Backend, Frontend, Tools und Daten) sowie den Plan zur Bereinigung von Fremdcode.

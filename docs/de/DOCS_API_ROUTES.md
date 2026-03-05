@@ -1,3 +1,8 @@
+---
+layout: default
+title: "API ROUTES"
+---
+
 # 🌉 Bifrost API-Routen (Aethelgard)
 
 Dieses Dokument beschreibt die dynamische Router-Architektur und die verfügbaren Endpunkte des Bifrost-Servers.

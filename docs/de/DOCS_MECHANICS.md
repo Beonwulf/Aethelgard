@@ -1,3 +1,8 @@
+---
+layout: default
+title: "MECHANICS"
+---
+
 # ⚙️ Spielmechaniken - Aethelgard Core
 
 Dieses Dokument beschreibt die mathematischen und technischen Regeln, nach denen die Welt von Aethelgard funktioniert.
@@ -73,7 +78,96 @@ Bei der Heldenerschaffung sind Charaktere nicht nur leere Wertegerüste. Aethelg
 
 ---
 
-## 6. Berechnungsformeln (Vorschau)
+## 6. Skill-Progressionssystem (Talente & Berufe)
+
+### Stufen & Labels
+
+| Stufe | Label | Beruf anwendbar? |
+| :---: | :--- | :---: |
+| 0 | Unwissender | ❌ |
+| 1–2 | Unwissender (erworben) | ❌ |
+| 3–4 | Anfänger (ausgebildet) | ❌ |
+| 5–6 | Lehrling | ✅ |
+| 7–10 | Geselle | ✅ |
+| 11–14 | Altgeselle | ✅ |
+| 15–18 | Fachmann | ✅ |
+| 19–22 | Meister | ✅ |
+| 23+ | Großmeister | ✅ |
+
+> **Wichtig:** Erst ab **Lehrling (Stufe 5)** kann ein Beruf aktiv eingesetzt werden. Darunter gilt der Charakter als „noch nicht ausgebildet".
+
+---
+
+### Aufstiegsregeln
+
+| Von → Bis | Anforderung |
+| :--- | :--- |
+| **0 → 1** | **Quest:** Einführungsquest bei einem NPC-Lehrmeister abschließen. |
+| **1 → 2** | **Talentlehrer bezahlen** (Silber-Kosten je nach Lehrer). |
+| **2 → 3** | **Talentlehrer aufsuchen + bezahlen.** |
+| **3 → 4** | **Talentlehrer aufsuchen + bezahlen.** |
+| **4 → Lehrling (5+)** | Start des normalen Levelsystems. |
+| **Lehrling → Geselle → ...** | Erfahrung durch Nutzung (`XP`) **+** optionales Training bei NPC. |
+| **→ Meister / Großmeister** | Zusätzlich eine **Meisterprüfung** (spezielle Quest/Prüfung) ablegen. *(Genaue Schwellen TBD)* |
+
+---
+
+### Ideen / Offene Punkte
+* **Stufe 1→2 (offen):** Tendenz zu "Experten-NPC bezahlen" (kein Quest-Zwang, da Erstzugang bereits durch die Einführungsquest bewiesen).
+* **Aufstiegsschwellen Meister/Großmeister:** Könnten serverweit begrenzt sein (z.B. max. 1 Großmeister pro Region).
+* **XP durch Nutzung:** Höhere Stufen könnten *use-based* XP erfordern (Schmiede muss X mal schmieden, nicht nur Gold zahlen).
+* **Meisterprüfung:** Könnte durch eine Instanz/Dungeon nachgewiesen werden statt durch eine NPC-Quest.
+
+---
+
+
+---
+
+## 7. Proben & Schwierigkeitsmodifikatoren
+
+Die Talent-Progression (Abschnitt 6) bleibt bewusst **kompakt** (Stufe 0–23+, 8 Labels). Flexibilität beim Balancing entsteht nicht durch mehr Stufen, sondern durch **Probe-Modifikatoren**.
+
+### Grundprinzip
+
+Jede Aktion hat einen `difficulty_modifier` im Bereich **-10 (sehr erleichtert) bis +10 (sehr erschwert)**. Dieser Wert wird zur Probe addiert/subtrahiert, ohne die Progression selbst anzutasten.
+
+### Modifier-Quellen
+
+| Quelle | Beispiel | Modifier |
+| :--- | :--- | :---: |
+| **Ausrüstung** | Meisterwerkzeug beim Schmieden | -2 |
+| **Ausrüstung** | Ramponiertes Werkzeug | +3 |
+| **Umgebung** | Sturm beim Navigieren | +4 |
+| **Umgebung** | Ruhiges Wasser | -1 |
+| **Buffs/Tränke** | Konzentrationstrank (Alchemie) | -2 |
+| **Göttliche Gunst** | Solan-Segen auf Kampfprobe | -3 |
+| **Korruption** | Taint-Stufe 50+ auf soziale Probe | +2 |
+| **Quest-Kontext** | Einführungsquest (soll gelingen) | -5 |
+| **Zielgruppe** | NPC misstraut dem Charakter | +2 |
+
+### Balancing-Prinzip
+
+> Ein **Lehrling (5)** kann eine Meisteraufgabe versuchen – aber auf stark **erschwert**.
+> Ein **Meister (19)** erledigt Routinearbeit auf stark **erleichtert** – fast ohne Fehlschlag-Risiko.
+
+Stufengrenzen sind **keine harten Sperren**, sondern Sprünge im Basis-Modifier. Server-Config kann jeden Modifier jederzeit nachsteuern ohne die Progression anzufassen.
+
+### Technische Umsetzung (Vorschau)
+
+```js
+// Probe-Auflösung (serverseitig)
+function resolveCheck(character, skillId, difficultyModifier = 0) {
+  const skillLevel = character.skills[skillId] ?? 0;
+  const attrBonus  = getAttrBonus(character, skillId);
+  const roll       = rollD20();
+  const threshold  = skillLevel + attrBonus - difficultyModifier;
+  return { success: roll <= threshold, roll, threshold };
+}
+```
+
+---
+
+## 8. Berechnungsformeln (Vorschau)
 * **Basis-HP:** $KO \times 2 + Bonus$
 * **Nahkampf-Basis-Schaden:** $(KK \times 0.5) + Waffenwert$
 * **Magieresistenz:** $(MU + KL + IN) / 3$

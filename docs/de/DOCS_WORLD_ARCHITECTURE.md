@@ -1,3 +1,8 @@
+---
+layout: default
+title: "WORLD ARCHITECTURE"
+---
+
 # 🗺️ Welt-Architektur & Chunk-System
 Dieses Dokument beschreibt die geografische Struktur von Aethelgard und wie die massive Spielwelt technisch in Three.js und über den Bifrost verwaltet wird.
 

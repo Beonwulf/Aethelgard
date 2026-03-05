@@ -1,3 +1,8 @@
+---
+layout: default
+title: "CHARACTER DESIGN"
+---
+
 # 📜 Aethelgard Character Design Guide
 **Stilrichtung**: WoW-Comic-Style (Stylized, Hand-Painted, Silhouette-Focused)
 
@@ -33,6 +38,7 @@
 * **Silhouette**: Sehr beweglich wirkend, asymmetrische Rüstungsteile (z.B. nur ein Schulterpanzer).
 * **Farben**: Waldgrün, Herbstgold, Rindenbraun.
 * **Merkmale**: Bernstein-Augen, Kriegsbemalung in Naturfarben, Tiertrophäen (Zähne, Krallen).
+* **Besonderheit – Tiergestalt**: Feynir können sich in eine **Wolfsform** transformieren. Erfordert ein separates 3D-Modell (Wolfs-Rig). Humanform = Standard-Charakter-Creator. Wolfsform = eigenes Asset (TODO).
 6. **Lichtalben (Light Elves)**
 * **Vibe**: Arroganz, Äther, Sternenlicht.
 * **Silhouette**: Sehr groß, extrem schmal, fast schwebend wirkend.
@@ -48,7 +54,7 @@
 * **Silhouette**: Ähnlich wie Kaiserliche, aber "dicker" eingepackt.
 * **Farben**: Weiß, Eisblau, grobes Leinen-Grau.
 * **Merkmale**: Frost im Bart, blasse Haut, funktionale Kleidung ohne Prunk.
-9. **Südbund (Southbound) – NEU**
+9. **Südbund (Southbound)**
 * **Vibe**: Handel, Wissen, Diplomatie, subtiler Reichtum.
 * **Silhouette**: Locker, entspannt, eher "zivil" als militärisch.
 * **Farben**: Purpur, Smaragdgrün, Messing, Seidenweiß.
@@ -61,8 +67,22 @@
 * **Merkmale**:
     - **Bärte**: Oft mit leuchtenden Runensteinen oder Pergamentrollen geschmückt.
     - **Haut**: Blasser als bei Felsenzwergen, fast wie Alabaster, da sie kaum Sonnenlicht sehen.
-    - **Augen**ugen: Besitzen oft ein sanftes, inneres Leuchten (Runenmagie).
+    - **Augen**: Besitzen oft ein sanftes, inneres Leuchten (Runenmagie).
 * **Ausrüstung**:
     - Kombination aus schwerer Robe und feinen Kettenhemden.
     - Ihre Rüstungen sind mit leuchtenden Runen graviert, die im Dunkeln glimmen.
     - Tragen oft mechanische Laternen oder große Kristalle am Gürtel.
+11. **Wurzelvolk (Root Folk)**
+* **Vibe**: Uralte lebende Baumwesen, langsam, weise, fast unsterblich.
+* **Silhouette**: Massiv, breit, knorrig. Erinnert an einen alten Baum – Äste als Gliedmaßen, Rinde als Haut.
+* **Farben**: Tiefes Waldgrün, Rindenbraun, Moos-Grau, Gold der Herbstblätter.
+* **Merkmale**: Baumrinde statt Haut, leuchtende Augen (Irrlichter), Blätter/Moos wachsen am Körper.
+* **Lore**: Uralte Wächter der Wälder von Yldra. Kaum einer sieht ein Wurzelvolk in seinem Leben mehr als einmal.
+* **Attribute**: `KO+3`, `KK+2`, `GE-2`, `CH-1` – massiv, aber langsam.
+12. **Gnomolk**
+* **Vibe**: Kleine bipedale Eisbärwesen, hyperintelligent, Steampunk-Tüftler, Überlebenskünstler.
+* **Silhouette**: Winzig (~1m), weißes dichtes Fell, Bärenschnauze, kleine runde Ohren.
+* **Farben**: Cremeweiß, Kupfer, Lederbraun, Messing-Gold.
+* **Merkmale**: Eisbär-Gesicht, Steampunk-Weste mit Lederriemen, Dampfbrille auf der Stirn, Gadgets am Gürtel.
+* **Lore**: Niemand weiß, woher die Gnomolk kommen. Sie tauchen einfach auf, bauen Dampfmaschinen, machen Lärm und verschwinden wieder.
+* **Attribute**: `KL+3`, `FF+2`, `IN+1`, `KK-2`, `KO-1` – Genies aber körperschwach.
