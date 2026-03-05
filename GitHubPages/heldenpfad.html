@@ -15,16 +15,19 @@
       <nav class="landing-topnav">
         <a class="landing-logo" href="index.html">Aethelgard</a>
         <div class="topnav-links">
-          <a class="topnav-link" href="kulturen.html">Kulturen</a>
-          <a class="topnav-link active" href="heldenpfad.html">Heldenpfad</a>
-          <a class="topnav-link" href="welt.html">Die Welt</a>
-          <a class="topnav-link" href="index.html">← Startseite</a>
+          <a id="nav-cultures" class="topnav-link" href="kulturen.html"></a>
+          <a id="nav-calling"  class="topnav-link active" href="heldenpfad.html"></a>
+          <a id="nav-world"    class="topnav-link" href="welt.html"></a>
+          <a id="nav-back"     class="topnav-link" href="index.html"></a>
+        </div>
+        <div class="topnav-actions">
+          <button id="lang-toggle" class="btn-wow-outline btn-topnav"></button>
         </div>
       </nav>
 
       <div class="cultures-hero">
-        <h1 class="hero-title">Die Heldenpfade</h1>
-        <p class="hero-subtitle">Wähle deine Berufung – sie bestimmt, wie du die Welt erlebst und veränderst.</p>
+        <h1 id="page-title" class="hero-title"></h1>
+        <p  id="page-subtitle" class="hero-subtitle"></p>
       </div>
 
       <div class="calling-section">
@@ -32,59 +35,77 @@
       </div>
 
       <footer class="landing-footer">
-        <span>© Aethelgard – Ein Welt am Rande des Weltenbrandes</span>
+        <span id="footer-text"></span>
       </footer>
 
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { t, initLangToggle } from './assets/js/i18n.js';
+
     const PROFESSIONS = [
-      { slug: 'krieger',     name: 'Krieger',     icon: '⚔️',  energy: '-',        attrs: 'MU, KK, KO',   restriction: null,                    tags: ['Kampf', 'Nahkampf'],        desc: 'Meister des Stahls und der Schlachtfeldtaktik. Der Krieger verlässt sich auf rohe Kraft, Ausdauer und jahrelanges Training. Kein Beruf überlebt länger auf dem Schlachtfeld.' },
-      { slug: 'magier',      name: 'Magier',      icon: '🔮',  energy: 'Mana 20',  attrs: 'KL, IN',        restriction: 'Erfordert KL 11, IN 11', tags: ['Magie', 'Wissen'],           desc: 'Die Gelehrten der arkanen Künste. Mächtig, aber zerbrechlich. Ein Magier kann eine ganze Armee aufhalten – oder an einem einzigen Schwerthieb sterben.' },
-      { slug: 'runenmeister',name: 'Runenmeister',icon: '᚛',   energy: 'Mana 15',  attrs: 'KL, KK, KO',   restriction: 'Nur für Zwerge',         tags: ['Magie', 'Handwerk', 'Zwerge'],desc: 'Die Verschmelzung von Handwerk und Magie. Runenmeister gravieren uralte Zeichen in Metall und Stein, die Waffen zum Leben erwecken und Rüstungen undurchdringlich machen.' },
-      { slug: 'kleriker',    name: 'Kleriker',    icon: '✝️',  energy: 'Gunst 20', attrs: 'MU, IN, CH',   restriction: null,                    tags: ['Göttlich', 'Heilung', 'Kampf'],desc: 'Diener der Götter, ausgerüstet mit göttlicher Gunst. Sie heilen, bannen und richten – im Namen Solans oder Valerias. Zwischen Kampf und Glaube ist kein Widerspruch.' },
-      { slug: 'paladin',     name: 'Paladin',     icon: '🛡️',  energy: 'Gunst 15', attrs: 'MU, KK, CH',   restriction: null,                    tags: ['Göttlich', 'Kampf', 'Schutz'],desc: 'Ritter des Strahlenden Lichts. Ein Paladin ist Krieger und Glaubensträger zugleich. Im Namen Solans oder Skadis tritt er gegen Korruption und Dunkelheit an.' },
-      { slug: 'druide',      name: 'Druide',      icon: '🌿',  energy: 'Gunst 15', attrs: 'IN, KO, CH',   restriction: null,                    tags: ['Göttlich', 'Natur', 'Heilung'],desc: 'Diener Yldras, der Erdgöttin. Druiden sprechen mit der Natur, heilen Wunden durch Kräuter und können in extremen Fällen die Kraft des Lebens selbst als Waffe einsetzen.' },
-      { slug: 'streuner',    name: 'Streuner',    icon: '🗡️',  energy: '-',        attrs: 'IN, GE, CH',   restriction: null,                    tags: ['Schatten', 'Geschick'],      desc: 'Überlebenskünstler, Diebe und Schattenläufer. Der Streuner gewinnt durch List, nicht durch Kraft. Ideal für alle, die lieber im Verborgenen agieren.' },
-      { slug: 'entdecker',   name: 'Entdecker',   icon: '🧭',  energy: '-',        attrs: 'KL, IN, KO',   restriction: null,                    tags: ['Wildnis', 'Wissen'],         desc: 'Pioniere der Wildnis und Kartographen unbekannter Länder. Ein Entdecker kennt jeden Pfad, jede Pflanze und jede Gefahr – und überlebt dort, wo andere scheitern.' },
-      { slug: 'schmied',     name: 'Schmied',     icon: '🔨',  energy: '-',        attrs: 'KK, FF, KO',   restriction: null,                    tags: ['Handwerk'],                  desc: 'Meister von Feuer und Amboss. Was ein Schmied fertigt, hält ein Leben lang. Im Krieg sind die besten Waffen oft wertvoller als die tapfersten Krieger.' },
-      { slug: 'haendler',    name: 'Händler',     icon: '💰',  energy: '-',        attrs: 'KL, IN, CH',   restriction: null,                    tags: ['Gesellschaft', 'Wissen'],    desc: 'Eloquent, reisend und immer mit einem Angebot zur Hand. Händler bewegen sich frei zwischen Fraktionen und verdienen an Konflikten, die andere fürchten.' },
-      { slug: 'bauer',       name: 'Bauer',       icon: '🌾',  energy: '-',        attrs: 'KO, KK',        restriction: null,                    tags: ['Überleben'],                 desc: 'Zäh, geerdet und unterschätzt. Ein Bauer kennt das Land wie seinen eigenen Körper. Aus ihren Reihen kommen oft die härtesten Krieger – weil Überleben ihr Alltag ist.' },
-      { slug: 'bettler',     name: 'Bettler',     icon: '🎭',  energy: '-',        attrs: 'IN, CH',        restriction: null,                    tags: ['Schatten', 'Gesellschaft'],  desc: 'Meister der Tarnung im Schatten der Gesellschaft. Ein Bettler sieht alles, hört alles und kostet nichts. Wer sie unterschätzt, bereut es.' },
+      { slug: 'krieger',     name: 'Krieger',     icon: 'sword',  energy: '-',        attrs: 'MU, KK, KO',   restriction: null,                    tags: ['Kampf', 'Nahkampf'],        desc: 'Meister des Stahls und der Schlachtfeldtaktik. Der Krieger verlasst sich auf rohe Kraft, Ausdauer und jahrelanges Training. Kein Beruf ueberlebt laenger auf dem Schlachtfeld.' },
+      { slug: 'magier',      name: 'Magier',      icon: 'orb',    energy: 'Mana 20',  attrs: 'KL, IN',        restriction: 'Erfordert KL 11, IN 11', tags: ['Magie', 'Wissen'],           desc: 'Die Gelehrten der arkanen Kuenste. Maechtig, aber zerbrechlich. Ein Magier kann eine ganze Armee aufhalten - oder an einem einzigen Schwerthieb sterben.' },
+      { slug: 'runenmeister',name: 'Runenmeister',icon: 'rune',   energy: 'Mana 15',  attrs: 'KL, KK, KO',   restriction: 'Nur fuer Zwerge',        tags: ['Magie', 'Handwerk', 'Zwerge'],desc: 'Die Verschmelzung von Handwerk und Magie. Runenmeister gravieren uralte Zeichen in Metall und Stein, die Waffen zum Leben erwecken und Ruestungen undurchdringlich machen.' },
+      { slug: 'kleriker',    name: 'Kleriker',    icon: 'cross',  energy: 'Gunst 20', attrs: 'MU, IN, CH',   restriction: null,                    tags: ['Goettlich', 'Heilung', 'Kampf'],desc: 'Diener der Goetter, ausgeruestet mit goettlicher Gunst. Sie heilen, bannen und richten - im Namen Solans oder Valerias.' },
+      { slug: 'paladin',     name: 'Paladin',     icon: 'shield', energy: 'Gunst 15', attrs: 'MU, KK, CH',   restriction: null,                    tags: ['Goettlich', 'Kampf', 'Schutz'],desc: 'Ritter des Strahlenden Lichts. Ein Paladin ist Krieger und Glaubenstraeger zugleich. Im Namen Solans oder Skadis tritt er gegen Korruption und Dunkelheit an.' },
+      { slug: 'druide',      name: 'Druide',      icon: 'leaf',   energy: 'Gunst 15', attrs: 'IN, KO, CH',   restriction: null,                    tags: ['Goettlich', 'Natur', 'Heilung'],desc: 'Diener Yldras, der Erdgoettin. Druiden sprechen mit der Natur und heilen Wunden durch Kraeuter.' },
+      { slug: 'streuner',    name: 'Streuner',    icon: 'dagger', energy: '-',        attrs: 'IN, GE, CH',   restriction: null,                    tags: ['Schatten', 'Geschick'],      desc: 'Ueberlebenskuenstler, Diebe und Schattenlaeufer. Der Streuner gewinnt durch List, nicht durch Kraft.' },
+      { slug: 'entdecker',   name: 'Entdecker',   icon: 'compass',energy: '-',        attrs: 'KL, IN, KO',   restriction: null,                    tags: ['Wildnis', 'Wissen'],         desc: 'Pioniere der Wildnis und Kartographen unbekannter Laender. Ein Entdecker kennt jeden Pfad, jede Pflanze und jede Gefahr.' },
+      { slug: 'schmied',     name: 'Schmied',     icon: 'hammer', energy: '-',        attrs: 'KK, FF, KO',   restriction: null,                    tags: ['Handwerk'],                  desc: 'Meister von Feuer und Amboss. Was ein Schmied fertigt, haelt ein Leben lang.' },
+      { slug: 'haendler',    name: 'Haendler',    icon: 'coin',   energy: '-',        attrs: 'KL, IN, CH',   restriction: null,                    tags: ['Gesellschaft', 'Wissen'],    desc: 'Eloquent, reisend und immer mit einem Angebot zur Hand. Haendler bewegen sich frei zwischen Fraktionen.' },
+      { slug: 'bauer',       name: 'Bauer',       icon: 'grain',  energy: '-',        attrs: 'KO, KK',        restriction: null,                    tags: ['Ueberleben'],                desc: 'Zaeh, geerdet und unterschaetzt. Ein Bauer kennt das Land wie seinen eigenen Koerper.' },
+      { slug: 'bettler',     name: 'Bettler',     icon: 'mask',   energy: '-',        attrs: 'IN, CH',        restriction: null,                    tags: ['Schatten', 'Gesellschaft'],  desc: 'Meister der Tarnung im Schatten der Gesellschaft. Ein Bettler sieht alles, hoert alles und kostet nichts.' },
     ];
 
     const TAG_COLORS = {
-      'Kampf': '#c0392b', 'Magie': '#8e44ad', 'Göttlich': '#f39c12', 'Handwerk': '#7f8c8d',
+      'Kampf': '#c0392b', 'Magie': '#8e44ad', 'Goettlich': '#f39c12', 'Handwerk': '#7f8c8d',
       'Wildnis': '#27ae60', 'Natur': '#27ae60', 'Schatten': '#2c3e50', 'Heilung': '#16a085',
-      'Wissen': '#2980b9', 'Gesellschaft': '#d35400', 'Überleben': '#795548',
+      'Wissen': '#2980b9', 'Gesellschaft': '#d35400', 'Ueberleben': '#795548',
       'Geschick': '#6c5ce7', 'Nahkampf': '#c0392b', 'Schutz': '#34495e', 'Zwerge': '#a0522d',
     };
 
-    const grid = document.getElementById('calling-grid');
-    PROFESSIONS.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'profession-card';
-      const tags = p.tags.map(t => {
-        const c = TAG_COLORS[t] || '#555';
-        return `<span class="prof-tag" style="background:${c}22;border-color:${c}55;color:${c}">${t}</span>`;
-      }).join('');
-      const restriction = p.restriction ? `<div class="prof-restriction">⚠ ${p.restriction}</div>` : '';
-      card.innerHTML = `
-        <div class="prof-icon">${p.icon}</div>
-        <div class="prof-body">
-          <h3 class="prof-name">${p.name}</h3>
-          <div class="prof-tags">${tags}</div>
-          <p class="prof-desc">${p.desc}</p>
-          <div class="prof-meta">
-            <span class="prof-meta-item"><em>Attribute:</em> ${p.attrs}</span>
-            <span class="prof-meta-item"><em>Energie:</em> ${p.energy}</span>
-          </div>
-          ${restriction}
-        </div>
-      `;
-      grid.appendChild(card);
-    });
+    const ICONS = { sword:'⚔️', orb:'🔮', rune:'᚛', cross:'✝️', shield:'🛡️', leaf:'🌿', dagger:'🗡️', compass:'🧭', hammer:'🔨', coin:'💰', grain:'🌾', mask:'🎭' };
+
+    function render() {
+      document.getElementById('nav-cultures').textContent = t('nav', 'cultures');
+      document.getElementById('nav-calling').textContent  = t('nav', 'calling');
+      document.getElementById('nav-world').textContent    = t('nav', 'world');
+      document.getElementById('nav-back').textContent     = t('nav', 'back');
+      document.getElementById('page-title').textContent   = t('calling', 'title');
+      document.getElementById('page-subtitle').textContent= t('calling', 'subtitle');
+      document.getElementById('footer-text').textContent  = t('calling', 'footer');
+      document.getElementById('lang-toggle').textContent  = t('nav', 'toggle');
+
+      const grid = document.getElementById('calling-grid');
+      grid.innerHTML = '';
+      PROFESSIONS.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'profession-card';
+        const tags = p.tags.map(tag => {
+          const c = TAG_COLORS[tag] || '#555';
+          return `<span class="prof-tag" style="background:${c}22;border-color:${c}55;color:${c}">${tag}</span>`;
+        }).join('');
+        const restriction = p.restriction ? `<div class="prof-restriction">&#9888; ${p.restriction}</div>` : '';
+        card.innerHTML = `
+          <div class="prof-icon">${ICONS[p.icon]}</div>
+          <div class="prof-body">
+            <h3 class="prof-name">${p.name}</h3>
+            <div class="prof-tags">${tags}</div>
+            <p class="prof-desc">${p.desc}</p>
+            <div class="prof-meta">
+              <span class="prof-meta-item"><em>${t('calling','attrs')}:</em> ${p.attrs}</span>
+              <span class="prof-meta-item"><em>${t('calling','energy')}:</em> ${p.energy}</span>
+            </div>
+            ${restriction}
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    initLangToggle(render);
+    render();
   </script>
 
 </body>

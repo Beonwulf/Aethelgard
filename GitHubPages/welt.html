@@ -15,183 +15,229 @@
       <nav class="landing-topnav">
         <a class="landing-logo" href="index.html">Aethelgard</a>
         <div class="topnav-links">
-          <a class="topnav-link" href="kulturen.html">Kulturen</a>
-          <a class="topnav-link" href="heldenpfad.html">Heldenpfad</a>
-          <a class="topnav-link active" href="welt.html">Die Welt</a>
-          <a class="topnav-link" href="index.html">← Startseite</a>
+          <a id="nav-cultures" class="topnav-link" href="kulturen.html"></a>
+          <a id="nav-calling"  class="topnav-link" href="heldenpfad.html"></a>
+          <a id="nav-world"    class="topnav-link active" href="welt.html"></a>
+          <a id="nav-back"     class="topnav-link" href="index.html"></a>
+        </div>
+        <div class="topnav-actions">
+          <button id="lang-toggle" class="btn-wow-outline btn-topnav"></button>
         </div>
       </nav>
 
       <div class="world-map-section">
-        <h1 class="hero-title world-title">Die Welt Aethelgard</h1>
-        <p class="hero-subtitle">Einst beinahe vernichtet durch Surtrs Zorn – heute eine Welt voller Geheimnisse, Macht und Verderbnis.</p>
+        <h1 id="page-title" class="hero-title world-title"></h1>
+        <p  id="page-subtitle" class="hero-subtitle"></p>
         <div class="map-container">
           <img class="world-map-img" src="./assets/images/AethelgardMap.jpg" alt="Karte von Aethelgard">
         </div>
       </div>
 
       <div class="locations-section">
-        <h2 class="section-title">Orte &amp; Regionen</h2>
-        <p class="lore-intro">Von der strahlenden Hauptstadt bis zur verdammten Gläsernen Öde – jede Region hat ihre eigene Geschichte, ihre eigenen Gefahren.</p>
+        <h2 id="locations-title" class="section-title"></h2>
+        <p  id="locations-intro" class="lore-intro"></p>
         <div id="locations-grid" class="locations-grid"></div>
       </div>
 
       <div class="world-lore-section">
-        <h2 class="section-title">Das Pantheon</h2>
-        <p class="lore-intro">Acht Götter wachen über Aethelgard. Wer ihnen dient, empfängt Gunst – wer sie beleidigt, trägt die Konsequenzen.</p>
+        <h2 id="pantheon-title" class="section-title"></h2>
+        <p  id="pantheon-intro" class="lore-intro"></p>
         <div id="pantheon-grid" class="pantheon-grid"></div>
       </div>
 
       <div class="world-lore-section world-lore-dark">
-        <h2 class="section-title section-title-dark">Die Widersacher</h2>
-        <p class="lore-intro">Die Widersacher bieten Abkürzungen zur Macht an. Jede Gabe ist ein zweischneidiges Schwert – enorme Boni, aber ein permanenter Preis.</p>
+        <h2 id="adversaries-title" class="section-title section-title-dark"></h2>
+        <p  id="adversaries-intro" class="lore-intro"></p>
         <div id="adversaries-grid" class="adversaries-grid"></div>
       </div>
 
       <div class="world-chronicles-section">
-        <h2 class="section-title">Die Chroniken Aethelgards</h2>
-        <p class="lore-intro">Was in den Archiven der Silbernen Akademie steht – und was zwischen den Zeilen flüstert.</p>
+        <h2 id="chronicles-title" class="section-title"></h2>
+        <p  id="chronicles-intro" class="lore-intro"></p>
         <div class="chronicles-story">
-          <p class="chronicles-text">Vor 500 Jahren schrie das Zentrum der Welt. Es begann mit einem Zittern tief unter den Wurzeln der Gläsernen Berge – dann kam das Feuer. Nicht das Feuer eines Waldbrandes oder einer Esse. Das Feuer Surtrs. Rein, gierig, unersättlich. Drei Provinzen des Kaiserreichs schmolzen in Stunden zu schwarzem Glas. Tausende Menschen, Tiere, Bäume – alles wurde zu einem einzigen, stillen Mahnmal.</p>
-          <p class="chronicles-text">Die acht Götter griffen ein. Zum letzten Mal mit voller Kraft. Sie schmiedeten ein Siegel aus ihrer eigenen Essenz – ein Gefängnis aus gewebtem Licht und Opferblut. Surtr wurde zurückgedrängt. Die Welt überlebte. Aber die Götter bezahlten ihren Preis: Seitdem ist ihre Verbindung zu Aethelgard schwächer. Wunder sind teuer geworden. Gebete werden seltener erhört. Die Stille der Götter ist das eigentliche Erbe des Schwarzen Tages.</p>
-          <p class="chronicles-text">Was blieb, ist die Gläserne Öde – eine unbewohnbare Wüste aus schwarzem Glas im Herzen der Welt. Kein Gras, kein Wasser, kein Leben. Nur der Wind trägt noch die Stimmen derer, die hier starben. Und irgendwo in den Ätherwinden messen Hochmagister Elions Instrumente Schwingungen, die exakt jenen vor 500 Jahren entsprechen.</p>
+          <p id="chronicles-p1" class="chronicles-text"></p>
+          <p id="chronicles-p2" class="chronicles-text"></p>
+          <p id="chronicles-p3" class="chronicles-text"></p>
         </div>
         <div class="chronicles-prophecy">
-          <blockquote class="prophecy-quote">„Wenn der Frost im Sommer brennt und der Stein zu weinen beginnt, wird der Riese aus der Tiefe steigen, um zu beenden, was er begann."</blockquote>
-          <cite class="prophecy-source">— Aus den Archiven der Silbernen Akademie, Urheber unbekannt</cite>
+          <blockquote id="prophecy-text" class="prophecy-quote"></blockquote>
+          <cite id="prophecy-source" class="prophecy-source"></cite>
         </div>
-        <h3 class="chronicles-timeline-title">Historische Meilensteine</h3>
+        <h3 id="timeline-title" class="chronicles-timeline-title"></h3>
         <div id="chronicles-timeline" class="chronicles-timeline"></div>
       </div>
 
       <footer class="landing-footer">
-        <span>© Aethelgard – Ein Welt am Rande des Weltenbrandes</span>
+        <span id="footer-text"></span>
       </footer>
 
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { t, initLangToggle } from './assets/js/i18n.js';
+
     const PANTHEON = [
-      { name: 'Solan',    icon: '☀️', aspect: 'Licht & Gerechtigkeit', focus: 'Wahrheit & Recht',  bonus: 'MU+1, Rechtskunde, Überzeugen',   color: '#f1c40f' },
-      { name: 'Valeria',  icon: '⚡', aspect: 'Sturm & Ehre',           focus: 'Kampf & Seefahrt',  bonus: 'KK+1, Schwerter, Schwimmen',      color: '#3498db' },
-      { name: 'Mercuris', icon: '🎲', aspect: 'Listen & Handel',        focus: 'Glück & Geschick',  bonus: 'IN+1, Feilschen, Schlösser',      color: '#2ecc71' },
-      { name: 'Yldra',    icon: '🌿', aspect: 'Erde & Heilung',         focus: 'Leben & Natur',     bonus: 'KO+1, Heilkunde, Pflanzenkunde',  color: '#27ae60' },
-      { name: 'Mornir',   icon: '💀', aspect: 'Tod & Stille',           focus: 'Ahnen & Übergang',  bonus: 'MU+1, Selbstbeherrschung, Sagen', color: '#95a5a6' },
-      { name: 'Skadi',    icon: '🏹', aspect: 'Jagd & Wildnis',         focus: 'Überleben',          bonus: 'GE+1, Bogen, Orientierung',       color: '#e67e22' },
-      { name: 'Mimir',    icon: '📚', aspect: 'Wissen & Runen',         focus: 'Weisheit & Magie',  bonus: 'KL+1, Magiekunde, Rechnen',       color: '#9b59b6' },
-      { name: 'Lokh',     icon: '🔥', aspect: 'Wandel & Feuer',         focus: 'Chaos & Energie',   bonus: 'IN+1, Überreden, Alchimie',       color: '#e74c3c' },
+      { name: 'Solan',    icon: 'sun',   aspect_de: 'Licht & Gerechtigkeit', aspect_en: 'Light & Justice',   focus_de: 'Wahrheit & Recht',  focus_en: 'Truth & Law',     bonus: 'MU+1',  color: '#f1c40f' },
+      { name: 'Valeria',  icon: 'storm', aspect_de: 'Sturm & Ehre',           aspect_en: 'Storm & Honour',    focus_de: 'Kampf & Seefahrt',  focus_en: 'Combat & Sea',    bonus: 'KK+1',  color: '#3498db' },
+      { name: 'Mercuris', icon: 'dice',  aspect_de: 'Listen & Handel',        aspect_en: 'Cunning & Trade',   focus_de: 'Glueck & Geschick', focus_en: 'Luck & Skill',    bonus: 'IN+1',  color: '#2ecc71' },
+      { name: 'Yldra',    icon: 'leaf',  aspect_de: 'Erde & Heilung',         aspect_en: 'Earth & Healing',   focus_de: 'Leben & Natur',     focus_en: 'Life & Nature',   bonus: 'KO+1',  color: '#27ae60' },
+      { name: 'Mornir',   icon: 'skull', aspect_de: 'Tod & Stille',           aspect_en: 'Death & Silence',   focus_de: 'Ahnen & Uebergang', focus_en: 'Ancestors',       bonus: 'MU+1',  color: '#95a5a6' },
+      { name: 'Skadi',    icon: 'bow',   aspect_de: 'Jagd & Wildnis',         aspect_en: 'Hunt & Wilderness', focus_de: 'Ueberleben',        focus_en: 'Survival',        bonus: 'GE+1',  color: '#e67e22' },
+      { name: 'Mimir',    icon: 'book',  aspect_de: 'Wissen & Runen',         aspect_en: 'Knowledge & Runes', focus_de: 'Weisheit & Magie',  focus_en: 'Wisdom & Magic',  bonus: 'KL+1',  color: '#9b59b6' },
+      { name: 'Lokh',     icon: 'fire',  aspect_de: 'Wandel & Feuer',         aspect_en: 'Change & Fire',     focus_de: 'Chaos & Energie',   focus_en: 'Chaos & Energy',  bonus: 'IN+1',  color: '#e74c3c' },
     ];
 
+    const ICONS_G = { sun:'sun', storm:'storm', dice:'dice', leaf:'leaf', skull:'skull', bow:'bow', book:'book', fire:'fire' };
+    const ICONS_P = { sun:'☀️', storm:'⚡', dice:'🎲', leaf:'🌿', skull:'💀', bow:'🏹', book:'📚', fire:'🔥' };
+
     const ADVERSARIES = [
-      { name: 'Fenrisul',  icon: '🐺', title: 'Der Weltenfresser', rival: 'Solan',   rivalDesc: 'Hunger vs. Licht',         gift: 'Bestialischer Zorn', giftBonus: 'KK+3, MU+1',              flaw: 'CH-2, KL-2 – Die Züge werden bestialisch, die Sprache verkommt zum Knurren.',        color: '#8e44ad' },
-      { name: 'Hela-Ka',   icon: '❄️', title: 'Die Frostkönigin',  rival: 'Yldra',   rivalDesc: 'Stasis vs. Wachstum',      gift: 'Eisherz',            giftBonus: 'KO+3, Kälteresistenz',    flaw: 'IN-2 – Totale emotionale Kälte; Verlust von Empathie und Mitgefühl.',               color: '#3498db' },
-      { name: 'Vorthos',   icon: '👁️', title: 'Der Lügenweber',    rival: 'Mimir',   rivalDesc: 'Irrlicht vs. Erkenntnis',  gift: 'Flüsternde Runen',   giftBonus: 'Mana+15',                 flaw: 'Sinnesschärfe-4 – Die Realität wird von tausend lügenden Stimmen überlagert.',      color: '#9b59b6' },
-      { name: 'Surtr',     icon: '⚔️', title: 'Der Weltenbrand',   rival: 'Valeria', rivalDesc: 'Zerstörung vs. Ehre',      gift: 'Blutfeuer',          giftBonus: 'Schwerter/Hiebwaffen+3',  flaw: 'Selbstbeherrschung-5 – Im Kampfrausch ist weder Rückzug noch Gnade möglich.',      color: '#e74c3c' },
-      { name: 'Xal-Atath', icon: '🖐️', title: 'Die Leere Hand',    rival: '-',       rivalDesc: '',                         gift: 'Diebsgeschick',      giftBonus: 'FF+3, Schlösser+3',       flaw: 'Gold zerrinnt buchstäblich zwischen den Fingern. Reichtum ist unerreichbar.',       color: '#f39c12' },
-      { name: 'Nidhogg',   icon: '🐍', title: 'Der Wurzelnager',   rival: '-',       rivalDesc: '',                         gift: 'Fäulnisschutz',      giftBonus: 'Gift-Immunität',          flaw: 'Der Körper beginnt bereits zu Lebzeiten zu verwesen.',                             color: '#27ae60' },
-      { name: 'Skoll',     icon: '🌑', title: 'Der Sonnenjäger',   rival: '-',       rivalDesc: '',                         gift: 'Schattenschritt',    giftBonus: 'GE+3, Unsichtbarkeit',    flaw: 'Erblindung im göttlichen Sonnenlicht.',                                            color: '#2c3e50' },
-      { name: 'Malakor',   icon: '🗿', title: 'Der ewige Stillstand',rival: '-',      rivalDesc: '',                         gift: 'Steinerne Haut',     giftBonus: 'Rüstungsschutz+5',        flaw: 'Die Glieder versteifen. Jede Flinkheit wird geraubt.',                             color: '#7f8c8d' },
+      { name: 'Fenrisul',  icon: '🐺', title_de: 'Der Weltenfresser', title_en: 'The World-Devourer', rival: 'Solan',   rival_de: 'Hunger vs. Licht',     rival_en: 'Hunger vs. Light',    gift_de: 'Bestialischer Zorn', gift_en: 'Bestial Rage',    giftBonus: 'KK+3, MU+1',              flaw_de: 'CH-2, KL-2',  flaw_en: 'CH-2, KL-2', color: '#8e44ad' },
+      { name: 'Hela-Ka',   icon: '❄️', title_de: 'Die Frostkoenigin', title_en: 'The Frost Queen',    rival: 'Yldra',   rival_de: 'Stasis vs. Wachstum', rival_en: 'Stasis vs. Growth',   gift_de: 'Eisherz',            gift_en: 'Ice Heart',       giftBonus: 'KO+3',                     flaw_de: 'IN-2',        flaw_en: 'IN-2', color: '#3498db' },
+      { name: 'Vorthos',   icon: '👁️', title_de: 'Der Luegenweber',   title_en: 'The Lie-Weaver',     rival: 'Mimir',   rival_de: 'Irrlicht vs. Erkenntnis',rival_en: 'Illusion vs. Truth', gift_de: 'Fluesternde Runen',  gift_en: 'Whispering Runes',giftBonus: 'Mana+15',                  flaw_de: 'Sinne-4',     flaw_en: 'Senses-4', color: '#9b59b6' },
+      { name: 'Surtr',     icon: '⚔️', title_de: 'Der Weltenbrand',   title_en: 'The World-Blaze',    rival: 'Valeria', rival_de: 'Zerstoerung vs. Ehre', rival_en: 'Destruction vs. Honour',gift_de:'Blutfeuer',          gift_en: 'Bloodfire',       giftBonus: 'Schwerter+3',              flaw_de: 'Selbstbeh.-5',flaw_en: 'Control-5', color: '#e74c3c' },
+      { name: 'Xal-Atath', icon: '🖐️', title_de: 'Die Leere Hand',    title_en: 'The Empty Hand',     rival: '-',       rival_de: '',                    rival_en: '',                    gift_de: 'Diebsgeschick',      gift_en: 'Thieves Skill',   giftBonus: 'FF+3',                     flaw_de: 'Kein Reichtum',flaw_en: 'No wealth', color: '#f39c12' },
+      { name: 'Nidhogg',   icon: '🐍', title_de: 'Der Wurzelnager',   title_en: 'The Root-Gnawer',    rival: '-',       rival_de: '',                    rival_en: '',                    gift_de: 'Faeulnisschutz',     gift_en: 'Rot Shield',      giftBonus: 'Gift-Immunitaet',          flaw_de: 'Koerper verwest',flaw_en: 'Body decays', color: '#27ae60' },
+      { name: 'Skoll',     icon: '🌑', title_de: 'Der Sonnenjäger',   title_en: 'The Sun-Hunter',     rival: '-',       rival_de: '',                    rival_en: '',                    gift_de: 'Schattenschritt',    gift_en: 'Shadow Step',     giftBonus: 'GE+3',                     flaw_de: 'Blind im Licht',flaw_en: 'Blind in light', color: '#2c3e50' },
+      { name: 'Malakor',   icon: '🗿', title_de: 'Der ewige Stillstand',title_en:'The Eternal Halt',  rival: '-',       rival_de: '',                    rival_en: '',                    gift_de: 'Steinerne Haut',     gift_en: 'Stone Skin',      giftBonus: 'RS+5',                     flaw_de: 'GE verloren', flaw_en: 'GE lost', color: '#7f8c8d' },
     ];
 
     const LOCATIONS = [
-      { name: 'Æthelhafen',       subtitle: 'Hauptstadt des Kaiserreichs',     icon: '🏛️', culture: 'Kaiserliche', danger: 1, desc: 'Das Herz Aethelgards. Hier residiert Hochkönig Alaric der Standhafte und der Sonnen-Konvent. Prächtige Straßen, kaiserliche Garde – und unter der Oberfläche die Schattenhände.' },
-      { name: 'Aetherwacht',      subtitle: 'Sitz der Silbernen Akademie',     icon: '🔮', culture: 'Lichtalben',  danger: 2, desc: 'Eine schwebende Zitadelle über den Ätherwinden. Hier lehrt Hochmagister Elion die Geheimnisse der Runen. Zwischen Akademie und Konvent brodelt ein uralter Konflikt.' },
-      { name: 'Fjordheim',        subtitle: 'Heimat der Freien Jarls',          icon: '⚓', culture: 'Skjaldar',    danger: 2, desc: 'Sturmumtoste Hafenstadt am nördlichen Meer. Jarl Ragnhild Sturmbringer hält hier Hof. Stärke entscheidet – Gesetze sind das, was der stärkste Jarl gerade sagt.' },
-      { name: 'Tiefenfels',       subtitle: 'Zwergenfestung & Handelszentrum', icon: '⛏️', culture: 'Felsenzwerge', danger: 2, desc: 'Eine Festungsstadt tief im Fels gebaut. Sitz des Eisenzahn-Bunds. Die besten Schmiede der Welt arbeiten hier – und hüten Geheimnisse, die tiefer reichen als ihre Minen.' },
-      { name: 'Solanspracht',     subtitle: 'Heilige Stadt des Sonnen-Konvents',icon: '☀️', culture: 'Kaiserliche', danger: 1, desc: 'Die heiligste Stadt Aethelgards. Hier betet man zu Solan, hier werden Ketzer verurteilt. Erzbischof Valerius regiert mit eiserner Hand – im Namen des Lichts.' },
-      { name: 'Goldstrand',       subtitle: 'Startpunkt für Neulinge',          icon: '🌅', culture: 'Alle',        danger: 1, desc: 'Eine ruhige Küstenstadt, wo viele Abenteurer ihre Geschichte beginnen. Die Herberge "Zum rostigen Anker" ist der erste sichere Hafen.' },
-      { name: 'Die Gläserne Öde', subtitle: 'Mahnmal der Ära der Asche',        icon: '🔥', culture: '-',           danger: 5, desc: 'Vor 500 Jahren schuf Surtrs Zorn diese unbewohnbare Wüste aus schwarzem Glas. Kein Gras, kein Wasser, kein Leben.' },
-      { name: 'Yldras Hain',      subtitle: 'Heiliges Waldgebiet der Wurzelvolk',icon: '🌿', culture: 'Wurzelvolk', danger: 3, desc: 'Ein uralter Wald, der älter ist als jede menschliche Zivilisation. Die Wurzelvolk wachen hier seit Äonen. Wer ohne Einladung eintritt, findet den Ausgang nicht mehr.' },
-      { name: 'Schattenmarkt',    subtitle: 'Geheimzentrale der Schattenhände', icon: '🗡️', culture: 'Nachtalben', danger: 4, desc: 'Kein Mensch kennt seinen genauen Standort. Er taucht auf, wo man ihn nicht erwartet. Die Namenlose soll hier residieren.' },
+      { name: 'Aethelhafen',      subtitle_de: 'Hauptstadt des Kaiserreichs',      subtitle_en: 'Capital of the Empire',          icon: '🏛️', culture: 'Kaiserliche', danger: 1, desc_de: 'Das Herz Aethelgards. Hier residiert Hochkoenig Alaric der Standhafte.', desc_en: 'The heart of Aethelgard. High King Alaric the Steadfast resides here.' },
+      { name: 'Aetherwacht',      subtitle_de: 'Sitz der Silbernen Akademie',      subtitle_en: 'Seat of the Silver Academy',      icon: '🔮', culture: 'Lichtalben',  danger: 2, desc_de: 'Eine schwebende Zitadelle ueber den Aetherwinden.', desc_en: 'A floating citadel above the aetheric winds.' },
+      { name: 'Fjordheim',        subtitle_de: 'Heimat der Freien Jarls',           subtitle_en: 'Home of the Free Jarls',          icon: '⚓', culture: 'Skjaldar',    danger: 2, desc_de: 'Sturmumtoste Hafenstadt am noerdlichen Meer.', desc_en: 'A storm-battered harbour city on the northern sea.' },
+      { name: 'Tiefenfels',       subtitle_de: 'Zwergenfestung & Handelszentrum',  subtitle_en: 'Dwarven Fortress & Trade Hub',    icon: '⛏️', culture: 'Felsenzwerge', danger: 2, desc_de: 'Eine Festungsstadt tief im Fels gebaut.', desc_en: 'A fortress city built deep in the rock.' },
+      { name: 'Solanspracht',     subtitle_de: 'Heilige Stadt des Sonnen-Konvents',subtitle_en: 'Holy City of the Sun-Convenant',  icon: '☀️', culture: 'Kaiserliche', danger: 1, desc_de: 'Die heiligste Stadt Aethelgards.', desc_en: 'The holiest city of Aethelgard.' },
+      { name: 'Goldstrand',       subtitle_de: 'Startpunkt fuer Neulinge',          subtitle_en: 'Starting Point for Newcomers',    icon: '🌅', culture: 'Alle / All',  danger: 1, desc_de: 'Eine ruhige Kuestenstadt fuer Abenteurereinsteiger.', desc_en: 'A peaceful coastal town where adventurers begin their journey.' },
+      { name: 'Die Glaeser. Oede',subtitle_de: 'Mahnmal der Aera der Asche',        subtitle_en: 'Monument of the Age of Ash',      icon: '🔥', culture: '-',           danger: 5, desc_de: 'Surtrs Zorn schuf diese unbewohnbare Wueste aus schwarzem Glas.', desc_en: 'Surtr\'s wrath created this uninhabitable desert of black glass.' },
+      { name: 'Yldras Hain',      subtitle_de: 'Heiliges Waldgebiet der Wurzelvolk',subtitle_en: 'Sacred Forest of the Root-folk',  icon: '🌿', culture: 'Wurzelvolk', danger: 3, desc_de: 'Ein uralter Wald, aelter als jede menschliche Zivilisation.', desc_en: 'An ancient forest older than any human civilisation.' },
+      { name: 'Schattenmarkt',    subtitle_de: 'Geheimzentrale der Schattenhände', subtitle_en: 'Secret HQ of the Shadow Hands',   icon: '🗡️', culture: 'Nachtalben', danger: 4, desc_de: 'Kein Mensch kennt seinen genauen Standort.', desc_en: 'No one knows its exact location.' },
     ];
 
-    const DANGER_LABELS = ['', 'Friedlich', 'Gefährlich', 'Bedrohlich', 'Tödlich', 'Verdammt'];
-    const DANGER_COLORS = ['', '#27ae60', '#f39c12', '#e67e22', '#c0392b', '#8e44ad'];
-
-    const TIMELINE = [
-      { year: 'Vor 500 J.', icon: '🔥', title: 'Die Ära der Asche',     desc: 'Surtrs Flammenheere reißen einen Riss ins Gefüge. Drei Provinzen schmelzen zu Glas. Die Götter schmieden das Siegel – um den Preis ihrer vollen Kraft.' },
-      { year: 'Vor 120 J.', icon: '❄️', title: 'Der Frost-Winter',       desc: 'Hela-Ka lässt die nördlichen Meere gefrieren. Die Skjaldar fliehen nach Süden und prägen die Küstenstädte bis heute.' },
-      { year: 'Vor 30 J.',  icon: '📜', title: 'Die Schism-Nacht',        desc: 'Akademie und Sonnen-Konvent zerstreiten sich öffentlich über die Nutzung von Runen-Magie. Der Konflikt schwelt noch heute.' },
-      { year: 'Heute',      icon: '⚡', title: 'Thermische Resonanz',     desc: 'Hochmagister Elion misst in den Ätherwinden Schwingungen wie kurz vor der Ära der Asche. Die Prophezeiung scheint sich zu erfüllen.' },
+    const TIMELINE_DE = [
+      { year: 'Vor 500 J.', icon: '🔥', title: 'Die Aera der Asche',     desc: 'Surtrs Flammenheere reissen einen Riss ins Gefuege. Drei Provinzen schmelzen zu Glas. Die Goetter schmieden das Siegel.' },
+      { year: 'Vor 120 J.', icon: '❄️', title: 'Der Frost-Winter',         desc: 'Hela-Ka laesst die noerdlichen Meere gefrieren. Die Skjaldar fliehen nach Sueden.' },
+      { year: 'Vor 30 J.',  icon: '📜', title: 'Die Schism-Nacht',          desc: 'Akademie und Sonnen-Konvent zerstreiten sich oeffentlich. Der Konflikt schwelt noch heute.' },
+      { year: 'Heute',      icon: '⚡', title: 'Thermische Resonanz',       desc: 'Hochmagister Elion misst in den Aetherwinden Schwingungen wie kurz vor der Aera der Asche.' },
     ];
 
-    // Locations
-    const locGrid = document.getElementById('locations-grid');
-    LOCATIONS.forEach(loc => {
-      const dc = DANGER_COLORS[loc.danger], dl = DANGER_LABELS[loc.danger];
-      const dots = Array.from({length: 5}, (_, i) =>
-        `<span class="danger-dot ${i < loc.danger ? 'filled' : ''}" style="${i < loc.danger ? `background:${dc}` : ''}"></span>`
-      ).join('');
-      locGrid.insertAdjacentHTML('beforeend', `
-        <div class="location-card">
-          <div class="loc-header">
-            <span class="loc-icon">${loc.icon}</span>
-            <div class="loc-title-wrap">
-              <h3 class="loc-name">${loc.name}</h3>
-              <span class="loc-subtitle">${loc.subtitle}</span>
+    const TIMELINE_EN = [
+      { year: '500 yrs ago', icon: '🔥', title: 'The Age of Ash',          desc: "Surtr's flame armies tear a rift into the fabric. Three provinces melt to glass. The gods forge the seal." },
+      { year: '120 yrs ago', icon: '❄️', title: 'The Frost Winter',         desc: 'Hela-Ka freezes the northern seas. The Skjaldar flee south and shape the coastal cities to this day.' },
+      { year: '30 yrs ago',  icon: '📜', title: 'The Schism Night',          desc: 'Academy and Sun-Convenant publicly clash over rune-magic. The conflict still smoulders today.' },
+      { year: 'Today',       icon: '⚡', title: 'Thermal Resonance',         desc: "Archmage Elion's instruments detect vibrations matching those before the Age of Ash." },
+    ];
+
+    function isEn() { return document.getElementById('lang-toggle').textContent === 'DE'; }
+
+    function render() {
+      const en = isEn();
+      document.getElementById('nav-cultures').textContent     = t('nav', 'cultures');
+      document.getElementById('nav-calling').textContent      = t('nav', 'calling');
+      document.getElementById('nav-world').textContent        = t('nav', 'world');
+      document.getElementById('nav-back').textContent         = t('nav', 'back');
+      document.getElementById('page-title').textContent       = t('world', 'title');
+      document.getElementById('page-subtitle').textContent    = t('world', 'subtitle');
+      document.getElementById('locations-title').textContent  = t('world', 'locations_title');
+      document.getElementById('locations-intro').textContent  = t('world', 'locations_intro');
+      document.getElementById('pantheon-title').textContent   = t('world', 'pantheon_title');
+      document.getElementById('pantheon-intro').textContent   = t('world', 'pantheon_intro');
+      document.getElementById('adversaries-title').textContent= t('world', 'adversaries_title');
+      document.getElementById('adversaries-intro').textContent= t('world', 'adversaries_intro');
+      document.getElementById('chronicles-title').textContent = t('world', 'chronicles_title');
+      document.getElementById('chronicles-intro').textContent = t('world', 'chronicles_intro');
+      document.getElementById('chronicles-p1').textContent    = t('world', 'chronicles_p1');
+      document.getElementById('chronicles-p2').textContent    = t('world', 'chronicles_p2');
+      document.getElementById('chronicles-p3').textContent    = t('world', 'chronicles_p3');
+      document.getElementById('prophecy-text').textContent    = t('world', 'prophecy_text');
+      document.getElementById('prophecy-source').textContent  = t('world', 'prophecy_source');
+      document.getElementById('timeline-title').textContent   = t('world', 'timeline_title');
+      document.getElementById('footer-text').textContent      = t('world', 'footer');
+      document.getElementById('lang-toggle').textContent      = t('nav', 'toggle');
+
+      const DANGER_LABELS = t('world', 'danger_labels');
+      const DANGER_COLORS = ['', '#27ae60', '#f39c12', '#e67e22', '#c0392b', '#8e44ad'];
+
+      // Locations
+      const locGrid = document.getElementById('locations-grid');
+      locGrid.innerHTML = '';
+      LOCATIONS.forEach(loc => {
+        const dc = DANGER_COLORS[loc.danger], dl = DANGER_LABELS[loc.danger];
+        const dots = Array.from({length:5},(_,i)=>`<span class="danger-dot ${i<loc.danger?'filled':''}" style="${i<loc.danger?'background:'+dc:''}"></span>`).join('');
+        locGrid.insertAdjacentHTML('beforeend', `
+          <div class="location-card">
+            <div class="loc-header"><span class="loc-icon">${loc.icon}</span>
+              <div class="loc-title-wrap">
+                <h3 class="loc-name">${loc.name}</h3>
+                <span class="loc-subtitle">${en ? loc.subtitle_en : loc.subtitle_de}</span>
+              </div>
             </div>
-          </div>
-          <p class="loc-desc">${loc.desc}</p>
-          <div class="loc-footer">
-            <span class="loc-culture">Kultur: <em>${loc.culture}</em></span>
-            <span class="loc-danger">${dots}<em style="color:${dc}">${dl}</em></span>
-          </div>
-        </div>
-      `);
-    });
+            <p class="loc-desc">${en ? loc.desc_en : loc.desc_de}</p>
+            <div class="loc-footer">
+              <span class="loc-culture">${t('world','culture_label')}: <em>${loc.culture}</em></span>
+              <span class="loc-danger">${dots}<em style="color:${dc}">${dl}</em></span>
+            </div>
+          </div>`);
+      });
 
-    // Pantheon
-    const panGrid = document.getElementById('pantheon-grid');
-    PANTHEON.forEach(g => {
-      const card = document.createElement('div');
-      card.className = 'pantheon-card';
-      card.style.setProperty('--god-color', g.color);
-      card.innerHTML = `
-        <div class="god-icon">${g.icon}</div>
-        <div class="god-body">
-          <h3 class="god-name">${g.name}</h3>
-          <span class="god-aspect">${g.aspect}</span>
-          <span class="god-focus">${g.focus}</span>
-          <span class="god-bonus"><em>Bonus:</em> ${g.bonus}</span>
-        </div>`;
-      panGrid.appendChild(card);
-    });
+      // Pantheon
+      const panGrid = document.getElementById('pantheon-grid');
+      panGrid.innerHTML = '';
+      PANTHEON.forEach(g => {
+        const card = document.createElement('div');
+        card.className = 'pantheon-card';
+        card.style.setProperty('--god-color', g.color);
+        card.innerHTML = `
+          <div class="god-icon">${ICONS_P[g.icon]}</div>
+          <div class="god-body">
+            <h3 class="god-name">${g.name}</h3>
+            <span class="god-aspect">${en ? g.aspect_en : g.aspect_de}</span>
+            <span class="god-focus">${en ? g.focus_en : g.focus_de}</span>
+            <span class="god-bonus"><em>${t('world','bonus_label')}:</em> ${g.bonus}</span>
+          </div>`;
+        panGrid.appendChild(card);
+      });
 
-    // Adversaries
-    const advGrid = document.getElementById('adversaries-grid');
-    ADVERSARIES.forEach(a => {
-      const card = document.createElement('div');
-      card.className = 'adversary-card';
-      card.style.setProperty('--adv-color', a.color);
-      const rival = a.rival !== '-' ? `<span class="adv-rival">Gegenspieler: <em>${a.rival}</em> – ${a.rivalDesc}</span>` : '';
-      card.innerHTML = `
-        <div class="adv-header">
-          <span class="adv-icon">${a.icon}</span>
-          <div><h3 class="adv-name">${a.name}</h3><span class="adv-title">${a.title}</span></div>
-        </div>
-        ${rival}
-        <div class="adv-gift">
-          <span class="adv-gift-label">⬆ Gabe: ${a.gift}</span>
-          <span class="adv-gift-bonus">${a.giftBonus}</span>
-        </div>
-        <div class="adv-flaw">⬇ Makel: ${a.flaw}</div>`;
-      advGrid.appendChild(card);
-    });
-
-    // Timeline
-    const timeline = document.getElementById('chronicles-timeline');
-    TIMELINE.forEach(e => {
-      timeline.insertAdjacentHTML('beforeend', `
-        <div class="timeline-item">
-          <div class="timeline-dot">${e.icon}</div>
-          <div class="timeline-content">
-            <span class="timeline-year">${e.year}</span>
-            <h4 class="timeline-title">${e.title}</h4>
-            <p class="timeline-desc">${e.desc}</p>
+      // Adversaries
+      const advGrid = document.getElementById('adversaries-grid');
+      advGrid.innerHTML = '';
+      ADVERSARIES.forEach(a => {
+        const card = document.createElement('div');
+        card.className = 'adversary-card';
+        card.style.setProperty('--adv-color', a.color);
+        const rival = a.rival !== '-' ? `<span class="adv-rival">${t('world','rival_label')}: <em>${a.rival}</em> – ${en ? a.rival_en : a.rival_de}</span>` : '';
+        card.innerHTML = `
+          <div class="adv-header"><span class="adv-icon">${a.icon}</span>
+            <div><h3 class="adv-name">${a.name}</h3><span class="adv-title">${en ? a.title_en : a.title_de}</span></div>
           </div>
-        </div>`);
-    });
+          ${rival}
+          <div class="adv-gift">
+            <span class="adv-gift-label">&#8679; ${t('world','gift_label')}: ${en ? a.gift_en : a.gift_de}</span>
+            <span class="adv-gift-bonus">${a.giftBonus}</span>
+          </div>
+          <div class="adv-flaw">&#8681; ${t('world','flaw_label')}: ${en ? a.flaw_en : a.flaw_de}</div>`;
+        advGrid.appendChild(card);
+      });
+
+      // Timeline
+      const tl = document.getElementById('chronicles-timeline');
+      tl.innerHTML = '';
+      const TIMELINE = en ? TIMELINE_EN : TIMELINE_DE;
+      TIMELINE.forEach(e => {
+        tl.insertAdjacentHTML('beforeend', `
+          <div class="timeline-item">
+            <div class="timeline-dot">${e.icon}</div>
+            <div class="timeline-content">
+              <span class="timeline-year">${e.year}</span>
+              <h4 class="timeline-title">${e.title}</h4>
+              <p class="timeline-desc">${e.desc}</p>
+            </div>
+          </div>`);
+      });
+    }
+
+    initLangToggle(render);
+    render();
   </script>
 
 </body>

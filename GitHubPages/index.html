@@ -15,13 +15,13 @@
       <nav class="landing-topnav">
         <span class="landing-logo">Aethelgard</span>
         <div class="topnav-links">
-          <a class="topnav-link" href="kulturen.html">Kulturen</a>
-          <a class="topnav-link" href="heldenpfad.html">Heldenpfad</a>
-          <a class="topnav-link" href="welt.html">Die Welt</a>
+          <a id="nav-cultures" class="topnav-link" href="kulturen.html"></a>
+          <a id="nav-calling"  class="topnav-link" href="heldenpfad.html"></a>
+          <a id="nav-world"    class="topnav-link" href="welt.html"></a>
           <a class="topnav-link" href="https://github.com/Beonwulf/Aethelgard" target="_blank">GitHub</a>
         </div>
         <div class="topnav-actions">
-          <a class="btn-wow-outline btn-topnav" href="https://github.com/Beonwulf/Aethelgard" target="_blank">Zum Projekt</a>
+          <button id="lang-toggle" class="btn-wow-outline btn-topnav"></button>
         </div>
       </nav>
 
@@ -29,24 +29,26 @@
         <div class="hero-overlay"></div>
         <div class="hero-content">
           <h1 class="hero-title">Aethelgard</h1>
-          <p class="hero-subtitle">Wähle dein Schicksal. Forme deine Legende.</p>
-          <a class="btn-wow btn-hero-cta" href="https://github.com/Beonwulf/Aethelgard" target="_blank">▶ Zum GitHub-Projekt</a>
+          <p id="hero-subtitle" class="hero-subtitle"></p>
+          <a id="btn-github" class="btn-wow btn-hero-cta" href="https://github.com/Beonwulf/Aethelgard" target="_blank"></a>
         </div>
       </div>
 
       <div class="landing-cultures-section">
-        <h2 class="section-title">Wähle deine Kultur</h2>
+        <h2 id="cultures-title" class="section-title"></h2>
         <div id="cultures-grid" class="cultures-grid"></div>
       </div>
 
       <footer class="landing-footer">
-        <span>© Aethelgard – Ein Welt am Rande des Weltenbrandes</span>
+        <span id="footer-text"></span>
       </footer>
 
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { t, initLangToggle } from './assets/js/i18n.js';
+
     const CULTURES = [
       { slug: 'kaiserliche', name: 'Kaiserliche',  img: 'imperial.png',      desc: 'Disziplin, Ordnung, Erbe.' },
       { slug: 'skjaldar',    name: 'Skjaldar',     img: 'skjaldar.png',      desc: 'Sturm, Wildheit, Ehre im Kampf.' },
@@ -62,18 +64,34 @@
       { slug: 'gnomolk',     name: 'Gnomolk',      img: 'gnomolk.png',       desc: 'Steampunk-Tüftler, Eisbärwesen, Herkunft unbekannt.' },
     ];
 
-    const grid = document.getElementById('cultures-grid');
-    CULTURES.forEach(c => {
-      grid.insertAdjacentHTML('beforeend', `
-        <a class="culture-card" href="kulturen.html#${c.slug}">
-          <img src="./assets/images/cultures/${c.img}" alt="${c.name}" class="culture-card-img" loading="lazy">
-          <div class="culture-card-info">
-            <h3 class="culture-card-name">${c.name}</h3>
-            <p class="culture-card-desc">${c.desc}</p>
-          </div>
-        </a>
-      `);
-    });
+    function render() {
+      document.documentElement.lang = t('nav','toggle') === 'EN' ? 'de' : 'en';
+      document.getElementById('nav-cultures').textContent = t('nav', 'cultures');
+      document.getElementById('nav-calling').textContent  = t('nav', 'calling');
+      document.getElementById('nav-world').textContent    = t('nav', 'world');
+      document.getElementById('hero-subtitle').textContent = t('landing', 'hero_subtitle');
+      document.getElementById('btn-github').textContent   = t('landing', 'btn_github');
+      document.getElementById('cultures-title').textContent = t('landing', 'cultures_title');
+      document.getElementById('footer-text').textContent  = t('landing', 'footer');
+      document.getElementById('lang-toggle').textContent  = t('nav', 'toggle');
+
+      const grid = document.getElementById('cultures-grid');
+      grid.innerHTML = '';
+      CULTURES.forEach(c => {
+        grid.insertAdjacentHTML('beforeend', `
+          <a class="culture-card" href="kulturen.html#${c.slug}">
+            <img src="./assets/images/cultures/${c.img}" alt="${c.name}" class="culture-card-img" loading="lazy">
+            <div class="culture-card-info">
+              <h3 class="culture-card-name">${c.name}</h3>
+              <p class="culture-card-desc">${c.desc}</p>
+            </div>
+          </a>
+        `);
+      });
+    }
+
+    initLangToggle(render);
+    render();
   </script>
 
 </body>
