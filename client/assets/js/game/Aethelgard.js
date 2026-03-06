@@ -210,9 +210,11 @@ export class Aethelgard {
 			this.engine.stats.setPing(this.networkSystem.latencyMs);
 		}
 
-		// Umgebung & Welt
+		// Umgebung & Welt – Spielerposition für korrektes Chunk-LOD übergeben
+		const player = this.ecs.getEntityByTag('player');
+		const playerPos = player !== undefined ? this.ecs.getComponent(player, 'position') : null;
         this.environment.update($deltaTime, elapsedTime);
-        this.worldManager.update($deltaTime, elapsedTime, null);
+        this.worldManager.update($deltaTime, elapsedTime, null, playerPos?.x, playerPos?.z);
         const sunDir = this.environment.shared?.sunDir?.value ?? this.environment.sun.position.clone().normalize();
         this.waterManager.update($deltaTime, elapsedTime, sunDir);
 

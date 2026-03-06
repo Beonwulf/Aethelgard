@@ -116,7 +116,7 @@ export class WorldManager {
 		return Array.from(this.chunks.values());
 	}
 
-	update(deltaTime, elapsedTime, sunDir) {
+	update(deltaTime, elapsedTime, sunDir, playerX, playerZ) {
 		if (!this.metadata) return;
 		this.chunks.forEach(mesh => {
 			if (mesh.material.uniforms) {
@@ -125,20 +125,21 @@ export class WorldManager {
 			}
 		});
 
-		const playerX = Math.floor(this.camera.position.x / this.chunkSize);
-		const playerZ = Math.floor(this.camera.position.z / this.chunkSize);
+		// Spielerposition für LOD nutzen (nicht Kameraposition – Kamera ist hinter dem Spieler!)
+		const cx = Math.floor((playerX ?? this.camera.position.x) / this.chunkSize);
+		const cz = Math.floor((playerZ ?? this.camera.position.z) / this.chunkSize);
 		const visibleChunks = new Set();
 
 		for (let dz = -this.renderDistance; dz <= this.renderDistance; dz++) {
 			for (let dx = -this.renderDistance; dx <= this.renderDistance; dx++) {
-				const cx = playerX + dx;
-				const cz = playerZ + dz;
-				if (cx >= 0 && cx < this.metadata.chunksX && cz >= 0 && cz < this.metadata.chunksY) {
-					const key = `${cz}_${cx}`;
-					const dist = Math.max(Math.abs(dx), Math.abs(dz)); // Chebyshev-Distanz
+				const chunkX = cx + dx;
+				const chunkZ = cz + dz;
+				if (chunkX >= 0 && chunkX < this.metadata.chunksX && chunkZ >= 0 && chunkZ < this.metadata.chunksY) {
+					const key = `${chunkZ}_${chunkX}`;
+					const dist = Math.max(Math.abs(dx), Math.abs(dz));
 					visibleChunks.add(key);
 					if (!this.chunks.has(key) && !this._loading.has(key)) {
-						this.loadChunk(cx, cz, dist);
+						this.loadChunk(chunkX, chunkZ, dist);
 					}
 				}
 			}
