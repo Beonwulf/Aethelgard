@@ -69,11 +69,25 @@ export class WorldManager {
 		if (relX < 0) relX += 1;
 		if (relZ < 0) relZ += 1;
 
-		// .bin Tiles sind (tileSize+1)×(tileSize+1) mit Overlap
-		const tileW = this.tileSize + 1;
-		const px = Math.floor(relX * this.tileSize);
-		const pz = Math.floor(relZ * this.tileSize);
-		const rawHeight = data[pz * tileW + px];
+		// Bilineare Interpolation – genau wie der GPU-Shader (texture2D mit LinearFilter)
+		const tileW = this.tileSize + 1; // 513
+		const fx = relX * this.tileSize;
+		const fz = relZ * this.tileSize;
+		const px0 = Math.min(Math.floor(fx), this.tileSize - 1);
+		const pz0 = Math.min(Math.floor(fz), this.tileSize - 1);
+		const px1 = Math.min(px0 + 1, this.tileSize);
+		const pz1 = Math.min(pz0 + 1, this.tileSize);
+		const tx = fx - px0;
+		const tz = fz - pz0;
+
+		const h00 = data[pz0 * tileW + px0];
+		const h10 = data[pz0 * tileW + px1];
+		const h01 = data[pz1 * tileW + px0];
+		const h11 = data[pz1 * tileW + px1];
+		const rawHeight = h00 * (1 - tx) * (1 - tz)
+		                + h10 * tx       * (1 - tz)
+		                + h01 * (1 - tx) * tz
+		                + h11 * tx       * tz;
 
 		return (rawHeight - this.seaLevel) * this.heightScale;
 	}

@@ -126,7 +126,7 @@ export class Aethelgard {
             // Spawn-Chunk sicher laden bevor wir die Höhe abfragen
             const groundY = await this.worldManager.preloadHeightAt(spawnPosition.x, spawnPosition.z);
             // +100m Sicherheitsabstand, damit der Char immer ÜBER dem Terrain startet
-            spawnPosition.y = (groundY ?? 500) + 100.0;
+            spawnPosition.y = (groundY ?? 500) + 5.0;
             console.log(`🧍 Spawn groundY=${groundY?.toFixed(2)} → spawnY=${spawnPosition.y.toFixed(2)} @ (${spawnPosition.x}, ${spawnPosition.z})`);
 
             this.ecs.addComponent(entity, 'position', spawnPosition);
