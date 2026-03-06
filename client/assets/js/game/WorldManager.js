@@ -8,7 +8,7 @@ export class WorldManager {
 		this.camera = camera;
 		this.shaderCode = shaderCode;
 		this.environment = environment;
-		this.basePath = './assets/world/heightmaps/mallorca/';
+		this.basePath = './assets/world/heightmaps/blender/';
 		this.metadata = null;
 		this.chunks = new Map(); 
 		this.skirts = new Map();
@@ -19,7 +19,10 @@ export class WorldManager {
 		this.tileSize = 512;
 		this.renderDistance = 2;
 		this.pixelToMeter = 4.677;
-		this.heightScale = 1456.0;  // 65535/45 = exakt aus worldStitcher Scale
+		this.heightScale = 1456.0;  // Gesamtbereich in Metern (0..65535)
+		this.seaLevel    = 0.2;     // Normalisierter Meeresspiegel (20% = uint16 13107)
+		// Formel: worldY = (rawNorm - seaLevel) * heightScale
+		// → rawNorm 0.2 = 0m (Wasser), 1.0 = +1165m, 0.0 = -291m
 
 		// LOD: Segmente abhängig von Chunk-Distanz zum Spieler
 		// Distanz 0 (direkt darunter) → 256, 1 → 128, 2+ → 64
@@ -85,7 +88,7 @@ export class WorldManager {
 		const index = pz * this.tileSize + px;
 		const rawHeight = data[index]; // normalisiert (0..1), kein S-Kurven-Transform
 
-		return rawHeight * this.heightScale;
+		return (rawHeight - this.seaLevel) * this.heightScale;
 	}
 
 	async init() {
@@ -100,7 +103,10 @@ export class WorldManager {
 
 		const response = await fetch(`${this.basePath}metadata.json`);
 		this.metadata = await response.json();
-		console.log("🌍 Welt-Metadaten geladen:", this.metadata);
+		// Dynamisch berechnete Werte aus terrain_fantasy.py übernehmen
+		if (this.metadata.heightScale) this.heightScale = this.metadata.heightScale;
+		if (this.metadata.seaLevel    != null) this.seaLevel = this.metadata.seaLevel;
+		console.log("🌍 Welt-Metadaten geladen:", this.metadata, `→ heightScale=${this.heightScale}, seaLevel=${this.seaLevel}`);
 		
 		this.update();
 	}
@@ -166,38 +172,32 @@ export class WorldManager {
 		const key = `${y}_${x}`;
 		this._loading.add(key);
 		const segments = this.lodSegments[Math.min(dist, this.lodSegments.length - 1)];
-		const url = `${this.basePath}tile_${y}_${x}.png`;
+		const url = new URL(`${this.basePath}tile_${y}_${x}.png`, window.location.href).href;
 
 		this._workerPool.decode(url, key).then(floatData => {
-			// Falls der Chunk inzwischen aus dem Sichtfeld verschwunden ist → abbrechen
 			if (!this._loading.has(key)) return;
 
 			this.heightData.set(key, floatData);
 
-			// 1. GPU Textur aus URL erstellen
-			const img = new Image();
-			img.crossOrigin = 'anonymous';
-			img.src = url;
-			img.onload = () => {
-			const heightTexture = new THREE.Texture(img);
+			// GPU Textur – zweiter fetch ist ok (Browser-Cache), kein Worker nötig
+			const loader = new THREE.TextureLoader();
+			const heightTexture = loader.load(url, (tex) => {
+				tex.magFilter = THREE.LinearFilter;
+				tex.minFilter = THREE.LinearMipmapLinearFilter;
+				tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+				tex.needsUpdate = true;
+			});
 			heightTexture.magFilter = THREE.LinearFilter;
 			heightTexture.minFilter = THREE.LinearMipmapLinearFilter;
 			heightTexture.wrapS = heightTexture.wrapT = THREE.ClampToEdgeWrapping;
-			heightTexture.type = THREE.HalfFloatType; 
-			heightTexture.needsUpdate = true;
 
-			// 3. Mesh & Material erstellen
-			// Overlap: Tiles überlappen sich um 'overlap' Meter an jeder Kante.
-			// Das versteckt Höhen-Diskontinuitäten die durch per-Tile-Blur entstehen.
-			// Die UV-Range erweitert sich um delta; ClampToEdge wiederholt den letzten Pixel.
-			const overlap = 8; // Meter Überlappung pro Seite (≈2 Pixel bei 3.75m/px)
+			const overlap = 8;
 			const geoSize = this.chunkSize + overlap * 2;
-			const uvDelta = overlap / this.chunkSize; // UV-Ausdehnung über 0..1 hinaus
+			const uvDelta = overlap / this.chunkSize;
 
 			const geometry = new THREE.PlaneGeometry(geoSize, geoSize, segments, segments);
 			geometry.rotateX(-Math.PI / 2);
 
-			// UV von [-delta .. 1+delta] statt [0..1]: Edge-Pixel werden wiederholt
 			const uvAttr = geometry.attributes.uv;
 			for (let i = 0; i < uvAttr.count; i++) {
 				uvAttr.setXY(i,
@@ -207,20 +207,41 @@ export class WorldManager {
 			}
 			uvAttr.needsUpdate = true;
 
+			const shared = this.environment.shared;
+			// Fallback wenn SharedUniforms noch nicht bereit
+			const su = shared ?? {
+				sunDir:           { value: new THREE.Vector3(0.5, 1, 0.5).normalize() },
+				moonDir:          { value: new THREE.Vector3(-0.5, -1, -0.5).normalize() },
+				sunColor:         { value: new THREE.Color(0xffffff) },
+				moonColor:        { value: new THREE.Color(0x2244aa) },
+				sunIntensity:     { value: 1.5 },
+				moonIntensity:    { value: 0.0 },
+				ambientColor:     { value: new THREE.Color(0x77aaff) },
+				ambientIntensity: { value: 0.4 },
+				fogColor:         { value: this.scene.fog?.color ?? new THREE.Color(0xaaccff) },
+				fogDensity:       { value: 0.00015 },
+			};
 			const material = new THREE.ShaderMaterial({
 				uniforms: {
-					tAtlas: { value: this.atlas.texture },       // sampler2DArray – alle Biome
-					tHeight: { value: heightTexture },
-					tHeightSize: { value: new THREE.Vector2(this.tileSize, this.tileSize) },
-					displacementScale: { value: this.heightScale },
-					sunDirection: { value: this.environment.sun.position },
-					fogColor: { value: this.environment.scene.fog.color },
-					fogDensity: { value: this.environment.scene.fog.density }
+					tAtlas:            { value: this.atlas.texture },
+					tHeight:           { value: heightTexture },
+					tHeightSize:       { value: new THREE.Vector2(this.tileSize, this.tileSize) },
+					displacementScale:  { value: this.heightScale },
+					seaLevel:           { value: this.seaLevel },
+					sunDir:            su.sunDir,
+					sunColor:          su.sunColor,
+					sunIntensity:      su.sunIntensity,
+					moonDir:           su.moonDir,
+					moonColor:         su.moonColor,
+					moonIntensity:     su.moonIntensity,
+					ambientColor:      su.ambientColor,
+					ambientIntensity:  su.ambientIntensity,
+					fogColor:          su.fogColor,
+					fogDensity:        su.fogDensity,
 				},
-				vertexShader: this.shaderCode.vert,
+				vertexShader:   this.shaderCode.vert,
 				fragmentShader: this.shaderCode.frag
 			});
-		
 
 			const mesh = new THREE.Mesh(geometry, material);
 			mesh.position.set(x * this.chunkSize, 0, y * this.chunkSize);
@@ -228,29 +249,26 @@ export class WorldManager {
 			this.chunks.set(key, mesh);
 			this._loading.delete(key);
 
-			// 4. Skirt
 			const skirt = this._buildSkirt(x, y, floatData);
 			this.scene.add(skirt);
 			this.skirts.set(key, skirt);
-			}; // img.onload Ende
 
-			img.onerror = () => this._loading.delete(key);
-
-		}).catch(() => {
+		}).catch((err) => {
+			console.warn(`⚠️ Chunk ${key} Ladefehler:`, err);
 			this._loading.delete(key);
 		});
 	}
 
 	// Baut eine dunkle Erdwand an allen 4 Tile-Kanten, die Spalten zwischen Tiles verdeckt
 	_buildSkirt(cx, cy, floatData) {
-		const W = this.chunkSize;
-		const T = this.tileSize;
-		const H = this.heightScale;
+		const W  = this.chunkSize;
+		const T  = this.tileSize;
+		const H  = this.heightScale;
+		const SL = this.seaLevel;
 		const BOTTOM = -80;
 		const STEP = 8;
 
-		// Kein S-Kurven-Transform – konsistent mit dem Vertex-Shader
-		const h2world = (h) => h * H;
+		const h2world = (h) => (h - SL) * H;
 
 		const ox = cx * W - W / 2;
 		const oz = cy * W - W / 2;

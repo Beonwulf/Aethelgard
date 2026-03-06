@@ -1,0 +1,10 @@
+{
+  "worldName": "Aethelgard",
+  "totalSize": 26624,
+  "tileSize": 512,
+  "chunksX": 52,
+  "chunksY": 52,
+  "overlap": true,
+  "heightScale": 1979.64,
+  "seaLevel": 0.146996
+}
