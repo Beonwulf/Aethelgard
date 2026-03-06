@@ -13,7 +13,7 @@ body, html {
 	height: 100%;
 	font-family: var(--font-ui);
 	color: var(--color-text-light);
-	overflow: hidden; /* Verhindert Scrollbalken bei Animationen */
+	overflow: auto;
 }
 
 /* Web-Modus (Landingpage, Kulturen etc.) – Scrolling erlaubt */
@@ -1990,6 +1990,185 @@ font-style: italic;
   margin: 0;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   PODCAST PAGE
+   ═══════════════════════════════════════════════════════════════ */
+
+.podcast-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #0a0a0f;
+}
+
+/* Hero */
+.podcast-hero {
+  position: relative;
+  padding: 100px 40px 60px;
+  background: linear-gradient(to bottom, rgba(74,158,255,0.08) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(200,169,81,0.15);
+}
+.podcast-hero-overlay {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center top, rgba(74,158,255,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.podcast-hero-content {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+.podcast-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #4a9eff;
+  border: 1px solid rgba(74,158,255,0.4);
+  padding: 3px 12px;
+  margin-bottom: 16px;
+}
+.podcast-title {
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  color: var(--gold, #c8a951);
+  font-family: 'IM Fell English', serif;
+  margin: 0 0 12px;
+  line-height: 1.3;
+}
+.podcast-subtitle {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.65);
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+.podcast-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.4);
+}
+.podcast-meta-sep { color: rgba(255,255,255,0.2); }
+
+/* Main layout */
+.podcast-main {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 40px 80px;
+  width: 100%;
+  box-sizing: border-box;
+}
+@media (max-width: 900px) {
+  .podcast-main { grid-template-columns: 1fr; }
+}
+
+/* Video */
+.podcast-video-wrapper {
+  position: relative;
+}
+.podcast-video-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 */
+  background: #0d0d14;
+  border: 1px solid rgba(200,169,81,0.25);
+  overflow: hidden;
+}
+.podcast-video-container iframe,
+.podcast-video-container > * {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.podcast-video-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.3);
+  font-size: 0.95rem;
+  background: #0d0d14;
+}
+
+/* Sidebar */
+.podcast-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.podcast-chapters-box,
+.podcast-speakers-box {
+  background: linear-gradient(135deg, #1a1208, #0f0a05);
+  border: 1px solid rgba(200,169,81,0.2);
+  padding: 20px;
+}
+.podcast-chapters-title,
+.podcast-speakers-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(200,169,81,0.7);
+  margin: 0 0 14px;
+}
+
+/* Chapters */
+.podcast-chapters-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.podcast-chapter-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.65);
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(200,169,81,0.06);
+  transition: color 0.2s;
+}
+.podcast-chapter-item:last-child { border-bottom: none; }
+.podcast-chapter-item:hover { color: rgba(255,255,255,0.9); }
+.podcast-chapter-time {
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #4a9eff;
+  min-width: 38px;
+  flex-shrink: 0;
+}
+
+/* Speakers */
+.podcast-speaker {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(200,169,81,0.08);
+}
+.podcast-speaker:last-child { border-bottom: none; }
+.podcast-speaker-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+.podcast-speaker strong { font-size: 0.9rem; color: rgba(255,255,255,0.9); display: block; margin-bottom: 2px; }
+.podcast-speaker-role { font-size: 0.78rem; color: rgba(255,255,255,0.4); margin: 0; }
+
 /* ═══════════════════════════════════════════
    GAME – BASE
 ═══════════════════════════════════════════ */
@@ -2230,3 +2409,5 @@ canvas { display: block; }
   font-size: 11px; white-space: nowrap;
   pointer-events: none; z-index: 100;
 }
+
+
