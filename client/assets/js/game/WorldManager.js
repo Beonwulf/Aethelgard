@@ -166,17 +166,19 @@ export class WorldManager {
 
 			this.heightData.set(key, floatData);
 
-			// GPU Textur – zweiter fetch ist ok (Browser-Cache), kein Worker nötig
-			const loader = new THREE.TextureLoader();
-			const heightTexture = loader.load(url, (tex) => {
-				tex.magFilter = THREE.LinearFilter;
-				tex.minFilter = THREE.LinearMipmapLinearFilter;
-				tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
-				tex.needsUpdate = true;
-			});
+			// GPU DataTexture direkt aus floatData bauen – kein zweiter Fetch nötig
+			// Tile ist (tileSize+1)×(tileSize+1) mit Overlap-Pixel
+			const texSize = this.tileSize + 1;
+			const heightTexture = new THREE.DataTexture(
+				floatData,           // Float32Array, Werte 0..1
+				texSize, texSize,    // 513 × 513
+				THREE.RedFormat,     // nur R-Kanal (Shader liest .r)
+				THREE.FloatType
+			);
 			heightTexture.magFilter = THREE.LinearFilter;
-			heightTexture.minFilter = THREE.LinearMipmapLinearFilter;
+			heightTexture.minFilter = THREE.LinearFilter;
 			heightTexture.wrapS = heightTexture.wrapT = THREE.ClampToEdgeWrapping;
+			heightTexture.needsUpdate = true;
 
 			const overlap = 8;
 			const geoSize = this.chunkSize + overlap * 2;

@@ -45,8 +45,8 @@ export class ChunkWorkerPool {
             console.warn('⚠️  SharedArrayBuffer nicht verfügbar – nutze Transferable Fallback');
             return;
         }
-        // N Slots à (tileSize² × 4 Bytes Float32)
-        const bytesPerSlot = this._tileSize * this._tileSize * 4;
+        // N Slots à ((tileSize+1)² × 4 Bytes Float32) – Overlap-Pixel einrechnen
+        const bytesPerSlot = (this._tileSize + 1) * (this._tileSize + 1) * 4;
         this._sharedBuffer = new SharedArrayBuffer(this._workerCount * bytesPerSlot);
         console.log(`🔗 SharedArrayBuffer allokiert: ${(this._sharedBuffer.byteLength / 1024).toFixed(1)} KB`);
     }
@@ -85,7 +85,8 @@ export class ChunkWorkerPool {
             msg.slotIndex    = freeWorker._id;
         }
 
-        freeWorker.postMessage(msg, this._sharedBuffer ? [this._sharedBuffer] : []);
+        // SAB wird als Referenz im msg-Objekt übergeben – NICHT in der Transfer-Liste!
+        freeWorker.postMessage(msg);
     }
 
 
@@ -100,7 +101,7 @@ export class ChunkWorkerPool {
             task.reject(new Error(data.error));
         } else if (data.sharedBuffer) {
             // SAB-Pfad: Daten aus dem Slot kopieren (Worker braucht den Slot wieder)
-            const count = this._tileSize * this._tileSize;
+            const count = (this._tileSize + 1) * (this._tileSize + 1);
             const src   = new Float32Array(this._sharedBuffer, worker._id * count * 4, count);
             task.resolve(new Float32Array(src)); // Kopie notwendig da SAB geteilt
         } else {
