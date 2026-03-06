@@ -261,7 +261,9 @@ export class WorldManager {
 		const BOTTOM = -80;
 		const STEP = 8;
 
-		const h2world = (h) => (h - SL) * H;
+		// Skirt-Oberkante leicht unter Terrain absenken damit sie nie sichtbar ist
+		const SINK = 5.0;
+		const h2world = (h) => (h - SL) * H - SINK;
 
 		// Chunk beginnt bei cx*W, endet bei (cx+1)*W
 		const ox = cx * W;
