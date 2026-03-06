@@ -166,13 +166,13 @@ export class WorldManager {
 
 			this.heightData.set(key, floatData);
 
-			// GPU DataTexture direkt aus floatData bauen – kein zweiter Fetch nötig
+			// GPU DataTexture direkt aus floatData – kein zweiter Fetch nötig
 			// Tile ist (tileSize+1)×(tileSize+1) mit Overlap-Pixel
 			const texSize = this.tileSize + 1;
 			const heightTexture = new THREE.DataTexture(
-				floatData,           // Float32Array, Werte 0..1
-				texSize, texSize,    // 513 × 513
-				THREE.RedFormat,     // nur R-Kanal (Shader liest .r)
+				floatData,
+				texSize, texSize,
+				THREE.RedFormat,
 				THREE.FloatType
 			);
 			heightTexture.magFilter = THREE.LinearFilter;
@@ -180,21 +180,9 @@ export class WorldManager {
 			heightTexture.wrapS = heightTexture.wrapT = THREE.ClampToEdgeWrapping;
 			heightTexture.needsUpdate = true;
 
-			const overlap = 8;
-			const geoSize = this.chunkSize + overlap * 2;
-			const uvDelta = overlap / this.chunkSize;
-
-			const geometry = new THREE.PlaneGeometry(geoSize, geoSize, segments, segments);
+			// Geometry: exakt chunkSize × chunkSize, zentriert → Position bei Chunk-Mittelpunkt
+			const geometry = new THREE.PlaneGeometry(this.chunkSize, this.chunkSize, segments, segments);
 			geometry.rotateX(-Math.PI / 2);
-
-			const uvAttr = geometry.attributes.uv;
-			for (let i = 0; i < uvAttr.count; i++) {
-				uvAttr.setXY(i,
-					uvAttr.getX(i) * (1 + 2 * uvDelta) - uvDelta,
-					uvAttr.getY(i) * (1 + 2 * uvDelta) - uvDelta
-				);
-			}
-			uvAttr.needsUpdate = true;
 
 			const shared = this.environment.shared;
 			// Fallback wenn SharedUniforms noch nicht bereit
@@ -214,7 +202,7 @@ export class WorldManager {
 				uniforms: {
 					tAtlas:            { value: this.atlas.texture },
 					tHeight:           { value: heightTexture },
-					tHeightSize:       { value: new THREE.Vector2(this.tileSize, this.tileSize) },
+					tHeightSize:       { value: new THREE.Vector2(texSize, texSize) },
 					displacementScale:  { value: this.heightScale },
 					seaLevel:           { value: this.seaLevel },
 					sunDir:            su.sunDir,
@@ -233,7 +221,8 @@ export class WorldManager {
 			});
 
 			const mesh = new THREE.Mesh(geometry, material);
-			mesh.position.set(x * this.chunkSize, 0, y * this.chunkSize);
+			// PlaneGeometry ist um (0,0,0) zentriert → Mittelpunkt des Chunks
+			mesh.position.set(x * this.chunkSize + this.chunkSize / 2, 0, y * this.chunkSize + this.chunkSize / 2);
 			this.scene.add(mesh);
 			this.chunks.set(key, mesh);
 			this._loading.delete(key);
@@ -252,6 +241,7 @@ export class WorldManager {
 	_buildSkirt(cx, cy, floatData) {
 		const W  = this.chunkSize;
 		const T  = this.tileSize;
+		const TW = T + 1;       // Stride des floatData-Arrays (513, mit Overlap-Pixel)
 		const H  = this.heightScale;
 		const SL = this.seaLevel;
 		const BOTTOM = -80;
@@ -259,8 +249,9 @@ export class WorldManager {
 
 		const h2world = (h) => (h - SL) * H;
 
-		const ox = cx * W - W / 2;
-		const oz = cy * W - W / 2;
+		// Chunk beginnt bei cx*W, endet bei (cx+1)*W
+		const ox = cx * W;
+		const oz = cy * W;
 
 		const positions = [];
 		const indices = [];
@@ -281,26 +272,26 @@ export class WorldManager {
 
 		const left = [];
 		for (let pz = 0; pz < T; pz += STEP)
-			left.push([ox, h2world(floatData[pz * T]), oz + (pz / (T - 1)) * W]);
-		left.push([ox, h2world(floatData[(T - 1) * T]), oz + W]);
+			left.push([ox, h2world(floatData[pz * TW]), oz + (pz / T) * W]);
+		left.push([ox, h2world(floatData[(T - 1) * TW]), oz + W]);
 		addStrip(left);
 
 		const right = [];
 		for (let pz = 0; pz < T; pz += STEP)
-			right.push([ox + W, h2world(floatData[pz * T + T - 1]), oz + (pz / (T - 1)) * W]);
-		right.push([ox + W, h2world(floatData[(T - 1) * T + T - 1]), oz + W]);
+			right.push([ox + W, h2world(floatData[pz * TW + T]), oz + (pz / T) * W]);
+		right.push([ox + W, h2world(floatData[(T - 1) * TW + T]), oz + W]);
 		addStrip(right);
 
 		const top = [];
 		for (let px = 0; px < T; px += STEP)
-			top.push([ox + (px / (T - 1)) * W, h2world(floatData[px]), oz]);
+			top.push([ox + (px / T) * W, h2world(floatData[px]), oz]);
 		top.push([ox + W, h2world(floatData[T - 1]), oz]);
 		addStrip(top);
 
 		const bottom = [];
 		for (let px = 0; px < T; px += STEP)
-			bottom.push([ox + (px / (T - 1)) * W, h2world(floatData[(T - 1) * T + px]), oz + W]);
-		bottom.push([ox + W, h2world(floatData[(T - 1) * T + T - 1]), oz + W]);
+			bottom.push([ox + (px / T) * W, h2world(floatData[(T - 1) * TW + px]), oz + W]);
+		bottom.push([ox + W, h2world(floatData[(T - 1) * TW + T - 1]), oz + W]);
 		addStrip(bottom);
 
 		const geo = new THREE.BufferGeometry();
