@@ -8,6 +8,7 @@ import { CulturesController } from '../controllers/CulturesController.js';
 import { CallingController } from '../controllers/CallingController.js';
 import { WorldController } from '../controllers/WorldController.js';
 import { TalentsController } from '../controllers/TalentsController.js';
+import { PodcastController } from '../controllers/PodcastController.js';
 
 
 export class StageManager {
@@ -24,6 +25,7 @@ export class StageManager {
 			'cultures': CulturesController,
 			'calling': CallingController,
 			'talents': TalentsController,
+			'podcast': PodcastController,
 			'world': WorldController,
 			'login': LoginController,
 			'char-select': CharSelectController,
@@ -35,7 +37,7 @@ export class StageManager {
 	}
 
 	// Web-Szenen zeigen die Landingpage/Infoseiten (Scrolling erlaubt)
-	static WEB_SCENES = new Set(['landing', 'cultures', 'calling', 'talents', 'world']);
+	static WEB_SCENES = new Set(['landing', 'cultures', 'calling', 'talents', 'world', 'podcast']);
 
 	setup(rootElement) {
 		this.root = rootElement;

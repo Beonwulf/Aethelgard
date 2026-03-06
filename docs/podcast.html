@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de" class="web">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podcast – Aethelgard</title>
+  <link rel="stylesheet" href="./assets/css/variables.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body class="web">
+
+  <div id="app">
+    <div class="podcast-page">
+
+      <nav class="landing-topnav">
+        <a class="landing-logo" href="index.html">Aethelgard</a>
+        <div class="topnav-links">
+          <a id="nav-cultures" class="topnav-link" href="kulturen.html"></a>
+          <a id="nav-calling"  class="topnav-link" href="heldenpfad.html"></a>
+          <a id="nav-world"    class="topnav-link" href="welt.html"></a>
+          <a id="nav-podcast"  class="topnav-link active" href="podcast.html"></a>
+        </div>
+        <div class="topnav-actions">
+          <button id="lang-toggle" class="btn-wow-outline btn-topnav"></button>
+        </div>
+      </nav>
+
+      <div class="podcast-hero">
+        <div class="podcast-hero-overlay"></div>
+        <div class="podcast-hero-content">
+          <span id="podcast-label" class="podcast-label"></span>
+          <h1 id="podcast-title" class="podcast-title"></h1>
+          <p  id="podcast-subtitle" class="podcast-subtitle"></p>
+          <div class="podcast-meta">
+            <span id="podcast-duration" class="podcast-meta-item"></span>
+            <span class="podcast-meta-sep">·</span>
+            <span id="podcast-episode" class="podcast-meta-item"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="podcast-main">
+
+        <div class="podcast-video-wrapper">
+          <div id="podcast-video-container" class="podcast-video-container"></div>
+        </div>
+
+        <div class="podcast-sidebar">
+
+          <div class="podcast-chapters-box">
+            <h3 id="chapters-title" class="podcast-chapters-title"></h3>
+            <ul id="podcast-chapters" class="podcast-chapters-list"></ul>
+          </div>
+
+          <div class="podcast-speakers-box">
+            <h3 id="speakers-title" class="podcast-speakers-title"></h3>
+            <div id="podcast-speakers"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <footer class="landing-footer">
+        <span id="footer-text"></span>
+      </footer>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { t, getLang, initLangToggle } from './assets/js/i18n.js';
+
+    async function render() {
+      const lang = getLang();
+
+      // Nav
+      document.getElementById('nav-cultures').textContent = t('nav', 'cultures');
+      document.getElementById('nav-calling').textContent  = t('nav', 'calling');
+      document.getElementById('nav-world').textContent    = t('nav', 'world');
+      document.getElementById('nav-podcast').textContent  = t('nav', 'podcast');
+      document.getElementById('footer-text').textContent  = t('podcast', 'footer');
+
+      // Podcast-Daten aus JSON laden
+      const podcasts = await fetch('./assets/data/podcasts.json').then(r => r.json());
+      const p = podcasts[0];
+      if (!p) return;
+
+      // Meta
+      document.getElementById('podcast-label').textContent    = t('podcast', 'label');
+      document.getElementById('podcast-title').textContent    = p.title[lang] ?? p.title.de;
+      document.getElementById('podcast-subtitle').textContent = p.subtitle[lang] ?? p.subtitle.de;
+      document.getElementById('podcast-duration').textContent = p.duration;
+      document.getElementById('podcast-episode').textContent  = `Episode ${p.episode}`;
+
+      // Chapters-Titel
+      document.getElementById('chapters-title').textContent = t('podcast', 'chapters_title');
+      document.getElementById('speakers-title').textContent = t('podcast', 'speakers_title');
+
+      // Video
+      const vc = document.getElementById('podcast-video-container');
+      if (p.youtube) {
+        const iframe = document.createElement('iframe');
+        iframe.src = p.youtube;
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+        iframe.frameBorder = '0';
+        vc.appendChild(iframe);
+      } else {
+        const ph = document.createElement('div');
+        ph.className = 'podcast-video-placeholder';
+        ph.innerHTML = `<span>${t('podcast', 'coming_soon')}</span>`;
+        vc.appendChild(ph);
+      }
+
+      // Chapters
+      const list = document.getElementById('podcast-chapters');
+      p.chapters.forEach(ch => {
+        const li = document.createElement('li');
+        li.className = 'podcast-chapter-item';
+        li.innerHTML = `<span class="podcast-chapter-time">${ch.time}</span>
+                        <span class="podcast-chapter-title">${ch.title[lang] ?? ch.title.de}</span>`;
+        list.appendChild(li);
+      });
+
+      // Speakers
+      const speakersEl = document.getElementById('podcast-speakers');
+      p.speakers.forEach(sp => {
+        const div = document.createElement('div');
+        div.className = 'podcast-speaker';
+        div.innerHTML = `
+          <span class="podcast-speaker-dot" style="background:${sp.color};box-shadow:0 0 6px ${sp.color}80"></span>
+          <div>
+            <strong>${sp.name[lang] ?? sp.name.de}</strong>
+            <p class="podcast-speaker-role">${sp.role[lang] ?? sp.role.de}</p>
+          </div>`;
+        speakersEl.appendChild(div);
+      });
+    }
+
+    render();
+    initLangToggle(() => {
+      // Seite neu rendern bei Sprachwechsel
+      document.getElementById('podcast-video-container').innerHTML = '';
+      document.getElementById('podcast-chapters').innerHTML = '';
+      document.getElementById('podcast-speakers').innerHTML = '';
+      render();
+    });
+  </script>
+
+</body>
+</html>

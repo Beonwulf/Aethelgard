@@ -38,6 +38,7 @@ export class LandingController extends BaseController {
 	handleCultures()    { this.app.stage.load('cultures'); }
 	handleCalling() { this.app.stage.load('calling'); }
 	handleWorld()       { this.app.stage.load('world'); }
+	handlePodcast()     { this.app.stage.load('podcast'); }
 
 	onReady() {
 		this._buildTopnavActions();

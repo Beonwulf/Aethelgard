@@ -1,0 +1,16 @@
+{
+  "podcast": {
+    "nav_back": "← Zurück",
+    "label": "Podcast",
+    "title": "PostgreSQL speichert deine Sünden in Aethelgard",
+    "subtitle": "Zwei KI-Avatare diskutieren Lore, Spielsysteme, Kulturen und die dunkle Seele von Aethelgard.",
+    "duration": "21 Min.",
+    "episode": "Episode 1",
+    "chapters_title": "Kapitel",
+    "speakers_title": "Sprecher",
+    "speaker_00_name": "Sarah Klein",
+    "speaker_00_role": "Game-Designerin & Lore-Expertin",
+    "speaker_01_name": "Marcus Weber",
+    "speaker_01_role": "Entwickler & Systemarchitekt"
+  }
+}

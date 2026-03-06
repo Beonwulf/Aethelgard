@@ -16,7 +16,8 @@
             { "$el": "a", "$class": "topnav-link", "$text": "{{landing.nav_cultures}}", "$action": "handleCultures" },
             { "$el": "a", "$class": "topnav-link", "$text": "{{landing.nav_calling}}", "$action": "handleCalling" },
             { "$el": "a", "$class": "topnav-link", "$text": "{{landing.nav_talents}}", "$action": "handleTalents" },
-            { "$el": "a", "$class": "topnav-link", "$text": "{{landing.nav_world}}", "$action": "handleWorld" }
+            { "$el": "a", "$class": "topnav-link", "$text": "{{landing.nav_world}}", "$action": "handleWorld" },
+            { "$el": "a", "$class": "topnav-link", "$text": "{{landing.nav_podcast}}", "$action": "handlePodcast" }
           ]
         },
         {

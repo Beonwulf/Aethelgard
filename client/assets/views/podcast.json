@@ -1,0 +1,105 @@
+{
+  "$class": "podcast-page",
+  "$childs": [
+    {
+      "$id": "podcast-topnav",
+      "$class": "landing-topnav",
+      "$childs": [
+        {
+          "$class": "landing-logo",
+          "$el": "span",
+          "$text": "Aethelgard"
+        },
+        {
+          "$class": "topnav-links",
+          "$childs": [
+            { "$el": "a", "$class": "topnav-link", "$text": "{{podcast.nav_back}}", "$action": "handleBack" }
+          ]
+        }
+      ]
+    },
+    {
+      "$class": "podcast-hero",
+      "$childs": [
+        { "$class": "podcast-hero-overlay" },
+        {
+          "$class": "podcast-hero-content",
+          "$childs": [
+            { "$el": "span", "$class": "podcast-label", "$text": "{{podcast.label}}" },
+            { "$el": "h1", "$class": "podcast-title", "$text": "{{podcast.title}}" },
+            { "$el": "p", "$class": "podcast-subtitle", "$text": "{{podcast.subtitle}}" },
+            {
+              "$class": "podcast-meta",
+              "$childs": [
+                { "$el": "span", "$class": "podcast-meta-item", "$text": "{{podcast.duration}}" },
+                { "$el": "span", "$class": "podcast-meta-sep", "$text": "·" },
+                { "$el": "span", "$class": "podcast-meta-item", "$text": "{{podcast.episode}}" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$class": "podcast-main",
+      "$childs": [
+        {
+          "$class": "podcast-video-wrapper",
+          "$childs": [
+            { "$id": "podcast-video-container", "$class": "podcast-video-container" }
+          ]
+        },
+        {
+          "$class": "podcast-sidebar",
+          "$childs": [
+            {
+              "$class": "podcast-chapters-box",
+              "$childs": [
+                { "$el": "h3", "$class": "podcast-chapters-title", "$text": "{{podcast.chapters_title}}" },
+                { "$el": "ul", "$id": "podcast-chapters", "$class": "podcast-chapters-list" }
+              ]
+            },
+            {
+              "$class": "podcast-speakers-box",
+              "$childs": [
+                { "$el": "h3", "$class": "podcast-speakers-title", "$text": "{{podcast.speakers_title}}" },
+                {
+                  "$class": "podcast-speaker",
+                  "$childs": [
+                    { "$class": "podcast-speaker-dot podcast-speaker-dot--00" },
+                    {
+                      "$el": "div",
+                      "$childs": [
+                        { "$el": "strong", "$text": "{{podcast.speaker_00_name}}" },
+                        { "$el": "p", "$class": "podcast-speaker-role", "$text": "{{podcast.speaker_00_role}}" }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "$class": "podcast-speaker",
+                  "$childs": [
+                    { "$class": "podcast-speaker-dot podcast-speaker-dot--01" },
+                    {
+                      "$el": "div",
+                      "$childs": [
+                        { "$el": "strong", "$text": "{{podcast.speaker_01_name}}" },
+                        { "$el": "p", "$class": "podcast-speaker-role", "$text": "{{podcast.speaker_01_role}}" }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$class": "landing-footer",
+      "$childs": [
+        { "$el": "span", "$text": "© Aethelgard – Ein Welt am Rande des Weltenbrandes" }
+      ]
+    }
+  ]
+}

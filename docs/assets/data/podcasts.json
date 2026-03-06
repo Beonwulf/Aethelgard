@@ -1,0 +1,43 @@
+[
+  {
+    "id": "postgresql-suenden-aethelgard",
+    "episode": 1,
+    "title": {
+      "de": "PostgreSQL speichert deine Sünden in Aethelgard",
+      "en": "PostgreSQL Stores Your Sins in Aethelgard"
+    },
+    "subtitle": {
+      "de": "Zwei KI-Avatare diskutieren Lore, Spielsysteme, Kulturen und die dunkle Seele von Aethelgard.",
+      "en": "Two AI avatars discuss lore, game systems, cultures and the dark soul of Aethelgard."
+    },
+    "duration": "21:47",
+    "youtube": "https://www.youtube.com/embed/jCD6OEnUGE8",
+    "speakers": [
+      {
+        "id": "SPEAKER_00",
+        "name": { "de": "Sarah Klein",  "en": "Sarah Klein" },
+        "role": { "de": "Game-Designerin & Lore-Expertin", "en": "Game Designer & Lore Expert" },
+        "color": "#4a9eff"
+      },
+      {
+        "id": "SPEAKER_01",
+        "name": { "de": "Marcus Weber", "en": "Marcus Weber" },
+        "role": { "de": "Entwickler & Systemarchitekt",   "en": "Developer & System Architect" },
+        "color": "#ff6b9d"
+      }
+    ],
+    "chapters": [
+      { "time": "0:00",  "title": { "de": "Intro & Willkommen",                   "en": "Intro & Welcome" } },
+      { "time": "1:45",  "title": { "de": "Lore & Prämisse: Licht vs. Korruption","en": "Lore & Premise: Light vs. Corruption" } },
+      { "time": "2:17",  "title": { "de": "Art Direction & Visual Design",         "en": "Art Direction & Visual Design" } },
+      { "time": "4:50",  "title": { "de": "Die 12 Kulturen von Aethelgard",        "en": "The 12 Cultures of Aethelgard" } },
+      { "time": "11:10", "title": { "de": "Kampf- & Balancing-System",             "en": "Combat & Balancing System" } },
+      { "time": "13:00", "title": { "de": "PostgreSQL: Die Seele des Spiels",      "en": "PostgreSQL: The Soul of the Game" } },
+      { "time": "13:45", "title": { "de": "Widersacher-Pakte & Moralsystem",       "en": "Antagonist Pacts & Moral System" } },
+      { "time": "15:40", "title": { "de": "Ruf- & Karma-System",                   "en": "Reputation & Karma System" } },
+      { "time": "16:50", "title": { "de": "Die Antagonisten",                      "en": "The Antagonists" } },
+      { "time": "17:50", "title": { "de": "Die Verderbnis & Die Wunde",            "en": "The Corruption & The Wound" } },
+      { "time": "21:30", "title": { "de": "Outro & Fazit",                         "en": "Outro & Summary" } }
+    ]
+  }
+]

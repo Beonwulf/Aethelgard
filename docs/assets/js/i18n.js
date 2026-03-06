@@ -8,6 +8,7 @@ export const LANG = {
       cultures: 'Kulturen',
       calling: 'Heldenpfad',
       world: 'Die Welt',
+      podcast: 'Podcast',
       back: '← Startseite',
       github: 'GitHub',
       toggle: 'EN',
@@ -58,6 +59,13 @@ export const LANG = {
       bonus_label: 'Bonus',
       footer: '© Aethelgard – Eine Welt am Rande des Weltenbrandes',
     },
+    podcast: {
+      label: 'Podcast',
+      chapters_title: 'Kapitel',
+      speakers_title: 'Sprecher',
+      coming_soon: 'Video folgt in Kürze auf YouTube',
+      footer: '© Aethelgard – Eine Welt am Rande des Weltenbrandes',
+    },
   },
 
   en: {
@@ -66,6 +74,7 @@ export const LANG = {
       cultures: 'Cultures',
       calling: "Hero's Path",
       world: 'The World',
+      podcast: 'Podcast',
       back: '← Home',
       github: 'GitHub',
       toggle: 'DE',
@@ -114,6 +123,13 @@ export const LANG = {
       gift_label: 'Gift',
       flaw_label: 'Flaw',
       bonus_label: 'Bonus',
+      footer: '© Aethelgard – A World on the Brink of the World-Fire',
+    },
+    podcast: {
+      label: 'Podcast',
+      chapters_title: 'Chapters',
+      speakers_title: 'Speakers',
+      coming_soon: 'Video coming soon on YouTube',
       footer: '© Aethelgard – A World on the Brink of the World-Fire',
     },
   },
