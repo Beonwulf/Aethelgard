@@ -1,10 +1,10 @@
 import sharp from 'sharp';
 import fs from 'fs';
 
-const MASTER_RAW = 'tools/source/Aethelgard_Final_16bit.raw';
+const MASTER_RAW = 'tools/source/Aethelgard_Blender_16bit.raw';
 const FULL_SIZE = 26624;
 const TILE_SIZE = 512; 
-const OUTPUT_DIR = './client/assets/world/heightmaps/mallorca/';
+const OUTPUT_DIR = './client/assets/world/heightmaps/blender/';
 
 async function generateTiles() {
     if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -34,18 +34,21 @@ async function generateTiles() {
                 }
             }
 
-            // Jetzt geben wir Sharp nur noch die fertige, kleine Kachel
-            await sharp(Buffer.from(tileBuffer.buffer), {
-                raw: { 
-                    width: currentTileSize, 
-                    height: currentTileSize, 
-                    channels: 1, 
-                    depth: 'ushort',
-                    endian: 'little'
-                }
+            // Encode 16-bit als 8-bit RGBA: R=high byte, G=low byte
+            // Browser-Canvas konvertiert 16-bit Gray zu R=G=B=high_byte (verliert low byte!)
+            // → deshalb explizit als RGBA speichern damit HeightmapDecoder R+G/255 korrekt liest
+            const rgbaBuffer = new Uint8Array(currentTileSize * currentTileSize * 4);
+            for (let i = 0; i < currentTileSize * currentTileSize; i++) {
+                const v = tileBuffer[i];
+                rgbaBuffer[i * 4 + 0] = (v >> 8) & 0xFF;  // R = high byte
+                rgbaBuffer[i * 4 + 1] = v & 0xFF;           // G = low byte
+                rgbaBuffer[i * 4 + 2] = 0;
+                rgbaBuffer[i * 4 + 3] = 255;
+            }
+            await sharp(Buffer.from(rgbaBuffer.buffer), {
+                raw: { width: currentTileSize, height: currentTileSize, channels: 4, depth: 'uchar' }
             })
-            //.blur(0.5) // Ein minimaler Blur unter 1px wirkt Wunder für die Shader-Normalen
-            .png({ bitdepth: 16, compressionLevel: 9 })
+            .png({ compressionLevel: 6 })
             .toFile(`${OUTPUT_DIR}tile_${y}_${x}.png`);
         }
         if (y % 5 === 0) console.log(`✅ Reihe ${y} fertig...`);
