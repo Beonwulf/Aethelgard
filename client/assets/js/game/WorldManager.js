@@ -33,60 +33,47 @@ export class WorldManager {
 
 	// Lädt den Chunk für (worldX, worldZ) falls nötig, gibt dann Höhe zurück.
 	// Nützlich beim Spawnen bevor der Render-Loop den Chunk geladen hat.
-	preloadHeightAt($worldX, $worldZ) {
+	async preloadHeightAt($worldX, $worldZ) {
 		const cx = Math.floor($worldX / this.chunkSize);
 		const cz = Math.floor($worldZ / this.chunkSize);
 		const key = `${cz}_${cx}`;
-		if (this.heightData.has(key)) return Promise.resolve(this.getHeightAt($worldX, $worldZ));
-		return new Promise((resolve) => {
-			const img = new Image();
-			img.crossOrigin = 'anonymous';
-			img.src = `${this.basePath}tile_${cz}_${cx}.png`;
-			img.onload = () => {
-				const canvas = document.createElement('canvas');
-				canvas.width = this.tileSize;
-				canvas.height = this.tileSize;
-				const ctx = canvas.getContext('2d');
-				ctx.drawImage(img, 0, 0);
-				const imageData = ctx.getImageData(0, 0, this.tileSize, this.tileSize).data;
-				const floatData = new Float32Array(this.tileSize * this.tileSize);
-				for (let i = 0; i < imageData.length; i += 4) {
-					floatData[i / 4] = imageData[i] / 255.0 + imageData[i + 1] / 65025.0;
-				}
-				canvas.width = 0; canvas.height = 0;
-				if (!this.heightData.has(key)) this.heightData.set(key, floatData);
-				resolve(this.getHeightAt($worldX, $worldZ));
-			};
-			img.onerror = () => resolve(null);
-		});
+		if (this.heightData.has(key)) return this.getHeightAt($worldX, $worldZ);
+
+		try {
+			const response = await fetch(`${this.basePath}tile_${cz}_${cx}.bin`);
+			if (!response.ok) throw new Error(`HTTP ${response.status}`);
+			const arrayBuffer = await response.arrayBuffer();
+			const u16 = new Uint16Array(arrayBuffer);
+			const count = (this.tileSize + 1) * (this.tileSize + 1);
+			const floatData = new Float32Array(count);
+			for (let i = 0; i < count; i++) floatData[i] = u16[i] / 65535.0;
+			if (!this.heightData.has(key)) this.heightData.set(key, floatData);
+		} catch (e) {
+			console.warn(`preloadHeightAt: ${e.message}`);
+			return null;
+		}
+		return this.getHeightAt($worldX, $worldZ);
 	}
 
 	// Hilfsfunktion: Wandelt Weltkoordinaten in die exakte Höhe um
 	getHeightAt($x, $z) {
-		// Berechne, in welchem Chunk wir uns befinden
 		const cx = Math.floor($x / this.chunkSize);
 		const cz = Math.floor($z / this.chunkSize);
 		const key = `${cz}_${cx}`;
 
 		const data = this.heightData.get(key);
-		if (!data) return null; // Chunk noch nicht geladen
+		if (!data) return null;
 
-		// Relative Position innerhalb des Chunks (0.0 bis 1.0)
-		// Wir nutzen Modulo, um die Position innerhalb der 1920m zu finden
 		let relX = ($x % this.chunkSize) / this.chunkSize;
 		let relZ = ($z % this.chunkSize) / this.chunkSize;
-		
-		// Korrektur für negative Koordinaten
 		if (relX < 0) relX += 1;
 		if (relZ < 0) relZ += 1;
 
-		// Umrechnung in Pixel-Indizes (0 bis 511)
-		const px = Math.floor(relX * (this.tileSize - 1));
-		const pz = Math.floor(relZ * (this.tileSize - 1));
-
-		// Index im 1D-Array berechnen
-		const index = pz * this.tileSize + px;
-		const rawHeight = data[index]; // normalisiert (0..1), kein S-Kurven-Transform
+		// .bin Tiles sind (tileSize+1)×(tileSize+1) mit Overlap
+		const tileW = this.tileSize + 1;
+		const px = Math.floor(relX * this.tileSize);
+		const pz = Math.floor(relZ * this.tileSize);
+		const rawHeight = data[pz * tileW + px];
 
 		return (rawHeight - this.seaLevel) * this.heightScale;
 	}
@@ -172,7 +159,7 @@ export class WorldManager {
 		const key = `${y}_${x}`;
 		this._loading.add(key);
 		const segments = this.lodSegments[Math.min(dist, this.lodSegments.length - 1)];
-		const url = new URL(`${this.basePath}tile_${y}_${x}.png`, window.location.href).href;
+		const url = new URL(`${this.basePath}tile_${y}_${x}.bin`, window.location.href).href;
 
 		this._workerPool.decode(url, key).then(floatData => {
 			if (!this._loading.has(key)) return;

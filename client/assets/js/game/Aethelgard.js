@@ -14,6 +14,7 @@ import { CharacterSystem } from './engine/systems/CharacterSystem.js';
 import { AbilitySystem } from './engine/systems/AbilitySystem.js';
 import { GUISystem } from './engine/systems/GUISystem.js';
 import { NetworkSystem } from './engine/systems/NetworkSystem.js';
+import { SoundManager } from './engine/systems/SoundManager.js';
 
 
 export class Aethelgard {
@@ -39,6 +40,9 @@ export class Aethelgard {
 	async ignite(worldData) {
 		window.aethelgard = this;
 
+		// Sounds vorab laden
+		SoundManager.preload('levelup', './assets/sounds/item_gem_01.ogg');
+
 		this.loading.addTask('shaders');
 		this.loading.addTask('world');
 		this.loading.addTask('player');
@@ -54,7 +58,7 @@ export class Aethelgard {
 
 		// 2. Environment
 		this.environment = new Environment(this.engine.scene);
-		this.environment.init();
+		// init() wird bereits im Konstruktor aufgerufen
 		this.engine.environment = this.environment;
 		this.engine.init();
 
@@ -85,7 +89,9 @@ export class Aethelgard {
         this._loadDemoAbilities();
 
         // Dummy-Modell laden → auf Fertigstellung warten für Loading-Screen
-        await this.characterSystem.loadForEntity('player', './assets/models/dummy.glb');
+        // Kultur des Spielers aus playerData lesen (kommt vom Server), Fallback: dummy.glb
+        const culture = null; // TODO: playerData?.culture wenn Server mitschickt
+        await this.characterSystem.loadForEntity('player', culture ? null : './assets/models/dummy.glb', culture);
         this.loading.completeTask('player', 'Spieler geladen');
         this.loading.finish('Willkommen in Aethelgard!');
 
@@ -119,7 +125,9 @@ export class Aethelgard {
 
             // Spawn-Chunk sicher laden bevor wir die Höhe abfragen
             const groundY = await this.worldManager.preloadHeightAt(spawnPosition.x, spawnPosition.z);
-            spawnPosition.y = (groundY ?? 100) + 2.0;
+            // +100m Sicherheitsabstand, damit der Char immer ÜBER dem Terrain startet
+            spawnPosition.y = (groundY ?? 500) + 100.0;
+            console.log(`🧍 Spawn groundY=${groundY?.toFixed(2)} → spawnY=${spawnPosition.y.toFixed(2)} @ (${spawnPosition.x}, ${spawnPosition.z})`);
 
             this.ecs.addComponent(entity, 'position', spawnPosition);
             this.ecs.addComponent(entity, 'rotation', { y: 0 });
@@ -184,8 +192,7 @@ export class Aethelgard {
 
 	playerSpawn($x, $y, $z) {
 		this.engine.camera.position.set($x, $y + 5, $z - 10);
-		this.engine.controls.target.set($x, $y, $z);
-		this.engine.controls.update();
+		this.engine.camera.lookAt($x, $y, $z);
 	}
 
 
@@ -198,10 +205,15 @@ export class Aethelgard {
 		if (this.networkSystem)   this.networkSystem.update($deltaTime);
 		if (this.guiSystem)       this.guiSystem.update();
 
+		// Ping an StatsPanel weiterleiten
+		if (this.networkSystem && this.engine.stats) {
+			this.engine.stats.setPing(this.networkSystem.latencyMs);
+		}
+
 		// Umgebung & Welt
         this.environment.update($deltaTime, elapsedTime);
-        const sunDir = this.environment.sun.position.clone().normalize();
-        this.worldManager.update($deltaTime, elapsedTime, sunDir);
+        this.worldManager.update($deltaTime, elapsedTime, null);
+        const sunDir = this.environment.shared?.sunDir?.value ?? this.environment.sun.position.clone().normalize();
         this.waterManager.update($deltaTime, elapsedTime, sunDir);
 
 		// Debug-HUD
