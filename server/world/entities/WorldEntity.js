@@ -2,7 +2,7 @@ export class WorldEntity {
     constructor($charData) {
         this.id = $charData.uuid;
         this.characterData = $charData;
-        this.position = { x: 58799, y: 0, z: 54589 }; // Spawn: flache Ebene nahe Insel-Mitte
+        this.position = { x: 111883, y: 0, z: 50198 }; // Spawn: Ostkueste Strand
         this.rotation = { x: 0, y: 0, z: 0, w: 1 };
         this.state = 'idle';
     }
