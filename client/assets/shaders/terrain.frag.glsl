@@ -42,7 +42,7 @@ void main() {
         vec3 deepCol    = vec3(0.01, 0.10, 0.28);
         vec3 waterCol   = mix(shallowCol, deepCol, depth);
 
-        // Rauschen (zwei scrollende Layer)
+        // Rauschen (zwei scrollende Layer) – Wellen nur in Fragment-Normale, kein Vertex-Clamping
         vec2 uv1 = vWorldPos.xz * 0.0005 + vec2(uTime * 0.010,  uTime * 0.010);
         vec2 uv2 = vWorldPos.xz * 0.0007 - vec2(uTime * 0.005,  uTime * 0.015);
         float n1 = texture2D(uNoiseTex, uv1).r;
@@ -50,22 +50,22 @@ void main() {
         float ns = (n1 + n2) * 0.5;
 
         // Schaum an flachen Küstenrändern
-        float shoreBlend = clamp(-vHeight / 3.0, 0.0, 1.0);   // 0=Strand, 1=tiefes Wasser
+        float shoreBlend = clamp(-vHeight / 3.0, 0.0, 1.0);
         float foam       = smoothstep(0.62, 0.72, ns) * (1.0 - shoreBlend);
         waterCol = mix(waterCol, vec3(0.9, 0.95, 1.0), foam * 0.5);
 
-        // Specular (Sonnenglanz)
+        // Wellennormale: rein aus Noise (kein Vertex-Displacement)
         vec3 wNorm    = normalize(vec3((n1 - 0.5) * 0.15, 1.0, (n2 - 0.5) * 0.15));
         vec3 viewDir  = normalize(uCameraPos - vWorldPos);
         vec3 halfVec  = normalize(sunDir + viewDir);
         float spec    = pow(max(dot(wNorm, halfVec), 0.0), 128.0);
         waterCol     += sunColor * sunIntensity * spec * 0.7;
 
-        // Fresnel: flacher Blickwinkel → mehr Reflexion
+        // Fresnel
         float fresnel = pow(1.0 - max(dot(viewDir, wNorm), 0.0), 3.0);
         waterCol      = mix(waterCol, fogColor, fresnel * 0.35);
 
-        gl_FragColor = vec4(mix(waterCol, fogColor, fogFactor), 0.88);
+        gl_FragColor = vec4(mix(waterCol, fogColor, fogFactor), 1.0);
         return;
     }
 

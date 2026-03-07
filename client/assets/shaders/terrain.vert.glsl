@@ -6,7 +6,6 @@ varying vec3 vWorldPos;
 uniform sampler2D tHeight;
 uniform float displacementScale;
 uniform float seaLevel;
-uniform float uTime;
 
 void main() {
     vUv = uv;
@@ -28,16 +27,9 @@ void main() {
         (hD - hU) * displacementScale
     ));
 
-    float yPos = vHeight;
-    // Unterwasser: Vertex auf Wasseroberfläche einfrieren + kleine Wellen
-    if (vHeight < 0.0) {
-        vec4 worldPos4 = modelMatrix * vec4(position, 1.0);
-        float wave = sin(worldPos4.x * 0.015 + uTime * 1.2) * 0.18
-                   + sin(worldPos4.z * 0.011 + uTime * 0.9) * 0.12;
-        yPos = wave;
-    }
-
-    vec4 worldPos = modelMatrix * vec4(position + vec3(0.0, yPos, 0.0), 1.0);
+    // Vertices bleiben an ihrer echten Position (Meeresboden bleibt unten).
+    // Wasser-Oberfläche wird rein im Fragment-Shader gemalt (kein Vertex-Clamping → keine Chunk-Kanten).
+    vec4 worldPos = modelMatrix * vec4(position + vec3(0.0, vHeight, 0.0), 1.0);
     vWorldPos = worldPos.xyz;
     gl_Position = projectionMatrix * viewMatrix * worldPos;
 }

@@ -239,7 +239,6 @@ export class WorldManager {
 				},
 				vertexShader:   this.shaderCode.vert,
 				fragmentShader: this.shaderCode.frag,
-				transparent:    true,
 			});
 
 			const mesh = new THREE.Mesh(geometry, material);
