@@ -46,12 +46,19 @@ void main() {
     float spec   = pow(max(dot(wNorm, halfVec), 0.0), 160.0);
     waterCol    += uSunColor * uSunIntensity * spec * 0.90;
 
-    // ── Fresnel (Horizont-Reflexion) ──────────────────────────────────────────
-    float fresnel = pow(1.0 - max(dot(viewDir, wNorm), 0.0), 3.5);
-    waterCol      = mix(waterCol, uFogColor, fresnel * 0.40);
+    // ── Fresnel: nur leicht, sonst wird alles grau ────────────────────────────
+    float fresnel = pow(1.0 - max(dot(viewDir, wNorm), 0.0), 4.0);
+    waterCol      = mix(waterCol, uFogColor * 0.6 + waterCol * 0.4, fresnel * 0.25);
 
-    // ── Alpha: nahe Kamera leicht transparent (Meeresboden durchscheinen) ─────
-    float alpha = mix(0.80, 0.96, clamp(dist / 3000.0, 0.0, 1.0));
+    // ── Alpha: nah etwas transparenter (Meeresboden durchscheinen) ────────────
+    float alpha = mix(0.82, 0.97, clamp(dist / 3000.0, 0.0, 1.0));
+
+    // ── Von unten: dunkles Blau-Grün ─────────────────────────────────────────
+    vec3 viewUp = normalize(vec3(0.0, 1.0, 0.0));
+    float fromBelow = step(dot(viewDir, viewUp), 0.0);
+    vec3 underwaterSurface = vec3(0.02, 0.15, 0.25);
+    waterCol = mix(waterCol, underwaterSurface, fromBelow);
+    alpha    = mix(alpha, 1.0, fromBelow);
 
     gl_FragColor = vec4(mix(waterCol, uFogColor, fogFactor), alpha);
 }

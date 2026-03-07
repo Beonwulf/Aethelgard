@@ -53,12 +53,12 @@ void main() {
 
         // Blaue Tiefentönung: tiefer = dunkler und blauer
         float depth     = clamp(-vHeight / 40.0, 0.0, 1.0);
-        vec3 deepTint   = vec3(0.02, 0.08, 0.22);
-        seafloor        = mix(seafloor * 0.7, deepTint, depth * 0.85);
+        vec3 deepTint   = vec3(0.03, 0.12, 0.30);
+        seafloor        = mix(seafloor * 0.55, deepTint, depth * 0.80);
 
-        // Schwaches Ambient-Licht unter Wasser
-        vec3 ambient2 = ambientColor * ambientIntensity * 0.3;
-        seafloor = seafloor * max(ambient2, vec3(0.02));
+        // Ambient-Licht unter Wasser (etwas heller)
+        vec3 ambient2 = ambientColor * ambientIntensity * 0.55;
+        seafloor = seafloor + max(ambient2, vec3(0.04));
 
         gl_FragColor = vec4(mix(seafloor, fogColor, fogFactor), 1.0);
         return;

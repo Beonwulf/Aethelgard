@@ -31,7 +31,7 @@ export class WaterManager {
 				uSunDir:     { value: new THREE.Vector3(0.5, 1.0, 0.5).normalize() },
 				uSunColor:   { value: new THREE.Color(0xffffff) },
 				uSunIntensity: { value: 1.5 },
-				uWaterColor: { value: new THREE.Color(0x0a4a6a) },
+				uWaterColor: { value: new THREE.Color(0x0055aa) },
 				uCameraPos:  { value: this.camera.position },
 				uNoiseTex:   { value: noiseTex },
 				uFogDensity: { value: 0.00015 },
@@ -40,6 +40,7 @@ export class WaterManager {
 			fragmentShader: this.shaderCode.frag,
 			transparent: true,
 			depthWrite:  false,
+			side:        THREE.DoubleSide,
 		});
 
 		this.water = new THREE.Mesh(geometry, this.material);
