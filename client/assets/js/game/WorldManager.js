@@ -226,7 +226,12 @@ export class WorldManager {
 					fogDensity:        su.fogDensity,
 				},
 				vertexShader:   this.shaderCode.vert,
-				fragmentShader: this.shaderCode.frag
+				fragmentShader: this.shaderCode.frag,
+				// Stencil: Land-Pixel markieren → Wasser rendert nur im Ozean
+				stencilWrite: true,
+				stencilRef:   1,
+				stencilFunc:  THREE.AlwaysStencilFunc,
+				stencilZPass: THREE.ReplaceStencilOp,
 			});
 
 			const mesh = new THREE.Mesh(geometry, material);

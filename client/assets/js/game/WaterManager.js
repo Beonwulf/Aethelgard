@@ -23,26 +23,30 @@ export class WaterManager {
 		noiseTex.minFilter = THREE.LinearMipmapLinearFilter;
 		noiseTex.generateMipmaps = true;
 
-		const geometry = new THREE.PlaneGeometry(30000, 30000); // Schön groß
+		const geometry = new THREE.PlaneGeometry(12000, 12000); // Kamera-folgend, Nebel bedeckt den Rand
 		
 		this.material = new THREE.ShaderMaterial({
 			uniforms: {
-				uTime: { value: 0 },
-				uFogColor: { value: this.scene.fog.color },
-				uSunDir: { value: new THREE.Vector3() },
+				uTime:       { value: 0 },
+				uFogColor:   { value: this.scene.fog.color },
+				uSunDir:     { value: new THREE.Vector3() },
 				uWaterColor: { value: new THREE.Color(0x004466) },
-				uCameraPos: { value: this.camera.position },
-				uNoiseTex: { value: noiseTex }
+				uCameraPos:  { value: this.camera.position },
+				uNoiseTex:   { value: noiseTex }
 			},
-			vertexShader: this.shaderCode.vert,
+			vertexShader:   this.shaderCode.vert,
 			fragmentShader: this.shaderCode.frag,
 			transparent: true,
-			side: THREE.DoubleSide
+			side: THREE.DoubleSide,
+			// Stencil: nur rendern wo kein Land-Pixel markiert (stencil=0)
+			stencilWrite: false,
+			stencilRef:   1,
+			stencilFunc:  THREE.NotEqualStencilFunc,
 		});
 
 		this.water = new THREE.Mesh(geometry, this.material);
 		this.water.rotation.x = -Math.PI / 2;
-		this.water.position.y = -0.25; 
+		this.water.position.y = 0.25; 
 		this.scene.add(this.water);
 	}
 
