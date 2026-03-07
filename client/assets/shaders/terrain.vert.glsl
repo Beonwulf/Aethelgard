@@ -9,8 +9,8 @@ uniform float seaLevel;
 void main() {
     vUv = uv;
 
-    // RedFormat FloatType DataTexture – direkt .r lesen (0..1)
-    float texel = 1.0 / 513.0;
+    // RedFormat FloatType DataTexture (flipY=true) – direkt .r lesen (0..1)
+    float texel = 1.0 / 512.0;
     float h  = texture2D(tHeight, uv).r;
     float hL = texture2D(tHeight, uv + vec2(-texel, 0.0)).r;
     float hR = texture2D(tHeight, uv + vec2( texel, 0.0)).r;

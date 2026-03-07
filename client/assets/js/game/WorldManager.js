@@ -69,25 +69,20 @@ export class WorldManager {
 		if (relX < 0) relX += 1;
 		if (relZ < 0) relZ += 1;
 
-		// Bilineare Interpolation – genau wie der GPU-Shader (texture2D mit LinearFilter)
-		const tileW = this.tileSize + 1; // 513
-		const fx = relX * this.tileSize;
-		const fz = relZ * this.tileSize;
-		const px0 = Math.min(Math.floor(fx), this.tileSize - 1);
-		const pz0 = Math.min(Math.floor(fz), this.tileSize - 1);
-		const px1 = Math.min(px0 + 1, this.tileSize);
-		const pz1 = Math.min(pz0 + 1, this.tileSize);
+		// Bilineare Interpolation, 512×512 Stride
+		const T  = this.tileSize;       // 512
+		const fx = relX * (T - 1);
+		const fz = relZ * (T - 1);
+		const px0 = Math.floor(fx); const px1 = Math.min(px0 + 1, T - 1);
+		const pz0 = Math.floor(fz); const pz1 = Math.min(pz0 + 1, T - 1);
 		const tx = fx - px0;
 		const tz = fz - pz0;
 
-		const h00 = data[pz0 * tileW + px0];
-		const h10 = data[pz0 * tileW + px1];
-		const h01 = data[pz1 * tileW + px0];
-		const h11 = data[pz1 * tileW + px1];
-		const rawHeight = h00 * (1 - tx) * (1 - tz)
-		                + h10 * tx       * (1 - tz)
-		                + h01 * (1 - tx) * tz
-		                + h11 * tx       * tz;
+		const h00 = data[pz0 * T + px0];
+		const h10 = data[pz0 * T + px1];
+		const h01 = data[pz1 * T + px0];
+		const h11 = data[pz1 * T + px1];
+		const rawHeight = h00*(1-tx)*(1-tz) + h10*tx*(1-tz) + h01*(1-tx)*tz + h11*tx*tz;
 
 		return (rawHeight - this.seaLevel) * this.heightScale;
 	}
@@ -181,15 +176,14 @@ export class WorldManager {
 
 			this.heightData.set(key, floatData);
 
-			// GPU DataTexture direkt aus floatData – kein zweiter Fetch nötig
-			// Tile ist (tileSize+1)×(tileSize+1) mit Overlap-Pixel
-			const texSize = this.tileSize + 1;
+			// GPU DataTexture: 512×512, flipY=true weil rotateX(-PI/2) die UV-V-Achse flippt
+			// UV v=0 → Welt Z=oz+W (Chunk-Unterkante), UV v=1 → Welt Z=oz (Chunk-Oberkante)
+			// flipY dreht die Textur so dass Row 0 (oz) korrekt bei UV v=1 landet
 			const heightTexture = new THREE.DataTexture(
-				floatData,
-				texSize, texSize,
-				THREE.RedFormat,
-				THREE.FloatType
+				floatData, this.tileSize, this.tileSize,
+				THREE.RedFormat, THREE.FloatType
 			);
+			heightTexture.flipY   = true;
 			heightTexture.magFilter = THREE.LinearFilter;
 			heightTexture.minFilter = THREE.LinearFilter;
 			heightTexture.wrapS = heightTexture.wrapT = THREE.ClampToEdgeWrapping;
@@ -217,7 +211,7 @@ export class WorldManager {
 				uniforms: {
 					tAtlas:            { value: this.atlas.texture },
 					tHeight:           { value: heightTexture },
-					tHeightSize:       { value: new THREE.Vector2(texSize, texSize) },
+					tHeightSize:       { value: new THREE.Vector2(this.tileSize, this.tileSize) },
 					displacementScale:  { value: this.heightScale },
 					seaLevel:           { value: this.seaLevel },
 					sunDir:            su.sunDir,
@@ -252,69 +246,65 @@ export class WorldManager {
 		});
 	}
 
-	// Baut eine dunkle Erdwand an allen 4 Tile-Kanten, die Spalten zwischen Tiles verdeckt
+	// Baut eine dunkle Erdwand an allen 4 Tile-Kanten um Spalten zwischen Chunks zu verdecken
 	_buildSkirt(cx, cy, floatData) {
-		const W  = this.chunkSize;
-		const T  = this.tileSize;
-		const TW = T + 1;       // Stride des floatData-Arrays (513, mit Overlap-Pixel)
-		const H  = this.heightScale;
-		const SL = this.seaLevel;
-		const BOTTOM = -80;
+		const W    = this.chunkSize;
+		const T    = this.tileSize;     // 512
+		const SL   = this.seaLevel;
+		const H    = this.heightScale;
+		const BOT  = -300;              // tief genug unter Unterwasser-Terrain
 		const STEP = 8;
 
-		// Skirt-Oberkante leicht unter Terrain absenken damit sie nie sichtbar ist
-		const SINK = 5.0;
-		const h2world = (h) => (h - SL) * H - SINK;
+		// floatData: Row 0 = Welt Z=oz (Chunk-Oberkante), Row T-1 = Welt Z≈oz+W (Chunk-Unterkante)
+		const h = (row, col) => (floatData[row * T + col] - SL) * H - 5.0; // 5m einsenken
 
-		// Chunk beginnt bei cx*W, endet bei (cx+1)*W
 		const ox = cx * W;
 		const oz = cy * W;
 
 		const positions = [];
-		const indices = [];
+		const indices   = [];
 		let vi = 0;
 
-		const addStrip = (pts) => {
+		const strip = (pts) => {
 			const base = vi;
-			for (const [wx, wh, wz] of pts) {
-				positions.push(wx, wh, wz);
-				positions.push(wx, BOTTOM, wz);
+			for (const [wx, wy, wz] of pts) {
+				positions.push(wx, wy, wz);
+				positions.push(wx, BOT, wz);
 				vi += 2;
 			}
 			for (let i = 0; i < pts.length - 1; i++) {
 				const a = base + i * 2;
-				indices.push(a, a + 1, a + 2,  a + 1, a + 3, a + 2);
+				indices.push(a, a+1, a+2,  a+1, a+3, a+2);
 			}
 		};
 
-		// UV v=0 → Welt Z=oz+W, DataTexture Row 0
-		// UV v=1 → Welt Z=oz,   DataTexture Row T=512
-		// D.h. Z-Achse ist invertiert: row = T - pz
+		// Links  (X = ox,   Z von oz → oz+W, Spalte 0)
 		const left = [];
-		for (let pz = 0; pz <= T; pz += STEP) {
-			const row = Math.min(T - pz, T);
-			left.push([ox, h2world(floatData[row * TW + 0]), oz + (pz / T) * W]);
-		}
-		addStrip(left);
+		for (let pz = 0; pz <= T - 1; pz += STEP)
+			left.push([ox, h(pz, 0), oz + (pz / (T-1)) * W]);
+		left.push([ox, h(T-1, 0), oz + W]);
+		strip(left);
 
+		// Rechts (X = ox+W, Z von oz → oz+W, Spalte T-1)
 		const right = [];
-		for (let pz = 0; pz <= T; pz += STEP) {
-			const row = Math.min(T - pz, T);
-			right.push([ox + W, h2world(floatData[row * TW + T]), oz + (pz / T) * W]);
-		}
-		addStrip(right);
+		for (let pz = 0; pz <= T - 1; pz += STEP)
+			right.push([ox + W, h(pz, T-1), oz + (pz / (T-1)) * W]);
+		right.push([ox + W, h(T-1, T-1), oz + W]);
+		strip(right);
 
-		// Z=oz   → UV v=1 → Row T=512
+		// Oben  (Z = oz,   X von ox → ox+W, Reihe 0)
 		const top = [];
-		for (let px = 0; px <= T; px += STEP)
-			top.push([ox + (px / T) * W, h2world(floatData[T * TW + px]), oz]);
-		addStrip(top);
+		for (let px = 0; px <= T - 1; px += STEP)
+			top.push([ox + (px / (T-1)) * W, h(0, px), oz]);
+		top.push([ox + W, h(0, T-1), oz]);
+		strip(top);
 
-		// Z=oz+W → UV v=0 → Row 0
-		const bottom = [];
-		for (let px = 0; px <= T; px += STEP)
-			bottom.push([ox + (px / T) * W, h2world(floatData[px]), oz + W]);
-		addStrip(bottom);
+		// Unten (Z = oz+W, X von ox → ox+W, Reihe T-1)
+		const bot = [];
+		for (let px = 0; px <= T - 1; px += STEP)
+			bot.push([ox + (px / (T-1)) * W, h(T-1, px), oz + W]);
+		bot.push([ox + W, h(T-1, T-1), oz + W]);
+		strip(bot);
 
 		const geo = new THREE.BufferGeometry();
 		geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
