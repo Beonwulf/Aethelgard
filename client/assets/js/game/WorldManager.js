@@ -287,28 +287,33 @@ export class WorldManager {
 			}
 		};
 
+		// UV v=0 → Welt Z=oz+W, DataTexture Row 0
+		// UV v=1 → Welt Z=oz,   DataTexture Row T=512
+		// D.h. Z-Achse ist invertiert: row = T - pz
 		const left = [];
-		for (let pz = 0; pz < T; pz += STEP)
-			left.push([ox, h2world(floatData[pz * TW]), oz + (pz / T) * W]);
-		left.push([ox, h2world(floatData[(T - 1) * TW]), oz + W]);
+		for (let pz = 0; pz <= T; pz += STEP) {
+			const row = Math.min(T - pz, T);
+			left.push([ox, h2world(floatData[row * TW + 0]), oz + (pz / T) * W]);
+		}
 		addStrip(left);
 
 		const right = [];
-		for (let pz = 0; pz < T; pz += STEP)
-			right.push([ox + W, h2world(floatData[pz * TW + T]), oz + (pz / T) * W]);
-		right.push([ox + W, h2world(floatData[(T - 1) * TW + T]), oz + W]);
+		for (let pz = 0; pz <= T; pz += STEP) {
+			const row = Math.min(T - pz, T);
+			right.push([ox + W, h2world(floatData[row * TW + T]), oz + (pz / T) * W]);
+		}
 		addStrip(right);
 
+		// Z=oz   → UV v=1 → Row T=512
 		const top = [];
-		for (let px = 0; px < T; px += STEP)
-			top.push([ox + (px / T) * W, h2world(floatData[px]), oz]);
-		top.push([ox + W, h2world(floatData[T - 1]), oz]);
+		for (let px = 0; px <= T; px += STEP)
+			top.push([ox + (px / T) * W, h2world(floatData[T * TW + px]), oz]);
 		addStrip(top);
 
+		// Z=oz+W → UV v=0 → Row 0
 		const bottom = [];
-		for (let px = 0; px < T; px += STEP)
-			bottom.push([ox + (px / T) * W, h2world(floatData[(T - 1) * TW + px]), oz + W]);
-		bottom.push([ox + W, h2world(floatData[(T - 1) * TW + T - 1]), oz + W]);
+		for (let px = 0; px <= T; px += STEP)
+			bottom.push([ox + (px / T) * W, h2world(floatData[px]), oz + W]);
 		addStrip(bottom);
 
 		const geo = new THREE.BufferGeometry();
