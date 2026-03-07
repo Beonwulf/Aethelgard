@@ -17,45 +17,34 @@ void main() {
     float fogFactor = 1.0 - exp(-uFogDensity * uFogDensity * dist * dist);
     fogFactor       = clamp(fogFactor, 0.0, 1.0);
 
-    // ── Seitenbestimmung (von oben / von unten) ───────────────────────────────
     vec3 viewDir = normalize(uCameraPos - vWorldPosition);
-    bool fromAbove = viewDir.y > 0.0;
 
-    // ── Von unten: einfache Unterseite ───────────────────────────────────────
-    if (!fromAbove) {
+    // ── Von unten ─────────────────────────────────────────────────────────────
+    if (viewDir.y <= 0.0) {
         gl_FragColor = vec4(mix(vec3(0.01, 0.08, 0.18), uFogColor, fogFactor), 1.0);
         return;
     }
 
-    // ── Noise: zwei gegenläufige Layer ────────────────────────────────────────
-    vec2 uv1 = vWorldPosition.xz * 0.0004 + vec2(uTime * 0.008, uTime * 0.006);
-    vec2 uv2 = vWorldPosition.xz * 0.0006 - vec2(uTime * 0.004, uTime * 0.010);
+    // ── Wellennormale aus Noise (NUR für Lighting, NICHT für Farbe) ───────────
+    vec2 uv1 = vWorldPosition.xz * 0.0003 + vec2(uTime * 0.007, uTime * 0.005);
+    vec2 uv2 = vWorldPosition.xz * 0.0005 - vec2(uTime * 0.004, uTime * 0.008);
     float n1 = texture2D(uNoiseTex, uv1).r;
     float n2 = texture2D(uNoiseTex, uv2).r;
+    vec3 wNorm = normalize(vec3((n1 - 0.5) * 0.10, 1.0, (n2 - 0.5) * 0.10));
 
-    // ── Wellennormale ─────────────────────────────────────────────────────────
-    vec3 wNorm   = normalize(vec3((n1 - 0.5) * 0.12, 1.0, (n2 - 0.5) * 0.12));
+    // ── Wasserfarbe: FLACH TÜRKIS, ohne Noise-Farb-Einfluss ──────────────────
+    vec3 waterCol = uWaterColor;
+
+    // ── Specular: ein scharfer Sonnenglanz-Punkt ──────────────────────────────
     vec3 halfVec = normalize(uSunDir + viewDir);
+    float spec   = pow(max(dot(wNorm, halfVec), 0.0), 350.0);
+    waterCol    += uSunColor * spec * 0.8;
 
-    // ── Specular: scharf und punktförmig (wie Sonnenlicht auf Wasser) ─────────
-    float spec = pow(max(dot(wNorm, halfVec), 0.0), 300.0) * uSunIntensity;
-
-    // ── Fresnel: Horizont erscheint heller/reflektiver ────────────────────────
+    // ── Fresnel: dezente Aufhellung am Horizont ───────────────────────────────
     float NdotV   = max(dot(wNorm, viewDir), 0.0);
     float fresnel = pow(1.0 - NdotV, 5.0);
+    waterCol      = mix(waterCol, uFogColor * 0.7, fresnel * 0.12);
 
-    // ── Wasserfarbe: tiefes Blau-Türkis, KEIN weisser Überzug ────────────────
-    vec3 waterCol = uWaterColor;
-    // Hauch Spiegelung am Horizont (Himmels-Farbe, dezent)
-    waterCol = mix(waterCol, uFogColor * 0.8, fresnel * 0.15);
-    // Schlanker Sonnenglanz-Punkt
-    waterCol += uSunColor * spec * 0.6;
-
-    // ── Nur winzige Schaumkronen an den höchsten Noise-Spitzen ───────────────
-    float ns   = (n1 + n2) * 0.5;
-    float foam = smoothstep(0.74, 0.80, ns);
-    waterCol   = mix(waterCol, vec3(1.0), foam * 0.30);
-
-    gl_FragColor = vec4(mix(waterCol, uFogColor, fogFactor), 0.88);
+    gl_FragColor = vec4(mix(waterCol, uFogColor, fogFactor), 0.85);
 }
 }
