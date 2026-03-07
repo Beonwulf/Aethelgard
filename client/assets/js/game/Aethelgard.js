@@ -95,12 +95,12 @@ export class Aethelgard {
         this.loading.completeTask('player', 'Spieler geladen');
         this.loading.finish('Willkommen in Aethelgard!');
 
-		// 6. Teleport via InputManager (nicht mehr hardcoded)
+		// 6. Teleport via InputManager
 		this.teleportPoints = [
-			{ name: 'Goldstrand',   x: 45 * 2395, z: 18 * 2395 },
-			{ name: 'Aethelhafen', x: 28 * 2395, z: 26 * 2395 },
-			{ name: 'Frostfang',   x: 26 * 2395, z: 44 * 2395 },
-			{ name: 'Wächter-Kap', x: 48 * 2395, z: 46 * 2395 },
+			{ name: 'Goldstrand',   x: 73237, z: 79616 },   // Strand Süd
+			{ name: 'Tramuntana',   x: 64898, z: 26584 },   // Berge Nord
+			{ name: 'Aethelhafen', x: 58944, z: 56760 },   // Ebene Mitte
+			{ name: 'Nordküste',   x: 93872, z:  6327 },   // Strand Nord
 		];
 		['TELEPORT_1','TELEPORT_2','TELEPORT_3','TELEPORT_4'].forEach((action, i) => {
 			this.input.on(action, () => this.teleportTo(this.teleportPoints[i]));
