@@ -73,8 +73,8 @@ void main() {
     float fogFactor = 1.0 - exp(-fogDensity * fogDensity * dist * dist);
     fogFactor       = clamp(fogFactor, 0.0, 1.0);
 
-    // Unterwasser-Terrain verwerfen → kein Stencil-Write → Wasser kann durchscheinen
-    if (vHeight < 0.0) discard;
+    // Terrain-Fragment unter Wasser: normal rendern (Stencil trotzdem schreiben → Wasser kann nicht durchscheinen)
+    // KEIN discard hier – Meeresboden soll durch Wasser sichtbar bleiben
 
     gl_FragColor = vec4(mix(litColor, fogColor, fogFactor), 1.0);
 }

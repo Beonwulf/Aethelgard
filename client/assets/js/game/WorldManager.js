@@ -315,7 +315,15 @@ export class WorldManager {
 		const geo = new THREE.BufferGeometry();
 		geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
 		geo.setIndex(indices);
-		const mat = new THREE.MeshBasicMaterial({ color: 0x3d2b1f, side: THREE.DoubleSide });
+		const mat = new THREE.MeshBasicMaterial({
+			color: 0x3d2b1f,
+			side: THREE.DoubleSide,
+			// Stencil=1 schreiben → Wasser rendert nicht durch Skirts
+			stencilWrite: true,
+			stencilRef:   1,
+			stencilFunc:  THREE.AlwaysStencilFunc,
+			stencilZPass: THREE.ReplaceStencilOp,
+		});
 		return new THREE.Mesh(geo, mat);
 	}
 }
