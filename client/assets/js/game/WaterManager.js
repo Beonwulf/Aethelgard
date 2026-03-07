@@ -31,7 +31,7 @@ export class WaterManager {
 				uSunDir:     { value: new THREE.Vector3(0.5, 1.0, 0.5).normalize() },
 				uSunColor:   { value: new THREE.Color(0xffffff) },
 				uSunIntensity: { value: 1.5 },
-				uWaterColor: { value: new THREE.Color(0x0055aa) },
+				uWaterColor: { value: new THREE.Color(0x006994) },  // Türkis-Blau wie Mittelmeer
 				uCameraPos:  { value: this.camera.position },
 				uNoiseTex:   { value: noiseTex },
 				uFogDensity: { value: 0.00015 },

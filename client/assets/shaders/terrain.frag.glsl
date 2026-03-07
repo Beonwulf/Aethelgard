@@ -56,9 +56,17 @@ void main() {
         vec3 deepTint   = vec3(0.03, 0.12, 0.30);
         seafloor        = mix(seafloor * 0.55, deepTint, depth * 0.80);
 
-        // Ambient-Licht unter Wasser (etwas heller)
-        vec3 ambient2 = ambientColor * ambientIntensity * 0.55;
-        seafloor = seafloor + max(ambient2, vec3(0.04));
+        // Caustics auf Meeresboden (threejs-caustics Kern-Trick)
+        // min(a,b) zweier gegenläufiger Noise-Layer → tanzende Stern-Lichtmuster
+        vec2 cuv1 = vWorldPos.xz * 0.0030 + vec2(uTime * 0.040, uTime * 0.032);
+        vec2 cuv2 = vWorldPos.xz * 0.0025 - vec2(uTime * 0.028, uTime * 0.045);
+        float cn1 = texture2D(uNoiseTex, cuv1).r;
+        float cn2 = texture2D(uNoiseTex, cuv2).r;
+        float caustics = pow(min(cn1, cn2) * 3.2, 2.5) * (1.0 - depth * 0.7) * sunIntensity;
+        seafloor += sunColor * caustics * 0.70;
+
+        // Schwaches Ambient damit Meeresboden nicht zu dunkel ist
+        seafloor += ambientColor * ambientIntensity * 0.25;
 
         gl_FragColor = vec4(mix(seafloor, fogColor, fogFactor), 1.0);
         return;

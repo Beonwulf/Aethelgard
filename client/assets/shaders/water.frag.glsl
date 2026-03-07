@@ -12,53 +12,50 @@ varying vec2 vUv;
 varying vec3 vWorldPosition;
 
 void main() {
-    // ── Nebel ────────────────────────────────────────────────────────────────
+    // ── Nebel ─────────────────────────────────────────────────────────────────
     float dist      = gl_FragCoord.z / gl_FragCoord.w;
     float fogFactor = 1.0 - exp(-uFogDensity * uFogDensity * dist * dist);
     fogFactor       = clamp(fogFactor, 0.0, 1.0);
 
-    // ── Noise Layer (Wellen-Normalen) ─────────────────────────────────────────
-    vec2 uv1 = vWorldPosition.xz * 0.0005 + vec2(uTime * 0.010,  uTime * 0.010);
-    vec2 uv2 = vWorldPosition.xz * 0.0007 - vec2(uTime * 0.005,  uTime * 0.015);
+    // ── Seitenbestimmung (von oben / von unten) ───────────────────────────────
+    vec3 viewDir = normalize(uCameraPos - vWorldPosition);
+    bool fromAbove = viewDir.y > 0.0;
+
+    // ── Von unten: einfache Unterseite ───────────────────────────────────────
+    if (!fromAbove) {
+        gl_FragColor = vec4(mix(vec3(0.01, 0.08, 0.18), uFogColor, fogFactor), 1.0);
+        return;
+    }
+
+    // ── Noise: zwei gegenläufige Layer ────────────────────────────────────────
+    vec2 uv1 = vWorldPosition.xz * 0.0004 + vec2(uTime * 0.008, uTime * 0.006);
+    vec2 uv2 = vWorldPosition.xz * 0.0006 - vec2(uTime * 0.004, uTime * 0.010);
     float n1 = texture2D(uNoiseTex, uv1).r;
     float n2 = texture2D(uNoiseTex, uv2).r;
-    float ns = (n1 + n2) * 0.5;
 
-    // ── Fake Caustics (threejs-caustics Trick: min(a,b) → Stern-Muster) ──────
-    vec2 cuv1 = vWorldPosition.xz * 0.0022 + vec2(uTime * 0.035, uTime * 0.028);
-    vec2 cuv2 = vWorldPosition.xz * 0.0018 - vec2(uTime * 0.022, uTime * 0.038);
-    float cn1 = texture2D(uNoiseTex, cuv1).r;
-    float cn2 = texture2D(uNoiseTex, cuv2).r;
-    float caustics = pow(min(cn1, cn2) * 2.8, 3.0) * uSunIntensity;
-
-    vec3 waterCol = uWaterColor;
-    waterCol += uSunColor * caustics * 0.25;
-
-    // ── Küstenschaum (dezenter) ───────────────────────────────────────────────
-    float foam1 = smoothstep(0.65, 0.75, ns);
-    float foam2 = smoothstep(0.75, 0.82, ns);
-    waterCol = mix(waterCol, vec3(0.92, 0.96, 1.0), foam1 * 0.25 + foam2 * 0.45);
-
-    // ── Wellennormale + Specular (weniger aggressiv) ───────────────────────────
-    vec3 wNorm   = normalize(vec3((n1 - 0.5) * 0.18, 1.0, (n2 - 0.5) * 0.18));
-    vec3 viewDir = normalize(uCameraPos - vWorldPosition);
+    // ── Wellennormale ─────────────────────────────────────────────────────────
+    vec3 wNorm   = normalize(vec3((n1 - 0.5) * 0.12, 1.0, (n2 - 0.5) * 0.12));
     vec3 halfVec = normalize(uSunDir + viewDir);
-    float spec   = pow(max(dot(wNorm, halfVec), 0.0), 200.0);
-    waterCol    += uSunColor * uSunIntensity * spec * 0.55;
 
-    // ── Fresnel: subtil ───────────────────────────────────────────────────────
-    float fresnel = pow(1.0 - max(dot(viewDir, wNorm), 0.0), 4.0);
-    waterCol      = mix(waterCol, uFogColor * 0.5 + waterCol * 0.5, fresnel * 0.18);
+    // ── Specular: scharf und punktförmig (wie Sonnenlicht auf Wasser) ─────────
+    float spec = pow(max(dot(wNorm, halfVec), 0.0), 300.0) * uSunIntensity;
 
-    // ── Alpha: nah etwas transparenter (Meeresboden durchscheinen) ────────────
-    float alpha = mix(0.82, 0.97, clamp(dist / 3000.0, 0.0, 1.0));
+    // ── Fresnel: Horizont erscheint heller/reflektiver ────────────────────────
+    float NdotV   = max(dot(wNorm, viewDir), 0.0);
+    float fresnel = pow(1.0 - NdotV, 5.0);
 
-    // ── Von unten: dunkles Blau-Grün ─────────────────────────────────────────
-    vec3 viewUp = normalize(vec3(0.0, 1.0, 0.0));
-    float fromBelow = step(dot(viewDir, viewUp), 0.0);
-    vec3 underwaterSurface = vec3(0.02, 0.15, 0.25);
-    waterCol = mix(waterCol, underwaterSurface, fromBelow);
-    alpha    = mix(alpha, 1.0, fromBelow);
+    // ── Wasserfarbe: tiefes Blau-Türkis, KEIN weisser Überzug ────────────────
+    vec3 waterCol = uWaterColor;
+    // Hauch Spiegelung am Horizont (Himmels-Farbe, dezent)
+    waterCol = mix(waterCol, uFogColor * 0.8, fresnel * 0.15);
+    // Schlanker Sonnenglanz-Punkt
+    waterCol += uSunColor * spec * 0.6;
 
-    gl_FragColor = vec4(mix(waterCol, uFogColor, fogFactor), alpha);
+    // ── Nur winzige Schaumkronen an den höchsten Noise-Spitzen ───────────────
+    float ns   = (n1 + n2) * 0.5;
+    float foam = smoothstep(0.74, 0.80, ns);
+    waterCol   = mix(waterCol, vec3(1.0), foam * 0.30);
+
+    gl_FragColor = vec4(mix(waterCol, uFogColor, fogFactor), 0.88);
+}
 }
