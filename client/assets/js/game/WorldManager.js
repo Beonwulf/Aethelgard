@@ -98,6 +98,14 @@ export class WorldManager {
 			texPath + 'mntn_dark_d.jpg',     // layer 3 – Fels
 		]);
 
+		// Noise-Textur für Wasser-Shader (geteilt mit allen Chunks)
+		const noiseTex = new THREE.TextureLoader().load('./assets/textures/perlin-noise.png');
+		noiseTex.wrapS = noiseTex.wrapT = THREE.RepeatWrapping;
+		noiseTex.magFilter = THREE.LinearFilter;
+		noiseTex.minFilter = THREE.LinearMipmapLinearFilter;
+		noiseTex.generateMipmaps = true;
+		this._noiseTex = noiseTex;
+
 		const response = await fetch(`${this.basePath}metadata.json`);
 		this.metadata = await response.json();
 		// Dynamisch berechnete Werte aus terrain_fantasy.py übernehmen
@@ -118,6 +126,7 @@ export class WorldManager {
 			if (mesh.material.uniforms) {
 				mesh.material.uniforms.fogColor.value = this.environment.scene.fog.color;
 				mesh.material.uniforms.fogDensity.value = this.environment.scene.fog.density;
+				if (elapsedTime !== undefined) mesh.material.uniforms.uTime.value = elapsedTime;
 			}
 		});
 
@@ -214,6 +223,9 @@ export class WorldManager {
 					tHeightSize:       { value: new THREE.Vector2(TW, TW) },
 					displacementScale:  { value: this.heightScale },
 					seaLevel:           { value: this.seaLevel },
+					uTime:             { value: 0.0 },
+					uCameraPos:        { value: this.camera.position },
+					uNoiseTex:         { value: this._noiseTex },
 					sunDir:            su.sunDir,
 					sunColor:          su.sunColor,
 					sunIntensity:      su.sunIntensity,
@@ -227,11 +239,7 @@ export class WorldManager {
 				},
 				vertexShader:   this.shaderCode.vert,
 				fragmentShader: this.shaderCode.frag,
-				// Stencil: Land-Pixel markieren → Wasser rendert nur im Ozean
-				stencilWrite: true,
-				stencilRef:   1,
-				stencilFunc:  THREE.AlwaysStencilFunc,
-				stencilZPass: THREE.ReplaceStencilOp,
+				transparent:    true,
 			});
 
 			const mesh = new THREE.Mesh(geometry, material);
@@ -315,15 +323,7 @@ export class WorldManager {
 		const geo = new THREE.BufferGeometry();
 		geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
 		geo.setIndex(indices);
-		const mat = new THREE.MeshBasicMaterial({
-			color: 0x3d2b1f,
-			side: THREE.DoubleSide,
-			// Stencil=1 schreiben → Wasser rendert nicht durch Skirts
-			stencilWrite: true,
-			stencilRef:   1,
-			stencilFunc:  THREE.AlwaysStencilFunc,
-			stencilZPass: THREE.ReplaceStencilOp,
-		});
+		const mat = new THREE.MeshBasicMaterial({ color: 0x3d2b1f, side: THREE.DoubleSide });
 		return new THREE.Mesh(geo, mat);
 	}
 }

@@ -1,10 +1,12 @@
 varying vec2 vUv;
 varying float vHeight;
 varying vec3 vWorldNormal;
+varying vec3 vWorldPos;
 
 uniform sampler2D tHeight;
 uniform float displacementScale;
 uniform float seaLevel;
+uniform float uTime;
 
 void main() {
     vUv = uv;
@@ -26,6 +28,16 @@ void main() {
         (hD - hU) * displacementScale
     ));
 
-    vec3 newPosition = position + vec3(0.0, vHeight, 0.0);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+    float yPos = vHeight;
+    // Unterwasser: Vertex auf Wasseroberfläche einfrieren + kleine Wellen
+    if (vHeight < 0.0) {
+        vec4 worldPos4 = modelMatrix * vec4(position, 1.0);
+        float wave = sin(worldPos4.x * 0.015 + uTime * 1.2) * 0.18
+                   + sin(worldPos4.z * 0.011 + uTime * 0.9) * 0.12;
+        yPos = wave;
+    }
+
+    vec4 worldPos = modelMatrix * vec4(position + vec3(0.0, yPos, 0.0), 1.0);
+    vWorldPos = worldPos.xyz;
+    gl_Position = projectionMatrix * viewMatrix * worldPos;
 }

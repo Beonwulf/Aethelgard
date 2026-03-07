@@ -50,9 +50,8 @@ export class Aethelgard {
 		// 1. Shader laden
 		this.loading._setStatus('Lade Shader...');
 		const shaderLoader = new ShaderLoader();
-		const [terrainShader, waterShader] = await Promise.all([
+		const [terrainShader] = await Promise.all([
 			shaderLoader.loadProgram('terrain', './assets/shaders/'),
-			shaderLoader.loadProgram('water', './assets/shaders/')
 		]);
 		this.loading.completeTask('shaders', 'Shader geladen');
 
@@ -68,8 +67,8 @@ export class Aethelgard {
 		await this.worldManager.init();
 		this.loading.completeTask('world', 'Terrain geladen');
 
-		// 4. WaterManager
-		this.waterManager = new WaterManager(this.engine.scene, this.engine.camera, waterShader);
+		// 4. WaterManager (Horizont-Fallback-Plane, Wasser-Shader im Terrain-Shader)
+		this.waterManager = new WaterManager(this.engine.scene);
 
 		this.movementSystem = new MovementSystem(this.ecs, this.input, this.worldManager);
 		this.cameraSystem = new ThirdPersonCameraSystem(this.engine.camera, this.ecs, this.worldManager, this.input);
@@ -215,8 +214,7 @@ export class Aethelgard {
 		const playerPos = player !== undefined ? this.ecs.getComponent(player, 'position') : null;
         this.environment.update($deltaTime, elapsedTime);
         this.worldManager.update($deltaTime, elapsedTime, null, playerPos?.x, playerPos?.z);
-        const sunDir = this.environment.shared?.sunDir?.value ?? this.environment.sun.position.clone().normalize();
-        this.waterManager.update($deltaTime, elapsedTime, sunDir);
+        this.waterManager.update();
 
 		// Debug-HUD
 		const camPos = this.engine.camera.position;
