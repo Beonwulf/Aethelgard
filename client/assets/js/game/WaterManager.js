@@ -21,8 +21,8 @@ export class WaterManager {
 		noiseTex.minFilter = THREE.LinearMipmapLinearFilter;
 		noiseTex.generateMipmaps = true;
 
-		// Kamera-folgende Plane – Depth-Test erledigt Küsten-Clipping ohne Stencil
-		const geometry = new THREE.PlaneGeometry(14000, 14000, 4, 4);
+		// Kamera-folgende Plane – 64×64 Segmente für Vertex-Wellen
+		const geometry = new THREE.PlaneGeometry(14000, 14000, 64, 64);
 
 		this.material = new THREE.ShaderMaterial({
 			uniforms: {

@@ -32,23 +32,23 @@ void main() {
     float caustics = pow(min(cn1, cn2) * 2.8, 3.0) * uSunIntensity;
 
     vec3 waterCol = uWaterColor;
-    waterCol += uSunColor * caustics * 0.35;
+    waterCol += uSunColor * caustics * 0.25;
 
-    // ── Küstenschaum ─────────────────────────────────────────────────────────
-    float foam1 = smoothstep(0.60, 0.72, ns);
-    float foam2 = smoothstep(0.72, 0.80, ns);
-    waterCol = mix(waterCol, vec3(0.92, 0.96, 1.0), foam1 * 0.40 + foam2 * 0.70);
+    // ── Küstenschaum (dezenter) ───────────────────────────────────────────────
+    float foam1 = smoothstep(0.65, 0.75, ns);
+    float foam2 = smoothstep(0.75, 0.82, ns);
+    waterCol = mix(waterCol, vec3(0.92, 0.96, 1.0), foam1 * 0.25 + foam2 * 0.45);
 
-    // ── Wellennormale + Specular ──────────────────────────────────────────────
-    vec3 wNorm   = normalize(vec3((n1 - 0.5) * 0.25, 1.0, (n2 - 0.5) * 0.25));
+    // ── Wellennormale + Specular (weniger aggressiv) ───────────────────────────
+    vec3 wNorm   = normalize(vec3((n1 - 0.5) * 0.18, 1.0, (n2 - 0.5) * 0.18));
     vec3 viewDir = normalize(uCameraPos - vWorldPosition);
     vec3 halfVec = normalize(uSunDir + viewDir);
-    float spec   = pow(max(dot(wNorm, halfVec), 0.0), 160.0);
-    waterCol    += uSunColor * uSunIntensity * spec * 0.90;
+    float spec   = pow(max(dot(wNorm, halfVec), 0.0), 200.0);
+    waterCol    += uSunColor * uSunIntensity * spec * 0.55;
 
-    // ── Fresnel: nur leicht, sonst wird alles grau ────────────────────────────
+    // ── Fresnel: subtil ───────────────────────────────────────────────────────
     float fresnel = pow(1.0 - max(dot(viewDir, wNorm), 0.0), 4.0);
-    waterCol      = mix(waterCol, uFogColor * 0.6 + waterCol * 0.4, fresnel * 0.25);
+    waterCol      = mix(waterCol, uFogColor * 0.5 + waterCol * 0.5, fresnel * 0.18);
 
     // ── Alpha: nah etwas transparenter (Meeresboden durchscheinen) ────────────
     float alpha = mix(0.82, 0.97, clamp(dist / 3000.0, 0.0, 1.0));
