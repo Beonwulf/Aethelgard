@@ -34,52 +34,33 @@ void main() {
     float fogFactor = 1.0 - exp(-fogDensity * fogDensity * dist * dist);
     fogFactor       = clamp(fogFactor, 0.0, 1.0);
 
-    // ── WASSER ──────────────────────────────────────────────────────────────
+    // ── WASSER (Meeresboden) ─────────────────────────────────────────────────
+    // Die eigentliche Wasseroberfläche kommt von der WaterManager-Plane bei Y=0.
+    // Hier rendern wir den Meeresboden: Terrain-Textur + blaue Tiefentönung.
     if (vHeight < 0.0) {
-        // Tiefenbasierte Wasserfarbe: flach = türkis, tief = dunkelblau
-        float depth     = clamp(-vHeight / 30.0, 0.0, 1.0);
-        vec3 shallowCol = vec3(0.05, 0.45, 0.55);
-        vec3 deepCol    = vec3(0.01, 0.10, 0.28);
-        vec3 waterCol   = mix(shallowCol, deepCol, depth);
+        float texelSize = 1.0 / tHeightSize.x;
+        float hL2 = getHeight(vUv + vec2(-texelSize, 0.0));
+        float hR2 = getHeight(vUv + vec2( texelSize, 0.0));
+        float hD2 = getHeight(vUv + vec2(0.0, -texelSize));
+        float hU2 = getHeight(vUv + vec2(0.0,  texelSize));
+        vec3 N2 = normalize(vec3(hL2 - hR2, 4.0, hD2 - hU2));
 
-        // ── Noise Layer (Wellen + Kaustik) ──────────────────────────────────
-        // Grobe Wellen (surface normals)
-        vec2 uv1 = vWorldPos.xz * 0.0005 + vec2(uTime * 0.010,  uTime * 0.010);
-        vec2 uv2 = vWorldPos.xz * 0.0007 - vec2(uTime * 0.005,  uTime * 0.015);
-        float n1 = texture2D(uNoiseTex, uv1).r;
-        float n2 = texture2D(uNoiseTex, uv2).r;
-        float ns = (n1 + n2) * 0.5;
+        float repeat = 128.0;
+        vec3 sand = texture(tAtlas, vec3(vUv * repeat, 0.0)).rgb;
+        vec3 rock = texture(tAtlas, vec3(vUv * repeat * 0.5, 3.0)).rgb;
+        float rockMix2 = smoothstep(0.55, 0.75, 1.0 - N2.y);
+        vec3 seafloor = mix(sand, rock, rockMix2);
 
-        // Feine Kaustik-Layer (schnell scrollend, kleinere Skala)
-        // Trick aus threejs-caustics: min(a,b) erzeugt Stern-Muster wie echte Lichtbrechung
-        vec2 cuv1 = vWorldPos.xz * 0.0022 + vec2(uTime * 0.035,  uTime * 0.028);
-        vec2 cuv2 = vWorldPos.xz * 0.0018 - vec2(uTime * 0.022,  uTime * 0.038);
-        float cn1 = texture2D(uNoiseTex, cuv1).r;
-        float cn2 = texture2D(uNoiseTex, cuv2).r;
-        // min(cn1,cn2) → Kaustik-Stern-Muster; nur in flachem Wasser sichtbar
-        float caustics = pow(min(cn1, cn2) * 2.8, 3.0) * (1.0 - depth) * sunIntensity;
-        waterCol += sunColor * caustics * 0.45;
+        // Blaue Tiefentönung: tiefer = dunkler und blauer
+        float depth     = clamp(-vHeight / 40.0, 0.0, 1.0);
+        vec3 deepTint   = vec3(0.02, 0.08, 0.22);
+        seafloor        = mix(seafloor * 0.7, deepTint, depth * 0.85);
 
-        // ── Küstenschaum ────────────────────────────────────────────────────
-        float shoreBlend = clamp(-vHeight / 3.0, 0.0, 1.0); // 0=Strand, 1=tief
-        // Äußerer Ring (breit, weich)
-        float foam1 = smoothstep(0.58, 0.70, ns) * (1.0 - shoreBlend);
-        // Innerer Ring (schmal, heller) – Brechungslinie
-        float foam2 = smoothstep(0.70, 0.78, ns) * (1.0 - shoreBlend * 0.5);
-        waterCol = mix(waterCol, vec3(0.9, 0.95, 1.0), foam1 * 0.45 + foam2 * 0.65);
+        // Schwaches Ambient-Licht unter Wasser
+        vec3 ambient2 = ambientColor * ambientIntensity * 0.3;
+        seafloor = seafloor * max(ambient2, vec3(0.02));
 
-        // ── Wellennormale + Specular ─────────────────────────────────────────
-        vec3 wNorm   = normalize(vec3((n1 - 0.5) * 0.20, 1.0, (n2 - 0.5) * 0.20));
-        vec3 viewDir = normalize(uCameraPos - vWorldPos);
-        vec3 halfVec = normalize(sunDir + viewDir);
-        float spec   = pow(max(dot(wNorm, halfVec), 0.0), 160.0);
-        waterCol    += sunColor * sunIntensity * spec * 0.85;
-
-        // ── Fresnel (Horizont-Reflexion) ─────────────────────────────────────
-        float fresnel = pow(1.0 - max(dot(viewDir, wNorm), 0.0), 3.5);
-        waterCol      = mix(waterCol, fogColor, fresnel * 0.40);
-
-        gl_FragColor = vec4(mix(waterCol, fogColor, fogFactor), 1.0);
+        gl_FragColor = vec4(mix(seafloor, fogColor, fogFactor), 1.0);
         return;
     }
 

@@ -1,7 +1,10 @@
 uniform sampler2D uNoiseTex;
 uniform float uTime;
+uniform float uFogDensity;
 uniform vec3 uFogColor;
 uniform vec3 uSunDir;
+uniform vec3 uSunColor;
+uniform float uSunIntensity;
 uniform vec3 uWaterColor;
 uniform vec3 uCameraPos;
 
@@ -9,44 +12,46 @@ varying vec2 vUv;
 varying vec3 vWorldPosition;
 
 void main() {
-    // 1. ZWEI LAYER NOISE (scrollen in verschiedene Richtungen)
-    vec2 uv1 = vWorldPosition.xz * 0.0005 + vec2(uTime * 0.01, uTime * 0.01);
-    vec2 uv2 = vWorldPosition.xz * 0.0007 - vec2(uTime * 0.005, uTime * 0.015);
-    
+    // ── Nebel ────────────────────────────────────────────────────────────────
+    float dist      = gl_FragCoord.z / gl_FragCoord.w;
+    float fogFactor = 1.0 - exp(-uFogDensity * uFogDensity * dist * dist);
+    fogFactor       = clamp(fogFactor, 0.0, 1.0);
+
+    // ── Noise Layer (Wellen-Normalen) ─────────────────────────────────────────
+    vec2 uv1 = vWorldPosition.xz * 0.0005 + vec2(uTime * 0.010,  uTime * 0.010);
+    vec2 uv2 = vWorldPosition.xz * 0.0007 - vec2(uTime * 0.005,  uTime * 0.015);
     float n1 = texture2D(uNoiseTex, uv1).r;
     float n2 = texture2D(uNoiseTex, uv2).r;
-    
-    // Kombiniertes Rauschen für die Oberflächenstruktur
-    float noiseSum = (n1 + n2) * 0.5;
+    float ns = (n1 + n2) * 0.5;
 
-    // 2. FARBE & SCHAUM
-    // Basis-Blau
-    vec3 col = uWaterColor;
-    
-    // Schaumkronen (nur an den hellsten Stellen des Rauschens)
-    float foam = smoothstep(0.65, 0.75, noiseSum);
-    col = mix(col, vec3(0.9, 0.95, 1.0), foam * 0.4);
+    // ── Fake Caustics (threejs-caustics Trick: min(a,b) → Stern-Muster) ──────
+    vec2 cuv1 = vWorldPosition.xz * 0.0022 + vec2(uTime * 0.035, uTime * 0.028);
+    vec2 cuv2 = vWorldPosition.xz * 0.0018 - vec2(uTime * 0.022, uTime * 0.038);
+    float cn1 = texture2D(uNoiseTex, cuv1).r;
+    float cn2 = texture2D(uNoiseTex, cuv2).r;
+    float caustics = pow(min(cn1, cn2) * 2.8, 3.0) * uSunIntensity;
 
-    // 3. LICHTREFLEXION (Specular) - Das macht "nasses" Wasser aus
-    vec3 worldNormal = vec3(0.0, 1.0, 0.0);
-    // Wir faken eine Störung der Normale durch das Rauschen für Glitzern
-    worldNormal.x += (n1 - 0.5) * 0.1;
-    worldNormal.z += (n2 - 0.5) * 0.1;
-    worldNormal = normalize(worldNormal);
+    vec3 waterCol = uWaterColor;
+    waterCol += uSunColor * caustics * 0.35;
 
+    // ── Küstenschaum ─────────────────────────────────────────────────────────
+    float foam1 = smoothstep(0.60, 0.72, ns);
+    float foam2 = smoothstep(0.72, 0.80, ns);
+    waterCol = mix(waterCol, vec3(0.92, 0.96, 1.0), foam1 * 0.40 + foam2 * 0.70);
+
+    // ── Wellennormale + Specular ──────────────────────────────────────────────
+    vec3 wNorm   = normalize(vec3((n1 - 0.5) * 0.25, 1.0, (n2 - 0.5) * 0.25));
     vec3 viewDir = normalize(uCameraPos - vWorldPosition);
-    vec3 reflectDir = reflect(-uSunDir, worldNormal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 128.0);
-    
-    // Sonnenglanz hinzufügen
-    col += vec3(1.0, 0.9, 0.7) * spec * 0.6;
+    vec3 halfVec = normalize(uSunDir + viewDir);
+    float spec   = pow(max(dot(wNorm, halfVec), 0.0), 160.0);
+    waterCol    += uSunColor * uSunIntensity * spec * 0.90;
 
-    // 4. NEBEL & TRANSPARENZ
-    float dist = length(uCameraPos - vWorldPosition);
-    float fogFactor = clamp(dist / 20000.0, 0.0, 1.0);
-    
-    // Am Horizont wird das Wasser eins mit dem Nebel/Himmel
-    vec3 finalCol = mix(col, uFogColor, fogFactor);
-    
-    gl_FragColor = vec4(finalCol, 0.8); // 0.8 für leichte Transparenz
+    // ── Fresnel (Horizont-Reflexion) ──────────────────────────────────────────
+    float fresnel = pow(1.0 - max(dot(viewDir, wNorm), 0.0), 3.5);
+    waterCol      = mix(waterCol, uFogColor, fresnel * 0.40);
+
+    // ── Alpha: nahe Kamera leicht transparent (Meeresboden durchscheinen) ─────
+    float alpha = mix(0.80, 0.96, clamp(dist / 3000.0, 0.0, 1.0));
+
+    gl_FragColor = vec4(mix(waterCol, uFogColor, fogFactor), alpha);
 }
