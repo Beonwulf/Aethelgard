@@ -69,19 +69,20 @@ export class WorldManager {
 		if (relX < 0) relX += 1;
 		if (relZ < 0) relZ += 1;
 
-		// Bilineare Interpolation, 512×512 Stride
+		// Bilineare Interpolation, Stride=513 (Overlap-Pixel)
 		const T  = this.tileSize;       // 512
-		const fx = relX * (T - 1);
-		const fz = relZ * (T - 1);
-		const px0 = Math.floor(fx); const px1 = Math.min(px0 + 1, T - 1);
-		const pz0 = Math.floor(fz); const pz1 = Math.min(pz0 + 1, T - 1);
+		const TW = T + 1;               // 513 – Stride des floatData-Arrays
+		const fx = relX * T;            // 0..512 (Overlap-Pixel ist der Rand des Nachbarn)
+		const fz = relZ * T;
+		const px0 = Math.min(Math.floor(fx), T - 1); const px1 = Math.min(px0 + 1, T);
+		const pz0 = Math.min(Math.floor(fz), T - 1); const pz1 = Math.min(pz0 + 1, T);
 		const tx = fx - px0;
 		const tz = fz - pz0;
 
-		const h00 = data[pz0 * T + px0];
-		const h10 = data[pz0 * T + px1];
-		const h01 = data[pz1 * T + px0];
-		const h11 = data[pz1 * T + px1];
+		const h00 = data[pz0 * TW + px0];
+		const h10 = data[pz0 * TW + px1];
+		const h01 = data[pz1 * TW + px0];
+		const h11 = data[pz1 * TW + px1];
 		const rawHeight = h00*(1-tx)*(1-tz) + h10*tx*(1-tz) + h01*(1-tx)*tz + h11*tx*tz;
 
 		return (rawHeight - this.seaLevel) * this.heightScale;
@@ -176,14 +177,13 @@ export class WorldManager {
 
 			this.heightData.set(key, floatData);
 
-			// GPU DataTexture: 512×512, flipY=true weil rotateX(-PI/2) die UV-V-Achse flippt
-			// UV v=0 → Welt Z=oz+W (Chunk-Unterkante), UV v=1 → Welt Z=oz (Chunk-Oberkante)
-			// flipY dreht die Textur so dass Row 0 (oz) korrekt bei UV v=1 landet
+			// GPU DataTexture: 513×513 (Overlap-Pixel für nahtlose Grenzen), flipY=true wegen UV-Flip
+			const TW = this.tileSize + 1; // 513
 			const heightTexture = new THREE.DataTexture(
-				floatData, this.tileSize, this.tileSize,
+				floatData, TW, TW,
 				THREE.RedFormat, THREE.FloatType
 			);
-			heightTexture.flipY   = true;
+			heightTexture.flipY     = true;
 			heightTexture.magFilter = THREE.LinearFilter;
 			heightTexture.minFilter = THREE.LinearFilter;
 			heightTexture.wrapS = heightTexture.wrapT = THREE.ClampToEdgeWrapping;
@@ -211,7 +211,7 @@ export class WorldManager {
 				uniforms: {
 					tAtlas:            { value: this.atlas.texture },
 					tHeight:           { value: heightTexture },
-					tHeightSize:       { value: new THREE.Vector2(this.tileSize, this.tileSize) },
+					tHeightSize:       { value: new THREE.Vector2(TW, TW) },
 					displacementScale:  { value: this.heightScale },
 					seaLevel:           { value: this.seaLevel },
 					sunDir:            su.sunDir,
@@ -250,13 +250,14 @@ export class WorldManager {
 	_buildSkirt(cx, cy, floatData) {
 		const W    = this.chunkSize;
 		const T    = this.tileSize;     // 512
+		const TW   = T + 1;             // 513 – Stride des floatData-Arrays
 		const SL   = this.seaLevel;
 		const H    = this.heightScale;
-		const BOT  = -300;              // tief genug unter Unterwasser-Terrain
+		const BOT  = -300;
 		const STEP = 8;
 
-		// floatData: Row 0 = Welt Z=oz (Chunk-Oberkante), Row T-1 = Welt Z≈oz+W (Chunk-Unterkante)
-		const h = (row, col) => (floatData[row * T + col] - SL) * H - 5.0; // 5m einsenken
+		// floatData Stride ist TW=513, Row 0 = Welt Z=oz
+		const h = (row, col) => (floatData[row * TW + col] - SL) * H - 5.0;
 
 		const ox = cx * W;
 		const oz = cy * W;

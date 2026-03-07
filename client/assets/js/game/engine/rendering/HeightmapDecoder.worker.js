@@ -13,7 +13,7 @@ self.onmessage = async ({ data }) => {
 
         // Uint16 Little-Endian → normalisierter Float (0..1)
         const u16    = new Uint16Array(arrayBuffer);
-        const count  = tileSize * tileSize;  // 512×512
+        const count  = (tileSize + 1) * (tileSize + 1);  // 513×513 mit Overlap-Pixel
 
         if (sharedBuffer) {
             const floatView = new Float32Array(sharedBuffer, slotIndex * count * 4, count);
